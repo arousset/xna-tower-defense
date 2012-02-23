@@ -17,6 +17,7 @@ namespace TowerDefenseXNA
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Map map;
+        Enemy enemy1;
 
         public Game1()
         {
@@ -31,14 +32,17 @@ namespace TowerDefenseXNA
             this.graphics.PreferredBackBufferHeight = 480;
             this.graphics.ApplyChanges();
             this.Window.Title = "Xna Tower Defense";
+            IsMouseVisible = true;
             this.Window.AllowUserResizing = false;
             base.Initialize();
         }
 
         protected override void LoadContent()
-        {
+       { 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             map = Content.Load<Map>("Map");
+            Texture2D enemyTexture = Content.Load<Texture2D>("Enemies/Normal");
+            enemy1 = new Enemy(enemyTexture, Vector2.Zero, 100, 10, 0.5f);
         }
 
         protected override void UnloadContent()
@@ -50,6 +54,8 @@ namespace TowerDefenseXNA
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+            enemy1.CurrentHealth -= 1;
+            enemy1.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -58,6 +64,7 @@ namespace TowerDefenseXNA
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             map.Draw(spriteBatch);
+            enemy1.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
