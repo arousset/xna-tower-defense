@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TowerDefenseXNA
 {
-    class Sprite
+    public class Sprite
     {
         // Declaration 
         protected Texture2D texture;
