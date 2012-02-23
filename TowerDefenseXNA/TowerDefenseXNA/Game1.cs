@@ -30,7 +30,7 @@ namespace TowerDefenseXNA
             this.graphics.PreferredBackBufferWidth = 960;
             this.graphics.PreferredBackBufferHeight = 480;
             this.graphics.ApplyChanges();
-            this.Window.Title = "Tower Defense";
+            this.Window.Title = "Xna Tower Defense";
             this.Window.AllowUserResizing = false;
             base.Initialize();
         }
