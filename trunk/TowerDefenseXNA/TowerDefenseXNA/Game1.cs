@@ -18,6 +18,7 @@ namespace TowerDefenseXNA
         SpriteBatch spriteBatch;
         Map map;
         Enemy enemy1;
+        Tower tower;
 
         public Game1()
         {
@@ -41,8 +42,14 @@ namespace TowerDefenseXNA
        { 
             spriteBatch = new SpriteBatch(GraphicsDevice);
             map = Content.Load<Map>("Map");
+            
+            // Enemy
             Texture2D enemyTexture = Content.Load<Texture2D>("Enemies/Normal");
             enemy1 = new Enemy(enemyTexture, Vector2.Zero, 100, 10, 0.5f);
+
+            // Tower 
+            Texture2D towerTexture = Content.Load<Texture2D>("Towers/Arrow");
+            tower = new Tower(towerTexture, Vector2.Zero);
         }
 
         protected override void UnloadContent()
@@ -56,6 +63,18 @@ namespace TowerDefenseXNA
                 this.Exit();
             enemy1.CurrentHealth -= 1;
             enemy1.Update(gameTime);
+
+
+            if (tower.Target == null)
+            {
+                List<Enemy> enemies = new List<Enemy>();
+                enemies.Add(enemy1);
+                tower.GetClosestEnemy(enemies);
+            }
+            // Update tower 
+            tower.Update(gameTime);
+
+
             base.Update(gameTime);
         }
 
@@ -65,6 +84,7 @@ namespace TowerDefenseXNA
             spriteBatch.Begin();
             map.Draw(spriteBatch);
             enemy1.Draw(spriteBatch);
+            tower.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }

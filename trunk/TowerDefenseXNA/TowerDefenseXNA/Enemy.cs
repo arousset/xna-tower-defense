@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TowerDefenseXNA
 {
-    class Enemy : Sprite
+    public class Enemy : Sprite
     {
         protected float startHealth;
         protected float currentHealth;
