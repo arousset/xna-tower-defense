@@ -18,6 +18,8 @@ namespace TowerDefenseXNA
         SpriteBatch spriteBatch;
         Map map;
         Enemy enemy1;
+        Level lvl;
+        Texture2D tiledMap;
         Tower tower;
 
         public Game1()
@@ -45,8 +47,10 @@ namespace TowerDefenseXNA
             
             // Enemy
             Texture2D enemyTexture = Content.Load<Texture2D>("Enemies/Normal");
+            tiledMap = Content.Load<Texture2D>("Tilesmap");
+            lvl = new Level(tiledMap, 32);
             enemy1 = new Enemy(enemyTexture, Vector2.Zero, 100, 10, 0.5f);
-
+            enemy1.SetWaypoints(lvl.Waypoints);
             // Tower 
             Texture2D towerTexture = Content.Load<Texture2D>("Towers/Arrow");
             tower = new Tower(towerTexture, Vector2.Zero);
@@ -61,7 +65,7 @@ namespace TowerDefenseXNA
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-            enemy1.CurrentHealth -= 1;
+           // enemy1.CurrentHealth -= 1;
             enemy1.Update(gameTime);
 
 
@@ -82,7 +86,8 @@ namespace TowerDefenseXNA
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            map.Draw(spriteBatch);
+            lvl.Draw(spriteBatch);
+            //map.Draw(spriteBatch);
             enemy1.Draw(spriteBatch);
             tower.Draw(spriteBatch);
             spriteBatch.End();
