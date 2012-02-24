@@ -16,6 +16,7 @@ namespace TowerDefenseXNA
         protected Vector2 origin;
         protected float rotation;
         protected Rectangle bounds;
+        protected Vector2 velocity;
 
         // Use for knowing the position of the sprite
         public Vector2 Position
@@ -41,7 +42,7 @@ namespace TowerDefenseXNA
         {
             texture = tex;
             position = pos;
-
+            velocity = Vector2.Zero;
             bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
             center = new Vector2(position.X + texture.Width / 2, position.Y + texture.Height / 2);
             origin = new Vector2(texture.Width / 2, texture.Height / 2);

@@ -14,13 +14,22 @@ namespace TowerDefenseXNA
         protected bool alive = true;
         protected float speed = 0.5f;
         protected int bountyGiven;
+        private Queue<Vector2> waypoints = new Queue<Vector2>();
 
         public Enemy(Texture2D texture, Vector2 position, float health, int bountyGiven, float speed) : base(texture, position)
         {
             this.startHealth = health;
+            this.position = position;
             this.currentHealth = startHealth;
             this.speed = speed;
             this.bountyGiven = bountyGiven;
+        }
+
+        public void SetWaypoints(Queue<Vector2> waypoints)
+        {
+            foreach (Vector2 waypoint in waypoints)
+                this.waypoints.Enqueue(waypoint);
+            this.position = this.waypoints.Dequeue();
         }
 
         public override void Update(GameTime gameTime)
@@ -28,6 +37,30 @@ namespace TowerDefenseXNA
             base.Update(gameTime);
             if (currentHealth <= 0)
                 alive = false;
+            if (waypoints.Count > 0)
+            {
+                if (DistanceToDestination < speed)
+                {
+                    position = waypoints.Peek();
+                    waypoints.Dequeue();
+                }
+                else
+                {
+                    Vector2 direction = waypoints.Peek() - position;
+                    direction.Normalize();
+                    velocity = Vector2.Multiply(direction, speed);
+                    position += velocity;
+                }
+                if (currentHealth <= 0)
+                {
+                    alive = false;
+                }
+            }
+        }
+
+        public float DistanceToDestination
+        {
+            get { return Vector2.Distance(position, waypoints.Peek()); }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -35,8 +68,9 @@ namespace TowerDefenseXNA
             if (alive)
             {
                 float healthPercentage = (float)currentHealth / (float)startHealth;
-                Color color = new Color(new Vector3(1 - healthPercentage, 1 - healthPercentage, 1 - healthPercentage));
-                base.Draw(spriteBatch, color);
+                //Color color = new Color(new Vector3(1 - healthPercentage, 1 - healthPercentage, 1 - healthPercentage));
+                //base.Draw(spriteBatch, color);
+                base.Draw(spriteBatch);
             }
         }
 
