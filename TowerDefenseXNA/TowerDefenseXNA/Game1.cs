@@ -20,7 +20,8 @@ namespace TowerDefenseXNA
         Enemy enemy1;
         Level lvl;
         Texture2D tiledMap;
-        Tower tower;
+        //Tower tower;
+        Player player;
 
         public Game1()
         {
@@ -53,7 +54,8 @@ namespace TowerDefenseXNA
             enemy1.SetWaypoints(lvl.Waypoints);
             // Tower 
             Texture2D towerTexture = Content.Load<Texture2D>("Towers/Arrow");
-            tower = new Tower(towerTexture, Vector2.Zero);
+            //tower = new Tower(towerTexture, Vector2.Zero);
+            player = new Player(lvl, towerTexture);
         }
 
         protected override void UnloadContent()
@@ -69,14 +71,10 @@ namespace TowerDefenseXNA
             enemy1.Update(gameTime);
 
 
-            if (tower.Target == null)
-            {
-                List<Enemy> enemies = new List<Enemy>();
-                enemies.Add(enemy1);
-                tower.GetClosestEnemy(enemies);
-            }
-            // Update tower 
-            tower.Update(gameTime);
+            List<Enemy> enemies = new List<Enemy>();
+            enemies.Add(enemy1);
+
+            player.Update(gameTime, enemies);
 
 
             base.Update(gameTime);
@@ -89,7 +87,8 @@ namespace TowerDefenseXNA
             lvl.Draw(spriteBatch);
             //map.Draw(spriteBatch);
             enemy1.Draw(spriteBatch);
-            tower.Draw(spriteBatch);
+            //tower.Draw(spriteBatch);
+            player.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
