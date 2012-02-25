@@ -1,0 +1,120 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Media;
+
+namespace TowerDefenseXNA
+{
+    public class Player
+    {
+        private int money = 50;
+        private int lives = 30;
+
+        // Players towers
+        private List<Tower> towers = new List<Tower>();
+
+        private MouseState mouseState; // state for current frame
+        private MouseState oldState; // state for previous frame
+        private Level level;
+        private Texture2D towerTexture;
+
+        // Tower placement
+        private int cellX;
+        private int cellY;
+        private int tileX;
+        private int tileY;
+
+        public int Money
+        {
+            get { return money; }
+        }
+        public int Lives
+        {
+            get { return lives; }
+        }
+
+
+        // Constructor 
+        public Player(Level level, Texture2D towerTexture)
+        {
+            this.level = level;
+            this.towerTexture = towerTexture;
+        }
+
+
+        public void Update(GameTime gameTime, List<Enemy> enemies)
+        {
+            mouseState = Mouse.GetState();
+
+            cellX = (int)(mouseState.X / 32); // Convert the position of the mouse
+            cellY = (int)(mouseState.Y / 32); // from array space to level space
+
+            tileX = cellX * 32; // Convert from array space to level space
+            tileY = cellY * 32; // Convert from array space to level space
+
+            if (mouseState.LeftButton == ButtonState.Released && oldState.LeftButton == ButtonState.Pressed)
+            {
+                if (IsCellClear())
+                {
+                    Tower tower = new Tower(towerTexture, new Vector2(tileX, tileY));
+                    towers.Add(tower);
+                }
+            }
+
+            foreach (Tower tower in towers)
+            {
+                if (tower.Target == null)
+                {
+                    tower.GetClosestEnemy(enemies);
+                }
+
+                tower.Update(gameTime);
+            }
+
+            oldState = mouseState; // Set the oldState so it becomes the state of the previous frame.
+        }
+
+
+        public void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (Tower tower in towers)
+            {
+                tower.Draw(spriteBatch);
+            }
+        }
+
+        
+
+        private bool IsCellClear()
+        {
+            bool inBounds = cellX >= 0 && cellY >= 0 && // Make sure tower is within limits
+                cellX < level.Width && cellY < level.Height;
+
+            bool spaceClear = true;
+
+            foreach (Tower tower in towers) // Check that there is no tower here
+            {
+                spaceClear = (tower.Position != new Vector2(tileX, tileY));
+
+                if (!spaceClear)
+                    break;
+            }
+
+            bool onPath = (level.GetIndex(cellX, cellY) != 1);
+
+            return inBounds && spaceClear && onPath; // If both checks are true return true
+        }
+
+
+
+
+    }
+}
+

@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace TowerDefenseXNA
 {
-    class Level
+    public class Level
     {
         private List<Texture2D> tileTextures = new List<Texture2D>();
         private int tilesPerRow;
@@ -106,6 +106,14 @@ namespace TowerDefenseXNA
                     return true;
             }
             return false;
+        }
+
+        public int GetIndex(int cellX, int cellY)
+        {
+            if (cellX < 0 || cellX > Width || cellY < 0 || cellY > Height)
+                return 0;
+
+            return map[cellY, cellX];
         }
 
         public void Draw(SpriteBatch batch)
