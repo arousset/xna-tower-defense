@@ -54,8 +54,9 @@ namespace TowerDefenseXNA
             enemy1.SetWaypoints(lvl.Waypoints);
             // Tower 
             Texture2D towerTexture = Content.Load<Texture2D>("Towers/Arrow");
-            //tower = new Tower(towerTexture, Vector2.Zero);
-            player = new Player(lvl, towerTexture);
+            Texture2D bulletTexture = Content.Load<Texture2D>("Towers/bullet4");
+
+            player = new Player(lvl, towerTexture, bulletTexture); // Create a new player (in future multiplayer ;)
         }
 
         protected override void UnloadContent()
@@ -85,9 +86,7 @@ namespace TowerDefenseXNA
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             lvl.Draw(spriteBatch);
-            //map.Draw(spriteBatch);
             enemy1.Draw(spriteBatch);
-            //tower.Draw(spriteBatch);
             player.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
