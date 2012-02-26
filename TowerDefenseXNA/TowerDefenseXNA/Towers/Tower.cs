@@ -14,10 +14,15 @@ namespace TowerDefenseXNA
 {
     public class Tower : Sprite
     {
+        protected Texture2D bulletTexture;
+        
         protected int cost; // Price to buy
         protected int damage; 
         protected float radius; // How far the tower can shoot
         protected Enemy target;
+
+        protected float bulletTimer; // How long ago was a bullet fired
+        protected List<Bullet> bulletList = new List<Bullet>();
 
         public Enemy Target
         {
@@ -39,19 +44,15 @@ namespace TowerDefenseXNA
         }
 
 
-        // Constructor
-        public Tower(Texture2D texture, Vector2 position) : base(texture, position)
+        public Tower(Texture2D texture, Texture2D bulletTexture, Vector2 position) : base(texture, position)
         {
-            radius = 1000;
+            this.bulletTexture = bulletTexture;
         }
 
         // Methods
         public bool IsInRange(Vector2 position)
         {
-            if (Vector2.Distance(center, position) <= radius)
-                return true;
-
-            return false;
+            return Vector2.Distance(center, position) <= radius;
         }
 
         public void GetClosestEnemy(List<Enemy> enemies)
@@ -69,6 +70,7 @@ namespace TowerDefenseXNA
             }
         }
 
+        // A way to move in the direction of the enemy
         protected void FaceTarget()
         {
             Vector2 direction = center - target.Center;
@@ -81,11 +83,27 @@ namespace TowerDefenseXNA
         {
             base.Update(gameTime);
 
+            bulletTimer += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             if (target != null)
+            {
                 FaceTarget();
+
+                if (!IsInRange(target.Center))
+                {
+                    target = null;
+                    bulletTimer = 0;
+                }
+            }
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
+            foreach (Bullet bullet in bulletList)
+                bullet.Draw(spriteBatch);
 
+            base.Draw(spriteBatch);
+        }
 
 
 

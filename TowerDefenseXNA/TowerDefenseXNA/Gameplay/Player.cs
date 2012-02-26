@@ -24,6 +24,7 @@ namespace TowerDefenseXNA
         private MouseState oldState; // state for previous frame
         private Level level;
         private Texture2D towerTexture;
+        private Texture2D bulletTexture; 
 
         // Tower placement
         private int cellX;
@@ -42,10 +43,11 @@ namespace TowerDefenseXNA
 
 
         // Constructor 
-        public Player(Level level, Texture2D towerTexture)
+        public Player(Level level, Texture2D towerTexture, Texture2D bulletTexture)
         {
             this.level = level;
             this.towerTexture = towerTexture;
+            this.bulletTexture = bulletTexture;
         }
 
 
@@ -63,7 +65,7 @@ namespace TowerDefenseXNA
             {
                 if (IsCellClear())
                 {
-                    Tower tower = new Tower(towerTexture, new Vector2(tileX, tileY));
+                    ArrowTower tower = new ArrowTower(towerTexture, bulletTexture, new Vector2(tileX, tileY));
                     towers.Add(tower);
                 }
             }
