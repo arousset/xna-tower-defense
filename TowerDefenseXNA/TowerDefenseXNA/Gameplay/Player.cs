@@ -32,6 +32,13 @@ namespace TowerDefenseXNA
         private int tileX;
         private int tileY;
 
+        private string newTowerType;
+
+        public string NewTowerType
+        {
+            set { newTowerType = value; }
+        }
+
         public int Money
         {
             get { return money; }
@@ -60,13 +67,13 @@ namespace TowerDefenseXNA
 
             tileX = cellX * 32; // Convert from array space to level space
             tileY = cellY * 32; // Convert from array space to level space
-
-            if (mouseState.LeftButton == ButtonState.Released && oldState.LeftButton == ButtonState.Pressed)
+           
+            if (mouseState.LeftButton == ButtonState.Released
+                && oldState.LeftButton == ButtonState.Pressed)
             {
-                if (IsCellClear())
+                if (string.IsNullOrEmpty(newTowerType) == false)
                 {
-                    ArrowTower tower = new ArrowTower(towerTexture, bulletTexture, new Vector2(tileX, tileY));
-                    towers.Add(tower);
+                    AddTower();
                 }
             }
 
@@ -112,6 +119,32 @@ namespace TowerDefenseXNA
             bool onPath = (level.GetIndex(cellX, cellY) != 1);
 
             return inBounds && spaceClear && onPath; // If both checks are true return true
+        }
+
+
+        public void AddTower()
+        {
+            Tower towerToAdd = null;
+
+            switch (newTowerType)
+            {
+                case "Arrow Tower":
+                    {
+                        towerToAdd = new ArrowTower(towerTexture,
+                            bulletTexture, new Vector2(tileX, tileY));
+                        break;
+                    }
+            }
+
+            // Only add the tower if there is a space and if the player can afford it.
+            if (IsCellClear() == true && towerToAdd.Cost <= money)
+            {
+                towers.Add(towerToAdd);
+                money -= towerToAdd.Cost;
+
+                // Reset the newTowerType field.
+                newTowerType = string.Empty;
+            }
         }
 
 
