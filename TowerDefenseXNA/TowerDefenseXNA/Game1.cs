@@ -20,7 +20,7 @@ namespace TowerDefenseXNA
         Enemy enemy1;
         Level lvl;
         Texture2D tiledMap;
-        //Tower tower;
+        Toolbar toolBar;
         Player player;
 
         public Game1()
@@ -34,10 +34,24 @@ namespace TowerDefenseXNA
             this.graphics.IsFullScreen = false;
             this.graphics.PreferredBackBufferWidth = 960;
             this.graphics.PreferredBackBufferHeight = 480;
+
+            tiledMap = Content.Load<Texture2D>("Tilesmap");
+            lvl = new Level(tiledMap, 32);
+            graphics.PreferredBackBufferWidth = lvl.Width * 32;
+            graphics.PreferredBackBufferHeight = 32 + lvl.Height * 32;
+
             this.graphics.ApplyChanges();
             this.Window.Title = "Xna Tower Defense";
             IsMouseVisible = true;
             this.Window.AllowUserResizing = false;
+
+
+            Texture2D topBar = Content.Load<Texture2D>("GUI/Toolbar");
+            SpriteFont font = Content.Load<SpriteFont>("Arial");
+
+            toolBar = new Toolbar(topBar, font, new Vector2(0, lvl.Height * 32));
+
+
             base.Initialize();
         }
 
@@ -48,8 +62,8 @@ namespace TowerDefenseXNA
             
             // Enemy
             Texture2D enemyTexture = Content.Load<Texture2D>("Enemies/Normal");
-            tiledMap = Content.Load<Texture2D>("Tilesmap");
-            lvl = new Level(tiledMap, 32);
+           
+            
             enemy1 = new Enemy(enemyTexture, Vector2.Zero, 100, 10, 0.5f);
             enemy1.SetWaypoints(lvl.Waypoints);
             // Tower 
@@ -74,10 +88,7 @@ namespace TowerDefenseXNA
 
             List<Enemy> enemies = new List<Enemy>();
             enemies.Add(enemy1);
-
             player.Update(gameTime, enemies);
-
-
             base.Update(gameTime);
         }
 
@@ -88,6 +99,7 @@ namespace TowerDefenseXNA
             lvl.Draw(spriteBatch);
             enemy1.Draw(spriteBatch);
             player.Draw(spriteBatch);
+            toolBar.Draw(spriteBatch, player);
             spriteBatch.End();
             base.Draw(gameTime);
         }
