@@ -110,7 +110,8 @@ namespace TowerDefenseXNA
 
         public int GetIndex(int cellX, int cellY)
         {
-            if (cellX < 0 || cellX > Width || cellY < 0 || cellY > Height)
+            // -1 : In order to add the toolbar 
+            if (cellX < 0 || cellX > Width - 1 || cellY < 0 || cellY > Height - 1)
                 return 0;
 
             return map[cellY, cellX];
