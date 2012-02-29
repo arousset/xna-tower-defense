@@ -22,6 +22,7 @@ namespace TowerDefenseXNA
         Texture2D tiledMap;
         Toolbar toolBar;
         Player player;
+        Button arrowButton;
 
         public Game1()
         {
@@ -32,8 +33,8 @@ namespace TowerDefenseXNA
         protected override void Initialize()
         {
             this.graphics.IsFullScreen = false;
-            this.graphics.PreferredBackBufferWidth = 960;
-            this.graphics.PreferredBackBufferHeight = 480;
+            this.graphics.PreferredBackBufferWidth = 1280; // 960
+            this.graphics.PreferredBackBufferHeight = 720; // 720
 
             tiledMap = Content.Load<Texture2D>("Tilesmap");
             lvl = new Level(tiledMap, 32);
@@ -51,15 +52,17 @@ namespace TowerDefenseXNA
 
             toolBar = new Toolbar(topBar, font, new Vector2(0, lvl.Height * 32));
 
+            
 
             base.Initialize();
         }
 
         protected override void LoadContent()
        { 
+            
+            
             spriteBatch = new SpriteBatch(GraphicsDevice);
             map = Content.Load<Map>("Map");
-            
             // Enemy
             Texture2D enemyTexture = Content.Load<Texture2D>("Enemies/Normal");
            
@@ -70,6 +73,20 @@ namespace TowerDefenseXNA
             Texture2D towerTexture = Content.Load<Texture2D>("Towers/Arrow");
             Texture2D bulletTexture = Content.Load<Texture2D>("Towers/bullet4");
 
+            // The "Normal" texture for the arrow button.
+            Texture2D arrowNormal = Content.Load<Texture2D>("GUI/Tower/Normal");
+            // The "MouseOver" texture for the arrow button.
+            Texture2D arrowHover = Content.Load<Texture2D>("GUI/Tower/Over");
+            // The "Pressed" texture for the arrow button.
+            Texture2D arrowPressed = Content.Load<Texture2D>("GUI/Tower/Pressed");
+            
+
+            // Initialize the arrow button.
+            arrowButton = new Button(arrowNormal, arrowHover, arrowPressed, new Vector2(0, lvl.Height * 32));
+
+            
+
+            arrowButton.Clicked += new EventHandler(arrowButton_Clicked);
             player = new Player(lvl, towerTexture, bulletTexture); // Create a new player (in future multiplayer ;)
         }
 
@@ -85,7 +102,7 @@ namespace TowerDefenseXNA
            // enemy1.CurrentHealth -= 1;
             enemy1.Update(gameTime);
 
-
+            arrowButton.Update(gameTime);
             List<Enemy> enemies = new List<Enemy>();
             enemies.Add(enemy1);
             player.Update(gameTime, enemies);
@@ -100,8 +117,15 @@ namespace TowerDefenseXNA
             enemy1.Draw(spriteBatch);
             player.Draw(spriteBatch);
             toolBar.Draw(spriteBatch, player);
+            toolBar.Draw(spriteBatch, player);
+            arrowButton.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
+        }
+
+        private void arrowButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Arrow Tower";
         }
     }
 }
