@@ -121,6 +121,11 @@ namespace TowerDefenseXNA
             return inBounds && spaceClear && onPath; // If both checks are true return true
         }
 
+        public void giveGold(int gold)
+        {
+            money += gold;
+        }
+
 
         public void AddTower()
         {

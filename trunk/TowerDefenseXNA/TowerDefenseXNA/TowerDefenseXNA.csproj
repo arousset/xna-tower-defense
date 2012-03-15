@@ -110,7 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Enemy.cs" />
+    <Compile Include="Gameplay\Enemy.cs" />
     <Compile Include="Gameplay\Player.cs" />
     <Compile Include="GUI\Button.cs" />
     <Compile Include="GUI\Toolbar.cs" />
@@ -122,7 +122,8 @@
     <Compile Include="Towers\ArrowTower.cs" />
     <Compile Include="Towers\Bullet.cs" />
     <Compile Include="Towers\Tower.cs" />
-    <Compile Include="Wave.cs" />
+    <Compile Include="Gameplay\Wave.cs" />
+    <Compile Include="Gameplay\WaveManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
