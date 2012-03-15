@@ -30,11 +30,11 @@ namespace TowerDefenseXNA
             textPosition = new Vector2(130, position.Y + 10);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Player player)
+        public void Draw(SpriteBatch spriteBatch, Player player, WaveManager wavemanager)
         {
             spriteBatch.Draw(texture, position, Color.White);
 
-            string text = string.Format("Gold : {0} Lives : {1}", player.Money, player.Lives);
+            string text = string.Format("Gold : {0} Lives : {1} Wave {2}/{3}", player.Money, player.Lives, wavemanager.Round, wavemanager.NbRounds);
             spriteBatch.DrawString(font, text, textPosition, Color.White);
         }
     }

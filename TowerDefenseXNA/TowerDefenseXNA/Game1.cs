@@ -24,9 +24,9 @@ namespace TowerDefenseXNA
         Player player;
         Button arrowButton;
         Button startWaveButton;
-        //List<Enemy> enemies = new List<Enemy>();
-        Wave wave;
-        Texture2D enemyTexture;
+        WaveManager waveManager;
+        Texture2D enemyTextureNormal;
+        Texture2D enemyTextureFast;
         Texture2D healthTexture;
         bool debug = false;
 
@@ -52,9 +52,14 @@ namespace TowerDefenseXNA
             IsMouseVisible = true;
             this.Window.AllowUserResizing = false;
 
-            enemyTexture = Content.Load<Texture2D>("Enemies/Normal");
+            Texture2D towerTexture = Content.Load<Texture2D>("Towers/Arrow");
+            Texture2D bulletTexture = Content.Load<Texture2D>("Towers/bullet4");
+            player = new Player(lvl, towerTexture, bulletTexture);
+
+            enemyTextureFast = Content.Load<Texture2D>("Enemies/Fast");
+            enemyTextureNormal = Content.Load<Texture2D>("Enemies/Normal");
             healthTexture = Content.Load<Texture2D>("Enemies/Health bar");
-            wave = new Wave(0, 10, lvl, enemyTexture, healthTexture);
+            waveManager = new WaveManager(lvl, 5, enemyTextureNormal, enemyTextureFast, healthTexture, player);
 
             Texture2D topBar = Content.Load<Texture2D>("GUI/Toolbar");
             SpriteFont font = Content.Load<SpriteFont>("Arial");
@@ -71,8 +76,7 @@ namespace TowerDefenseXNA
             
            
             // Tower 
-            Texture2D towerTexture = Content.Load<Texture2D>("Towers/Arrow");
-            Texture2D bulletTexture = Content.Load<Texture2D>("Towers/bullet4");
+            
 
             Texture2D startWave = Content.Load<Texture2D>("GUI/StartWave");
 
@@ -91,7 +95,7 @@ namespace TowerDefenseXNA
 
             startWaveButton.Clicked += new EventHandler(startButton_Clicked);
             arrowButton.Clicked += new EventHandler(arrowButton_Clicked);
-            player = new Player(lvl, towerTexture, bulletTexture); // Create a new player (in future multiplayer ;)
+            
         }
 
         protected override void UnloadContent()
@@ -104,22 +108,17 @@ namespace TowerDefenseXNA
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
-            {
-                wave.Start();
-            }
             if (Keyboard.GetState().IsKeyDown(Keys.P))
             {
                 debug = !debug;
             }    
 
-            if(wave.Started)
-                wave.Update(gameTime);
+            waveManager.Update(gameTime);
             
             arrowButton.Update(gameTime);
             startWaveButton.Update(gameTime);
-            
-            player.Update(gameTime, wave.Enemies);
+
+            player.Update(gameTime, waveManager.Enemies);
             base.Update(gameTime);
         }
 
@@ -128,12 +127,12 @@ namespace TowerDefenseXNA
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             lvl.Draw(spriteBatch);
-            wave.Draw(spriteBatch);
+            waveManager.Draw(spriteBatch);
             player.Draw(spriteBatch);
-           // toolBar.Draw(spriteBatch, player);
-            toolBar.Draw(spriteBatch, player);
+            toolBar.Draw(spriteBatch, player, waveManager);
             arrowButton.Draw(spriteBatch);
-            startWaveButton.Draw(spriteBatch);
+            if(waveManager.WaveReady)
+                startWaveButton.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -145,7 +144,7 @@ namespace TowerDefenseXNA
 
         private void startButton_Clicked(object sender, EventArgs e)
         {
-            wave.Start();
+            waveManager.StartNextWave();
         }
     }
 }

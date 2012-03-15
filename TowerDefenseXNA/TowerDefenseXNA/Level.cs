@@ -67,7 +67,7 @@ namespace TowerDefenseXNA
                 {
                     waypoints.Enqueue(new Vector2(x+1, y) * tileSize);
                     x++;
-                    System.Console.WriteLine("(" + x + "," + y + ")");
+                    //System.Console.WriteLine("(" + x + "," + y + ")");
                     continue;
                 }
                 i = map[y+1, x];
@@ -75,7 +75,7 @@ namespace TowerDefenseXNA
                 {
                     waypoints.Enqueue(new Vector2(x, y + 1) * tileSize);
                     y++;
-                    System.Console.WriteLine("(" + x + "," + y + ")");
+                    //System.Console.WriteLine("(" + x + "," + y + ")");
                     continue;
                 }
                 i = map[y-1, x];
@@ -83,7 +83,7 @@ namespace TowerDefenseXNA
                 {
                     waypoints.Enqueue(new Vector2(x, y - 1) * tileSize);
                     y--;
-                    System.Console.WriteLine("(" + x + "," + y + ")");
+                    //System.Console.WriteLine("(" + x + "," + y + ")");
                     continue;
                 }
                 i = map[y, x-1];
@@ -91,7 +91,7 @@ namespace TowerDefenseXNA
                 {
                     waypoints.Enqueue(new Vector2(x - 1, y) * tileSize);
                     x--;
-                    System.Console.WriteLine("(" + x + "," + y + ")");
+                    //System.Console.WriteLine("(" + x + "," + y + ")");
                     continue;
                 }
             }
