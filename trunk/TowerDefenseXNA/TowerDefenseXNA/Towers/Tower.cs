@@ -89,7 +89,7 @@ namespace TowerDefenseXNA
             {
                 FaceTarget();
 
-                if (!IsInRange(target.Center))
+                if (!IsInRange(target.Center) || target.IsDead)
                 {
                     target = null;
                     bulletTimer = 0;

@@ -17,12 +17,18 @@ namespace TowerDefenseXNA
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         Map map;
-        Enemy enemy1;
+        //Enemy enemy1;
         Level lvl;
         Texture2D tiledMap;
         Toolbar toolBar;
         Player player;
         Button arrowButton;
+        Button startWaveButton;
+        //List<Enemy> enemies = new List<Enemy>();
+        Wave wave;
+        Texture2D enemyTexture;
+        Texture2D healthTexture;
+        bool debug = false;
 
         public Game1()
         {
@@ -46,32 +52,30 @@ namespace TowerDefenseXNA
             IsMouseVisible = true;
             this.Window.AllowUserResizing = false;
 
+            enemyTexture = Content.Load<Texture2D>("Enemies/Normal");
+            healthTexture = Content.Load<Texture2D>("Enemies/Health bar");
+            wave = new Wave(0, 10, lvl, enemyTexture, healthTexture);
 
             Texture2D topBar = Content.Load<Texture2D>("GUI/Toolbar");
             SpriteFont font = Content.Load<SpriteFont>("Arial");
 
             toolBar = new Toolbar(topBar, font, new Vector2(0, lvl.Height * 32));
 
-            
-
             base.Initialize();
         }
 
         protected override void LoadContent()
-       { 
-            
-            
+       {       
             spriteBatch = new SpriteBatch(GraphicsDevice);
             map = Content.Load<Map>("Map");
-            // Enemy
-            Texture2D enemyTexture = Content.Load<Texture2D>("Enemies/Normal");
-           
             
-            enemy1 = new Enemy(enemyTexture, Vector2.Zero, 100, 10, 0.5f);
-            enemy1.SetWaypoints(lvl.Waypoints);
+           
             // Tower 
             Texture2D towerTexture = Content.Load<Texture2D>("Towers/Arrow");
             Texture2D bulletTexture = Content.Load<Texture2D>("Towers/bullet4");
+
+            Texture2D startWave = Content.Load<Texture2D>("GUI/StartWave");
+
 
             // The "Normal" texture for the arrow button.
             Texture2D arrowNormal = Content.Load<Texture2D>("GUI/Tower/Normal");
@@ -81,11 +85,11 @@ namespace TowerDefenseXNA
             Texture2D arrowPressed = Content.Load<Texture2D>("GUI/Tower/Pressed");
             
 
-            // Initialize the arrow button.
+            // Initialize the buttons.
             arrowButton = new Button(arrowNormal, arrowHover, arrowPressed, new Vector2(0, lvl.Height * 32));
+            startWaveButton = new Button(startWave, startWave, startWave, new Vector2(lvl.Width*32 - 32, lvl.Height * 32+5));
 
-            
-
+            startWaveButton.Clicked += new EventHandler(startButton_Clicked);
             arrowButton.Clicked += new EventHandler(arrowButton_Clicked);
             player = new Player(lvl, towerTexture, bulletTexture); // Create a new player (in future multiplayer ;)
         }
@@ -99,13 +103,23 @@ namespace TowerDefenseXNA
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
-           // enemy1.CurrentHealth -= 1;
-            enemy1.Update(gameTime);
 
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                wave.Start();
+            }
+            if (Keyboard.GetState().IsKeyDown(Keys.P))
+            {
+                debug = !debug;
+            }    
+
+            if(wave.Started)
+                wave.Update(gameTime);
+            
             arrowButton.Update(gameTime);
-            List<Enemy> enemies = new List<Enemy>();
-            enemies.Add(enemy1);
-            player.Update(gameTime, enemies);
+            startWaveButton.Update(gameTime);
+            
+            player.Update(gameTime, wave.Enemies);
             base.Update(gameTime);
         }
 
@@ -114,11 +128,12 @@ namespace TowerDefenseXNA
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
             lvl.Draw(spriteBatch);
-            enemy1.Draw(spriteBatch);
+            wave.Draw(spriteBatch);
             player.Draw(spriteBatch);
-            toolBar.Draw(spriteBatch, player);
+           // toolBar.Draw(spriteBatch, player);
             toolBar.Draw(spriteBatch, player);
             arrowButton.Draw(spriteBatch);
+            startWaveButton.Draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }
@@ -126,6 +141,11 @@ namespace TowerDefenseXNA
         private void arrowButton_Clicked(object sender, EventArgs e)
         {
             player.NewTowerType = "Arrow Tower";
+        }
+
+        private void startButton_Clicked(object sender, EventArgs e)
+        {
+            wave.Start();
         }
     }
 }

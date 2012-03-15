@@ -11,7 +11,7 @@ namespace TowerDefenseXNA
     {
         protected float startHealth;
         protected float currentHealth;
-        protected bool alive = true;
+        public bool alive = true;
         protected float speed = 0.5f;
         protected int bountyGiven;
         private Queue<Vector2> waypoints = new Queue<Vector2>();
@@ -67,11 +67,13 @@ namespace TowerDefenseXNA
         {
             if (alive)
             {
-                float healthPercentage = (float)currentHealth / (float)startHealth;
-                //Color color = new Color(new Vector3(1 - healthPercentage, 1 - healthPercentage, 1 - healthPercentage));
-                //base.Draw(spriteBatch, color);
                 base.Draw(spriteBatch);
             }
+        }
+
+        public float HealthPercentage
+        {
+            get { return currentHealth / startHealth; }
         }
 
         public float CurrentHealth
@@ -82,7 +84,7 @@ namespace TowerDefenseXNA
 
         public bool IsDead
         {
-            get { return currentHealth <= 0; }
+            get { return !alive; }
         }
 
     }
