@@ -14,7 +14,7 @@ namespace TowerDefenseXNA
 {
     public class Player
     {
-        private int money = 50;
+        private int money = 100;
         private int lives = 30;
 
         // Players towers
@@ -83,7 +83,7 @@ namespace TowerDefenseXNA
                 {
                     tower.GetClosestEnemy(enemies);
                 }
-
+           
                 tower.Update(gameTime);
             }
 
