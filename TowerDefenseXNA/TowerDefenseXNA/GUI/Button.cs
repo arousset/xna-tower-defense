@@ -36,6 +36,10 @@ namespace TowerDefenseXNA
         // Store the current state of the button.
         private ButtonStatus state = ButtonStatus.Normal;
 
+        // For Drag&Drop
+        public event EventHandler Clicked;
+        public event EventHandler OnPress;
+
         // Constructor
         public Button(Texture2D texture, Texture2D hoverTexture, Texture2D pressedTexture, Vector2 position) : base(texture, position)
         {
@@ -85,10 +89,10 @@ namespace TowerDefenseXNA
                     // update the button state.
                     state = ButtonStatus.MouseOver;
 
-                    if (Clicked != null)
+                    if (OnPress != null)
                     {
-                        // Fire the clicked event.
-                        Clicked(this, EventArgs.Empty);
+                        // Fire the OnPress event.
+                        OnPress(this, EventArgs.Empty);
                     }
                 }
 
@@ -120,7 +124,7 @@ namespace TowerDefenseXNA
             }
         }
 
-        public event EventHandler Clicked;
+        
 
        
 

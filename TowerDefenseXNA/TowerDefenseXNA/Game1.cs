@@ -22,12 +22,16 @@ namespace TowerDefenseXNA
         Texture2D tiledMap;
         Toolbar toolBar;
         Player player;
+
         Button arrowButton;
+        Button spikeButton;
         Button startWaveButton;
+
         WaveManager waveManager;
         Texture2D enemyTextureNormal;
         Texture2D enemyTextureFast;
         Texture2D healthTexture;
+
         bool debug = false;
 
         public Game1()
@@ -52,9 +56,15 @@ namespace TowerDefenseXNA
             IsMouseVisible = true;
             this.Window.AllowUserResizing = false;
 
-            Texture2D towerTexture = Content.Load<Texture2D>("Towers/Arrow");
+           // Texture2D towerTexture = Content.Load<Texture2D>("Towers/Arrow");
             Texture2D bulletTexture = Content.Load<Texture2D>("Towers/bullet4");
-            player = new Player(lvl, towerTexture, bulletTexture);
+            Texture2D[] towerTextures = new Texture2D[]
+            {
+                Content.Load<Texture2D>("Towers/Arrow"),
+                Content.Load<Texture2D>("Towers/Spike")
+            };
+
+            player = new Player(lvl, towerTextures, bulletTexture);
 
             enemyTextureFast = Content.Load<Texture2D>("Enemies/Fast");
             enemyTextureNormal = Content.Load<Texture2D>("Enemies/Normal");
@@ -87,14 +97,26 @@ namespace TowerDefenseXNA
             Texture2D arrowHover = Content.Load<Texture2D>("GUI/Tower/Over");
             // The "Pressed" texture for the arrow button.
             Texture2D arrowPressed = Content.Load<Texture2D>("GUI/Tower/Pressed");
-            
+
+            Texture2D spikeNormal = Content.Load<Texture2D>("GUI/Spike_Tower/SpikeNormal");
+            // The "MouseOver" texture for the spike button.
+            Texture2D spikeHover = Content.Load<Texture2D>("GUI/Spike_Tower/SpikeOver");
+            // The "Pressed" texture for the spike button.
+            Texture2D spikePressed = Content.Load<Texture2D>("GUI/Spike_Tower/SpikePressed");
+
 
             // Initialize the buttons.
             arrowButton = new Button(arrowNormal, arrowHover, arrowPressed, new Vector2(0, lvl.Height * 32));
+            spikeButton = new Button(spikeNormal, spikeHover, spikePressed, new Vector2(32, lvl.Height * 32));
             startWaveButton = new Button(startWave, startWave, startWave, new Vector2(lvl.Width*32 - 32, lvl.Height * 32+5));
 
-            startWaveButton.Clicked += new EventHandler(startButton_Clicked);
-            arrowButton.Clicked += new EventHandler(arrowButton_Clicked);
+           // startWaveButton.Clicked += new EventHandler(startButton_Clicked);
+            arrowButton.OnPress += new EventHandler(arrowButton_OnPress);
+            spikeButton.OnPress += new EventHandler(spikeButton_OnPress);
+            
+
+
+          //  player = new Player(lvl, towerTextures, bulletTexture);
             
         }
 
@@ -116,6 +138,7 @@ namespace TowerDefenseXNA
             waveManager.Update(gameTime);
             
             arrowButton.Update(gameTime);
+            spikeButton.Update(gameTime);
             startWaveButton.Update(gameTime);
 
             player.Update(gameTime, waveManager.Enemies);
@@ -129,8 +152,10 @@ namespace TowerDefenseXNA
             lvl.Draw(spriteBatch);
             waveManager.Draw(spriteBatch);
             player.Draw(spriteBatch);
+            player.DrawPreview(spriteBatch);
             toolBar.Draw(spriteBatch, player, waveManager);
             arrowButton.Draw(spriteBatch);
+            spikeButton.Draw(spriteBatch);
             if(waveManager.WaveReady)
                 startWaveButton.Draw(spriteBatch);
             spriteBatch.End();
@@ -140,11 +165,25 @@ namespace TowerDefenseXNA
         private void arrowButton_Clicked(object sender, EventArgs e)
         {
             player.NewTowerType = "Arrow Tower";
+            player.NewTowerIndex = 0;
+        }
+        private void spikeButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Spike Tower";
+            player.NewTowerIndex = 1;
         }
 
-        private void startButton_Clicked(object sender, EventArgs e)
+        private void arrowButton_OnPress(object sender, EventArgs e)
         {
-            waveManager.StartNextWave();
+            player.NewTowerType = "Arrow Tower";
+            player.NewTowerIndex = 0;
         }
+        private void spikeButton_OnPress(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Spike Tower";
+            player.NewTowerIndex = 1;
+        }
+
+
     }
 }

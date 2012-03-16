@@ -121,6 +121,7 @@
     <Compile Include="Sprites\Sprite.cs" />
     <Compile Include="Towers\ArrowTower.cs" />
     <Compile Include="Towers\Bullet.cs" />
+    <Compile Include="Towers\SpikeTower.cs" />
     <Compile Include="Towers\Tower.cs" />
     <Compile Include="Gameplay\Wave.cs" />
     <Compile Include="Gameplay\WaveManager.cs" />
