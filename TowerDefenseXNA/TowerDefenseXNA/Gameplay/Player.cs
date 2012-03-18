@@ -44,11 +44,13 @@ namespace TowerDefenseXNA
         public int Money
         {
             get { return money; }
+            set { money = value; }
         }
 
         public int Lives
         {
             get { return lives; }
+            set { lives = value; }
         }
 
         public int NewTowerIndex

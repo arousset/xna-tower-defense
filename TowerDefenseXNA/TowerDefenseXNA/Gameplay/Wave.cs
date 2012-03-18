@@ -20,6 +20,7 @@ namespace TowerDefenseXNA
         private Texture2D enemyTextureNormal;
         private Texture2D enemyTextureFast;
         private Texture2D healthTexture;
+
         public List<Enemy> enemies = new List<Enemy>(); // List of enemies
         int[] wave;
         Player player;
@@ -90,19 +91,21 @@ namespace TowerDefenseXNA
                     if (enemy.CurrentHealth > 0) // Enemy is at the end
                     {
                         enemyAtEnd = true;
+                        player.Lives -= 1; 
+                    }
+                    else
+                    {
+                        player.Money += enemy.BountyGiven;
                     }
                     enemies.Remove(enemy);
                     i--;
-                }
+                } 
             }
         }
 
         public bool RoundOver
         {
-            get
-            {
-                return enemies.Count == 0 && enemiesSpawned == numOfEnemies;
-            }
+            get { return enemies.Count == 0 && enemiesSpawned == numOfEnemies; }
         }
 
         public int RoundNumber
