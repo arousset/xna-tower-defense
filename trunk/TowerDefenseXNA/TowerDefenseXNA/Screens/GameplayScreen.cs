@@ -103,7 +103,6 @@ namespace GameStateManagement
 
             Texture2D startWave = content.Load<Texture2D>("GUI/StartWave");
 
-
             // The "Normal" texture for the arrow button.
             Texture2D arrowNormal = content.Load<Texture2D>("GUI/Tower/Normal");
             // The "MouseOver" texture for the arrow button.
@@ -153,8 +152,7 @@ namespace GameStateManagement
         /// property, so the game will stop updating when the pause menu is active,
         /// or if you tab away to a different application.
         /// </summary>
-        public override void Update(GameTime gameTime, bool otherScreenHasFocus,
-                                                       bool coveredByOtherScreen)
+        public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, false);
 

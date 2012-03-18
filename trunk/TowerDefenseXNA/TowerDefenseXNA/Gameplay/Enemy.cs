@@ -59,6 +59,16 @@ namespace TowerDefenseXNA
                     player.giveGold(bountyGiven);
                 }
             }
+            else
+            {
+                alive = false;
+            }
+
+        }
+
+        public int BountyGiven
+        {
+            get { return bountyGiven; }
         }
 
         public float DistanceToDestination
