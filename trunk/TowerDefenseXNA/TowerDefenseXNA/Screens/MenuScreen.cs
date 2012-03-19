@@ -44,6 +44,12 @@ namespace GameStateManagement
             get { return menuEntries; }
         }
 
+        public int SelectedEntry
+        {
+            get { return selectedEntry; }
+            set { selectedEntry = value; }
+        }
+
 
         #endregion
 
@@ -56,7 +62,6 @@ namespace GameStateManagement
         public MenuScreen(string menuTitle)
         {
             this.menuTitle = menuTitle;
-
             TransitionOnTime = TimeSpan.FromSeconds(0.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
         }
@@ -77,18 +82,28 @@ namespace GameStateManagement
             if (input.IsMenuUp(ControllingPlayer))
             {
                 selectedEntry--;
-
                 if (selectedEntry < 0)
                     selectedEntry = menuEntries.Count - 1;
+                while (!(menuEntries[selectedEntry].Selectable))
+                {
+                    selectedEntry--;
+                    if (selectedEntry < 0)
+                        selectedEntry = menuEntries.Count - 1;
+                }
             }
 
             // Move to the next menu entry?
             if (input.IsMenuDown(ControllingPlayer))
             {
                 selectedEntry++;
-
                 if (selectedEntry >= menuEntries.Count)
                     selectedEntry = 0;
+                while (!(menuEntries[selectedEntry].Selectable))
+                {
+                    selectedEntry++;
+                    if (selectedEntry >= menuEntries.Count)
+                        selectedEntry = 0;
+                }
             }
 
             // Accept or cancel the menu? We pass in our ControllingPlayer, which may

@@ -1,4 +1,4 @@
-#region File Description
+﻿#region File Description
 //-----------------------------------------------------------------------------
 // PauseMenuScreen.cs
 //
@@ -18,30 +18,30 @@ namespace GameStateManagement
     /// The pause menu comes up over the top of the game,
     /// giving the player options to resume or quit.
     /// </summary>
-    class PauseMenuScreen : MenuScreen
+    class LooseMenuScreen : MenuScreen
     {
         ContentManager Content;
+
         #region Initialization
 
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public PauseMenuScreen(ContentManager Content)
-            : base("Paused")
+        public LooseMenuScreen(ContentManager Content)
+            : base("You loose !")
         {
             this.Content = Content;
-
             // Create our menu entries.
-            MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
+            MenuEntry restarteGameMenuEntry = new MenuEntry("Restart level");
             MenuEntry quitGameMenuEntry = new MenuEntry("Quit Game");
-            
+
             // Hook up menu event handlers.
-            resumeGameMenuEntry.Selected += OnCancel;
+            restarteGameMenuEntry.Selected += RestarteGameMenuEntrySelected;
             quitGameMenuEntry.Selected += QuitGameMenuEntrySelected;
 
             // Add entries to the menu.
-            MenuEntries.Add(resumeGameMenuEntry);
+            MenuEntries.Add(restarteGameMenuEntry);
             MenuEntries.Add(quitGameMenuEntry);
         }
 
@@ -50,6 +50,22 @@ namespace GameStateManagement
 
         #region Handle Input
 
+        void RestarteGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        {
+            const string message = "Are you sure you want to restart this level?";
+
+            MessageBoxScreen confirmRestartMessageBox = new MessageBoxScreen(message);
+
+            confirmRestartMessageBox.Accepted += ConfirmRestartMessageBoxAccepted;
+
+            ScreenManager.AddScreen(confirmRestartMessageBox, ControllingPlayer);
+        }
+
+        void ConfirmRestartMessageBoxAccepted(object sender, PlayerIndexEventArgs e)
+        {
+            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
+                               new GameplayScreen());
+        }
 
         /// <summary>
         /// Event handler for when the Quit Game menu entry is selected.

@@ -155,7 +155,6 @@ namespace GameStateManagement
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
         {
             base.Update(gameTime, otherScreenHasFocus, false);
-
             // Gradually fade in or out depending on whether we are covered by the pause screen.
             if (coveredByOtherScreen)
                 pauseAlpha = Math.Min(pauseAlpha + 1f / 32, 1);
@@ -176,6 +175,8 @@ namespace GameStateManagement
                 startWaveButton.Update(gameTime);
 
                 player.Update(gameTime, waveManager.Enemies);
+                if (player.Lives <= 0)
+                    ScreenManager.AddScreen(new LooseMenuScreen(content), ControllingPlayer);
             }
         }
 
@@ -204,7 +205,7 @@ namespace GameStateManagement
 
             if (input.IsPauseGame(ControllingPlayer) || gamePadDisconnected)
             {
-                ScreenManager.AddScreen(new PauseMenuScreen(), ControllingPlayer);
+                ScreenManager.AddScreen(new PauseMenuScreen(content), ControllingPlayer);
             }
             else
             {

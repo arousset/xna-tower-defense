@@ -78,7 +78,6 @@ namespace TowerDefenseXNA
                         AddEnemyNormal();
                     else
                         AddEnemyFast();
-                    //AddEnemy(); // Time to add a new enemey
                 }
             }
 

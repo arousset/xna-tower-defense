@@ -67,6 +67,7 @@ namespace GameStateManagement
         }
 
 
+
         /// <summary>
         /// If true, the manager prints out a list of all the screens
         /// each time it is updated. This can be useful for making sure

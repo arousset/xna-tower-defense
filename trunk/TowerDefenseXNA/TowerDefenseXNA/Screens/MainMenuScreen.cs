@@ -9,6 +9,8 @@
 
 #region Using Statements
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 #endregion
 
 namespace GameStateManagement
@@ -19,14 +21,14 @@ namespace GameStateManagement
     class MainMenuScreen : MenuScreen
     {
         #region Initialization
-
-
+        ContentManager Content;
         /// <summary>
         /// Constructor fills in the menu contents.
         /// </summary>
-        public MainMenuScreen()
+        public MainMenuScreen(ContentManager Content)
             : base("Tower Defense")
         {
+            this.Content = Content;
             // Create our menu entries.
             MenuEntry playGameMenuEntry = new MenuEntry("Play Game solo");
             MenuEntry multiMenuEntry = new MenuEntry("Multiplayer");
@@ -60,8 +62,9 @@ namespace GameStateManagement
         /// </summary>
         void PlayGameMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
-                               new GameplayScreen());
+            /*LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
+                               new GameplayScreen());*/
+            ScreenManager.AddScreen(new SelectLevelMenuScreen(Content), e.PlayerIndex);
         }
 
         void MultiMenuEntrySelected(object sender, PlayerIndexEventArgs e)
@@ -91,7 +94,7 @@ namespace GameStateManagement
         /// </summary>
         protected override void OnCancel(PlayerIndex playerIndex)
         {
-            const string message = "Are you sure you want to exit this sample?";
+            const string message = "Are you sure you want to exit the game?";
 
             MessageBoxScreen confirmExitMessageBox = new MessageBoxScreen(message);
 
