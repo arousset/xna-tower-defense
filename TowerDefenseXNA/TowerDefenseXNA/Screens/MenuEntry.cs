@@ -11,6 +11,7 @@
 using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Content;
 #endregion
 
 namespace GameStateManagement
@@ -21,7 +22,7 @@ namespace GameStateManagement
     /// entries in different ways. This also provides an event that will be raised
     /// when the menu entry is selected.
     /// </summary>
-    class MenuEntry
+    class MenuEntry : GameScreen
     {
         #region Fields
 
@@ -43,6 +44,9 @@ namespace GameStateManagement
         /// each frame in Update.
         /// </summary>
         Vector2 position;
+        Texture2D unlockTexture;
+        bool selectable = true;
+        bool lvlUnlock = false;
 
         #endregion
 
@@ -56,6 +60,18 @@ namespace GameStateManagement
         {
             get { return text; }
             set { text = value; }
+        }
+
+        public bool Selectable
+        {
+            get { return selectable; }
+            set { selectable = value; }
+        }
+
+        public bool LvlUnlock
+        {
+            get { return lvlUnlock; }
+            set { lvlUnlock = value; }
         }
 
 
@@ -103,6 +119,12 @@ namespace GameStateManagement
         public MenuEntry(string text)
         {
             this.text = text;
+        }
+
+        public MenuEntry(string text, Texture2D unlockTexture)
+        {
+            this.text = text;
+            this.unlockTexture = unlockTexture;
         }
 
 
@@ -167,6 +189,12 @@ namespace GameStateManagement
 
             spriteBatch.DrawString(font, text, position, color, 0,
                                    origin, scale, SpriteEffects.None, 0);
+            if (lvlUnlock)
+            {
+                //spriteBatch.Draw(unlockTexture, new Rectangle(position.X, position.Y, 32, 32), Color.White);
+                spriteBatch.Draw(unlockTexture, new Rectangle((int)position.X-45,(int)position.Y-17,32,32), Color.White);
+
+            }
         }
 
 

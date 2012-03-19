@@ -15,7 +15,7 @@ namespace TowerDefenseXNA
     public class Player
     {
         private int money = 100;
-        private int lives = 30;
+        private int lives = 5;
 
         // Players towers
         private List<Tower> towers = new List<Tower>();
