@@ -14,6 +14,9 @@ namespace TowerDefenseXNA
         public bool alive = true;
         protected float speed = 0.5f;
         protected int bountyGiven;
+        private float speedModifier;
+        private float modifierDuration;
+        private float modiferCurrentTime;
         Player player;
         private Queue<Vector2> waypoints = new Queue<Vector2>();
 
@@ -39,6 +42,7 @@ namespace TowerDefenseXNA
             base.Update(gameTime);
             if (currentHealth <= 0)
                 alive = false;
+
             if (waypoints.Count > 0)
             {
                 if (DistanceToDestination < speed)
@@ -50,7 +54,28 @@ namespace TowerDefenseXNA
                 {
                     Vector2 direction = waypoints.Peek() - position;
                     direction.Normalize();
-                    velocity = Vector2.Multiply(direction, speed);
+
+                    // Store the original speed.
+                    float temporarySpeed = speed;
+
+                    // If the modifier has finished,
+                    if (modiferCurrentTime > modifierDuration)
+                    {
+                        // reset the modifier.
+                        speedModifier = 0;
+                        modiferCurrentTime = 0;
+                    }
+
+                    if (speedModifier != 0 && modiferCurrentTime <= modifierDuration)
+                    {
+                        // Modify the speed of the enemy.
+                        temporarySpeed *= speedModifier;
+                        // Update the modifier timer.
+                        modiferCurrentTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
+
+                    velocity = Vector2.Multiply(direction, temporarySpeed);
+
                     position += velocity;
                 }
                 if (currentHealth <= 0)
@@ -69,6 +94,22 @@ namespace TowerDefenseXNA
         public int BountyGiven
         {
             get { return bountyGiven; }
+        }
+
+        public float SpeedModifier
+        {
+            get { return speedModifier; }
+            set { speedModifier = value; }
+        }
+
+        public float ModifierDuration
+        {
+            get { return modifierDuration; }
+            set
+            {
+                modifierDuration = value;
+                modiferCurrentTime = 0;
+            }
         }
 
         public float DistanceToDestination

@@ -171,6 +171,11 @@ namespace TowerDefenseXNA
                         towerToAdd = new SpikeTower(towerTextures[1], bulletTexture, new Vector2(tileX, tileY));
                         break;
                     }
+                case "Slow Tower":
+                    {
+                        towerToAdd = new SlowTower(towerTextures[2], bulletTexture, new Vector2(tileX, tileY));
+                        break;
+                    }
             }
 
 
