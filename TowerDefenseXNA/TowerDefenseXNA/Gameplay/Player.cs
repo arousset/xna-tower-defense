@@ -79,9 +79,7 @@ namespace TowerDefenseXNA
         public void SellButtonOnPress(object sender, EventArgs e)
         {
             money += (int)((float)selectedTower.Cost * 0.75f);
-            towers.Remove(selectedTower);
-
-           
+            // Mettre code pour fiare upgrade
             selectedTower = null;
         }
 

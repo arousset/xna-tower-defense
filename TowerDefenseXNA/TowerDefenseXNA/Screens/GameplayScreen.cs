@@ -43,6 +43,7 @@ namespace GameStateManagement
         TowerDefenseXNA.Button arrowButton;
         TowerDefenseXNA.Button spikeButton;
         TowerDefenseXNA.Button slowButton;
+        TowerDefenseXNA.Button sellButton;
         TowerDefenseXNA.Button startWaveButton;
         TowerDefenseXNA.WaveManager waveManager;
         Texture2D enemyTextureNormal;
@@ -125,10 +126,19 @@ namespace GameStateManagement
             // The "Pressed" texture for the spike button.
             Texture2D slowPressed = content.Load<Texture2D>("GUI/Slow Tower/Pressed");
 
+            // The "Normal" texture for the sell button.
+            Texture2D sellNormal = content.Load<Texture2D>("GUI/Sell Button/Normal");
+            // The "MouseOver" texture for the sell button.
+            Texture2D sellHover = content.Load<Texture2D>("GUI/Sell Button/Mouse Over");
+            // The "Pressed" texture for the sell button.
+            Texture2D sellPressed = content.Load<Texture2D>("GUI/Sell Button/Pressed");
+
             // Initialize the buttons.
             arrowButton = new TowerDefenseXNA.Button(arrowNormal, arrowHover, arrowPressed, new Vector2(0, lvl.Height * 32));
             spikeButton = new TowerDefenseXNA.Button(spikeNormal, spikeHover, spikePressed, new Vector2(32, lvl.Height * 32));
-            slowButton = new TowerDefenseXNA.Button(slowNormal, slowHover, slowPressed, new Vector2(32*2, lvl.Height * 32)); 
+            slowButton = new TowerDefenseXNA.Button(slowNormal, slowHover, slowPressed, new Vector2(32*2, lvl.Height * 32));
+
+            sellButton = new TowerDefenseXNA.Button(sellNormal, sellHover, sellPressed, new Vector2(32 * 15, lvl.Height * 32));
            
             startWaveButton = new TowerDefenseXNA.Button(startWave, startWave, startWave, new Vector2(lvl.Width * 32 - 32, lvl.Height * 32 + 5));
             startWaveButton.OnPress += new EventHandler(startButton_OnPress);
@@ -136,6 +146,8 @@ namespace GameStateManagement
             arrowButton.OnPress += new EventHandler(arrowButton_OnPress);
             spikeButton.OnPress += new EventHandler(spikeButton_OnPress);
             slowButton.OnPress += new EventHandler(slowButton_OnPress);
+
+            sellButton.OnPress += new EventHandler(player.SellButtonOnPress);
             //Thread.Sleep(1000);
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -180,12 +192,19 @@ namespace GameStateManagement
                     debug = !debug;
                 }
 
+                
+
                 waveManager.Update(gameTime);
 
                 arrowButton.Update(gameTime);
                 spikeButton.Update(gameTime);
                 slowButton.Update(gameTime);
                 startWaveButton.Update(gameTime);
+
+                if (player.TowerSelected)
+                {
+                    sellButton.Update(gameTime);
+                }
 
                 player.Update(gameTime, waveManager.Enemies);
                 if (player.Lives <= 0)
@@ -241,6 +260,8 @@ namespace GameStateManagement
 
             spriteBatch.Begin();
 
+           
+
             lvl.Draw(spriteBatch);
             waveManager.Draw(spriteBatch);
             player.Draw(spriteBatch);
@@ -249,6 +270,12 @@ namespace GameStateManagement
             arrowButton.Draw(spriteBatch);
             spikeButton.Draw(spriteBatch);
             slowButton.Draw(spriteBatch);
+
+            if (player.TowerSelected)
+            {
+                sellButton.Draw(spriteBatch);
+            }
+
             if (waveManager.WaveReady)
                 startWaveButton.Draw(spriteBatch);
             spriteBatch.End();
