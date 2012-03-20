@@ -84,7 +84,8 @@ namespace GameStateManagement
    	        };
 
             Texture2D bulletTexture = content.Load<Texture2D>("Towers/bullet4");
-            player = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture);
+            Texture2D rangeTexture = content.Load<Texture2D>("GUI/Range");
+            player = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture);
 
             enemyTextureFast = content.Load<Texture2D>("Enemies/Fast");
             enemyTextureNormal = content.Load<Texture2D>("Enemies/Normal");

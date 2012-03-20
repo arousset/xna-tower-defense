@@ -23,10 +23,18 @@ namespace TowerDefenseXNA
 
         protected float bulletTimer; // How long ago was a bullet fired
         protected List<Bullet> bulletList = new List<Bullet>();
+        protected bool selected;
+        protected Texture2D rangeTexture;
 
         public Enemy Target
         {
             get { return target; }
+        }
+
+        public bool Selected
+        {
+            get { return selected; }
+            set { selected = value; }
         }
 
         public int Cost
@@ -49,9 +57,10 @@ namespace TowerDefenseXNA
             get { return target != null; }
         }
 
-        public Tower(Texture2D texture, Texture2D bulletTexture, Vector2 position) : base(texture, position)
+        public Tower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position) : base(texture, position)
         {
             this.bulletTexture = bulletTexture;
+            this.rangeTexture = rangeTexture;
         }
 
         // Methods
@@ -104,6 +113,19 @@ namespace TowerDefenseXNA
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            if (selected == true)
+            {
+                Vector2 radiusPosition = center - new Vector2(radius);
+
+                Rectangle radiusRect = new Rectangle(
+                    (int)radiusPosition.X,
+                    (int)radiusPosition.Y,
+                    (int)radius * 2,
+                    (int)radius * 2);
+
+                spriteBatch.Draw(rangeTexture, radiusRect, Color.White);
+            }
+            
             foreach (Bullet bullet in bulletList)
                 bullet.Draw(spriteBatch);
 

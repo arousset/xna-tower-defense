@@ -26,6 +26,8 @@ namespace TowerDefenseXNA
         private Texture2D towerTexture;
         private Texture2D bulletTexture;
         private Texture2D[] towerTextures;
+        private Texture2D rangeTexture;
+        private Tower selectedTower;
 
         // Tower placement
         private int cellX;
@@ -35,6 +37,11 @@ namespace TowerDefenseXNA
 
         private string newTowerType;
         private int newTowerIndex;
+
+        public bool TowerSelected
+        {
+            get { return selectedTower != null; }
+        }
 
         public string NewTowerType
         {
@@ -59,13 +66,25 @@ namespace TowerDefenseXNA
         }
 
         // Constructor 
-        public Player(Level level, Texture2D[] towerTextures, Texture2D bulletTexture)
+        public Player(Level level, Texture2D[] towerTextures, Texture2D bulletTexture, Texture2D rangeTexture)
         {
             this.level = level;
 
             this.towerTextures = towerTextures;
             this.bulletTexture = bulletTexture;
+            this.rangeTexture = rangeTexture;
         }
+
+        // Method Sell or UPDATE PAR LA SUITE !
+        public void SellButtonOnPress(object sender, EventArgs e)
+        {
+            money += (int)((float)selectedTower.Cost * 0.75f);
+            towers.Remove(selectedTower);
+
+           
+            selectedTower = null;
+        }
+
 
 
         public void Update(GameTime gameTime, List<Enemy> enemies)
@@ -84,6 +103,31 @@ namespace TowerDefenseXNA
                 if (string.IsNullOrEmpty(newTowerType) == false)
                 {
                     AddTower();
+                }
+                else
+                {
+                    if (selectedTower != null)
+                    {
+                        if (!selectedTower.Bounds.Contains(mouseState.X, mouseState.Y))
+                        {
+                            selectedTower.Selected = false;
+                            selectedTower = null;
+                        }
+                    }
+
+                    foreach (Tower tower in towers)
+                    {
+                        if (tower == selectedTower)
+                        {
+                            continue;
+                        }
+
+                        if (tower.Bounds.Contains(mouseState.X, mouseState.Y))
+                        {
+                            selectedTower = tower;
+                            tower.Selected = true;
+                        }
+                    }
                 }
             }
 
@@ -163,17 +207,17 @@ namespace TowerDefenseXNA
             {
                 case "Arrow Tower":
                     {
-                        towerToAdd = new ArrowTower(towerTextures[0], bulletTexture, new Vector2(tileX, tileY));
+                        towerToAdd = new ArrowTower(towerTextures[0], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
                         break;
                     }
                 case "Spike Tower":
                     {
-                        towerToAdd = new SpikeTower(towerTextures[1], bulletTexture, new Vector2(tileX, tileY));
+                        towerToAdd = new SpikeTower(towerTextures[1], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
                         break;
                     }
                 case "Slow Tower":
                     {
-                        towerToAdd = new SlowTower(towerTextures[2], bulletTexture, new Vector2(tileX, tileY));
+                        towerToAdd = new SlowTower(towerTextures[2], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
                         break;
                     }
             }

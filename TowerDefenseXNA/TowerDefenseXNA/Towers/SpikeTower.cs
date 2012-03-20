@@ -25,7 +25,7 @@ namespace TowerDefenseXNA
 
 
         // Constructors
-        public SpikeTower(Texture2D texture, Texture2D bulletTexture, Vector2 position) : base(texture, bulletTexture, position) 
+        public SpikeTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position) : base(texture, bulletTexture, rangeTexture, position) 
         {
             this.damage = 20; 
             this.cost = 40;   

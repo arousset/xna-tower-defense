@@ -14,7 +14,8 @@ namespace TowerDefenseXNA
         // Defines how long this effect will last.
         private float modifierDuration;
 
-        public SlowTower(Texture2D texture, Texture2D bulletTexture, Vector2 position) : base(texture, bulletTexture, position)
+        public SlowTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position)
+            : base(texture, bulletTexture, rangeTexture, position)
         {
             this.damage = 5; // Set the damage
             this.cost = 25;   // Set the initial cost
