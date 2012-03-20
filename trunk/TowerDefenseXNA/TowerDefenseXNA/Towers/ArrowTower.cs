@@ -16,7 +16,8 @@ namespace TowerDefenseXNA
     {
         
         // Constructor
-        public ArrowTower(Texture2D texture, Texture2D bulletTexture, Vector2 position) : base(texture, bulletTexture, position)
+        public ArrowTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position)
+            : base(texture, bulletTexture, rangeTexture, position)
         {
             this.damage = 15; // Set the damage
             this.cost = 15;   // Set the initial cost
