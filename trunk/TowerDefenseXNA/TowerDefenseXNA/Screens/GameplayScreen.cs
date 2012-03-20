@@ -42,6 +42,7 @@ namespace GameStateManagement
         TowerDefenseXNA.Player player;
         TowerDefenseXNA.Button arrowButton;
         TowerDefenseXNA.Button spikeButton;
+        TowerDefenseXNA.Button slowButton;
         TowerDefenseXNA.Button startWaveButton;
         TowerDefenseXNA.WaveManager waveManager;
         Texture2D enemyTextureNormal;
@@ -78,7 +79,8 @@ namespace GameStateManagement
             Texture2D[] towerTextures = new Texture2D[]
   	        {
   	                content.Load<Texture2D>("Towers/Arrow"),
-   	                content.Load<Texture2D>("Towers/Spike")
+   	                content.Load<Texture2D>("Towers/Spike"),
+                    content.Load<Texture2D>("Towers/Slow")
    	        };
 
             Texture2D bulletTexture = content.Load<Texture2D>("Towers/bullet4");
@@ -110,20 +112,29 @@ namespace GameStateManagement
             // The "Pressed" texture for the arrow button.
             Texture2D arrowPressed = content.Load<Texture2D>("GUI/Tower/Pressed");
 
-             Texture2D spikeNormal = content.Load<Texture2D>("GUI/Spike_Tower/SpikeNormal");
+            Texture2D spikeNormal = content.Load<Texture2D>("GUI/Spike_Tower/SpikeNormal");
   	        // The "MouseOver" texture for the spike button.
  	        Texture2D spikeHover = content.Load<Texture2D>("GUI/Spike_Tower/SpikeOver");
   	        // The "Pressed" texture for the spike button.
   	        Texture2D spikePressed = content.Load<Texture2D>("GUI/Spike_Tower/SpikePressed");
 
+            Texture2D slowNormal = content.Load<Texture2D>("GUI/Slow Tower/Normal");
+            // The "MouseOver" texture for the spike button.
+            Texture2D slowHover = content.Load<Texture2D>("GUI/Slow Tower/Mouse Over");
+            // The "Pressed" texture for the spike button.
+            Texture2D slowPressed = content.Load<Texture2D>("GUI/Slow Tower/Pressed");
+
             // Initialize the buttons.
             arrowButton = new TowerDefenseXNA.Button(arrowNormal, arrowHover, arrowPressed, new Vector2(0, lvl.Height * 32));
             spikeButton = new TowerDefenseXNA.Button(spikeNormal, spikeHover, spikePressed, new Vector2(32, lvl.Height * 32));
+            slowButton = new TowerDefenseXNA.Button(slowNormal, slowHover, slowPressed, new Vector2(32*2, lvl.Height * 32)); 
+           
             startWaveButton = new TowerDefenseXNA.Button(startWave, startWave, startWave, new Vector2(lvl.Width * 32 - 32, lvl.Height * 32 + 5));
-
             startWaveButton.OnPress += new EventHandler(startButton_OnPress);
+            
             arrowButton.OnPress += new EventHandler(arrowButton_OnPress);
             spikeButton.OnPress += new EventHandler(spikeButton_OnPress);
+            slowButton.OnPress += new EventHandler(slowButton_OnPress);
             //Thread.Sleep(1000);
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -172,6 +183,7 @@ namespace GameStateManagement
 
                 arrowButton.Update(gameTime);
                 spikeButton.Update(gameTime);
+                slowButton.Update(gameTime);
                 startWaveButton.Update(gameTime);
 
                 player.Update(gameTime, waveManager.Enemies);
@@ -235,6 +247,7 @@ namespace GameStateManagement
             toolBar.Draw(spriteBatch, player, waveManager);
             arrowButton.Draw(spriteBatch);
             spikeButton.Draw(spriteBatch);
+            slowButton.Draw(spriteBatch);
             if (waveManager.WaveReady)
                 startWaveButton.Draw(spriteBatch);
             spriteBatch.End();
@@ -248,6 +261,22 @@ namespace GameStateManagement
             }
         }
 
+        private void arrowButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Arrow Tower";
+            player.NewTowerIndex = 0;
+        }
+        private void spikeButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Spike Tower";
+            player.NewTowerIndex = 1;
+        }
+        private void slowButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Slow Tower";
+            player.NewTowerIndex = 2;
+        }
+
         private void arrowButton_OnPress(object sender, EventArgs e)
         {
             player.NewTowerType = "Arrow Tower";
@@ -258,6 +287,12 @@ namespace GameStateManagement
         {
             player.NewTowerType = "Spike Tower";
             player.NewTowerIndex = 1;
+        }
+
+        private void slowButton_OnPress(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Slow Tower";
+            player.NewTowerIndex = 2;
         }
 
         private void startButton_OnPress(object sender, EventArgs e)
