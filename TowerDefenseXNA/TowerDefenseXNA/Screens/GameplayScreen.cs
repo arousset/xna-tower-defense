@@ -137,7 +137,7 @@ namespace GameStateManagement
             arrowButton = new TowerDefenseXNA.Button(arrowNormal, arrowHover, arrowPressed, new Vector2(0, lvl.Height * 32));
             spikeButton = new TowerDefenseXNA.Button(spikeNormal, spikeHover, spikePressed, new Vector2(32, lvl.Height * 32));
             slowButton = new TowerDefenseXNA.Button(slowNormal, slowHover, slowPressed, new Vector2(32*2, lvl.Height * 32));
-
+            
             sellButton = new TowerDefenseXNA.Button(sellNormal, sellHover, sellPressed, new Vector2(32 * 15, lvl.Height * 32));
            
             startWaveButton = new TowerDefenseXNA.Button(startWave, startWave, startWave, new Vector2(lvl.Width * 32 - 32, lvl.Height * 32 + 5));
