@@ -95,8 +95,7 @@ namespace TowerDefenseXNA
             tileX = cellX * 32; // Convert from array space to level space
             tileY = cellY * 32; // Convert from array space to level space
            
-            if (mouseState.LeftButton == ButtonState.Released
-                && oldState.LeftButton == ButtonState.Pressed)
+            if (mouseState.LeftButton == ButtonState.Released && oldState.LeftButton == ButtonState.Pressed)
             {
                 if (string.IsNullOrEmpty(newTowerType) == false)
                 {
@@ -127,6 +126,12 @@ namespace TowerDefenseXNA
                         }
                     }
                 }
+            }
+
+            if (mouseState.RightButton == ButtonState.Released && oldState.RightButton == ButtonState.Pressed)
+            {
+                selectedTower = null;
+                newTowerType = string.Empty;
             }
 
             foreach (Tower tower in towers)
@@ -164,10 +169,6 @@ namespace TowerDefenseXNA
 
                 Texture2D previewTexture = towerTextures[newTowerIndex];
                 spriteBatch.Draw(previewTexture, new Rectangle(tileX, tileY, previewTexture.Width, previewTexture.Height), Color.White);
-            }
-            else
-            {
-                newTowerType = string.Empty;
             }
         }
 
@@ -229,6 +230,10 @@ namespace TowerDefenseXNA
 
                 // Reset the newTowerType field.
                 newTowerType = string.Empty;
+            }
+            else
+            {
+                //newTowerType = string.Empty;
             }
         }
 
