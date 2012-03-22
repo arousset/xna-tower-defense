@@ -39,6 +39,7 @@ namespace GameStateManagement
         TowerDefenseXNA.Level lvl;
         Texture2D tiledMap;
         TowerDefenseXNA.Toolbar toolBar;
+        TowerDefenseXNA.Healthbar healthbar;
         TowerDefenseXNA.Player player;
         TowerDefenseXNA.Button arrowButton;
         TowerDefenseXNA.Button spikeButton;
@@ -49,6 +50,7 @@ namespace GameStateManagement
         Texture2D enemyTextureNormal;
         Texture2D enemyTextureFast;
         Texture2D healthTexture;
+
         bool debug = false;
         float pauseAlpha;
 
@@ -76,6 +78,7 @@ namespace GameStateManagement
             TransitionOnTime = TimeSpan.FromSeconds(1.5);
             tiledMap = content.Load<Texture2D>("Tilesmap");
             lvl = new TowerDefenseXNA.Level(tiledMap, 32);
+            
 
             Texture2D[] towerTextures = new Texture2D[]
   	        {
@@ -95,8 +98,10 @@ namespace GameStateManagement
 
             Texture2D topBar = content.Load<Texture2D>("GUI/Toolbar");
             SpriteFont font = content.Load<SpriteFont>("Arial");
+            Texture2D healthinformations = content.Load<Texture2D>("GUI/Coeur");
 
             toolBar = new TowerDefenseXNA.Toolbar(topBar, font, new Vector2(0, lvl.Height * 32));
+            healthbar = new TowerDefenseXNA.Healthbar(healthinformations, font, new Vector2(lvl.Width+860, lvl.Height-10));
             ///////
 
             map = content.Load<Map>("Map");
@@ -265,8 +270,11 @@ namespace GameStateManagement
             lvl.Draw(spriteBatch);
             waveManager.Draw(spriteBatch);
             player.Draw(spriteBatch);
+            
             player.DrawPreview(spriteBatch);
             toolBar.Draw(spriteBatch, player, waveManager);
+            healthbar.Draw(spriteBatch, player);
+
             arrowButton.Draw(spriteBatch);
             spikeButton.Draw(spriteBatch);
             slowButton.Draw(spriteBatch);

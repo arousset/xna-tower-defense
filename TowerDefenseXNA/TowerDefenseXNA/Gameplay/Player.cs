@@ -15,7 +15,7 @@ namespace TowerDefenseXNA
     public class Player
     {
         private int money = 100;
-        private int lives = 5;
+        private int lives = 30;
 
         // Players towers
         private List<Tower> towers = new List<Tower>();
@@ -81,6 +81,7 @@ namespace TowerDefenseXNA
             money += (int)((float)selectedTower.Cost * 0.75f);
             // Mettre code pour fiare upgrade
             selectedTower = null;
+
         }
 
 
@@ -230,10 +231,6 @@ namespace TowerDefenseXNA
 
                 // Reset the newTowerType field.
                 newTowerType = string.Empty;
-            }
-            else
-            {
-                //newTowerType = string.Empty;
             }
         }
 
