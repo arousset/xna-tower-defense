@@ -207,7 +207,6 @@ namespace GameStateManagement
             slowButton.OnPress += new EventHandler(slowButton_OnPress);
             fireButton.OnPress += new EventHandler(fireButton_OnPress);
 
-            sellButton.OnPress += new EventHandler(player.SellButtonOnPress);
             //Thread.Sleep(1000);
 
             // once the load has finished, we use ResetElapsedTime to tell the game's
@@ -314,6 +313,10 @@ namespace GameStateManagement
             {
                 ScreenManager.AddScreen(new PauseMenuScreen(content), ControllingPlayer);
             }
+            else
+            {
+                
+            }
         }
 
 
@@ -368,6 +371,26 @@ namespace GameStateManagement
             }
         }
 
+        private void arrowButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Arrow Tower";
+            player.NewTowerIndex = 0;
+        }
+        private void spikeButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Spike Tower";
+            player.NewTowerIndex = 1;
+        }
+        private void slowButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Slow Tower";
+            player.NewTowerIndex = 2;
+        }
+        private void fireButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Fire Tower";
+            player.NewTowerIndex = 3;
+        }
 
         private void arrowButton_OnPress(object sender, EventArgs e)
         {

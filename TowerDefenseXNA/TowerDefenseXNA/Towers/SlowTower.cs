@@ -36,7 +36,7 @@ namespace TowerDefenseXNA
             {
                 Bullet bullet = new Bullet(bulletTexture, Vector2.Subtract(center,
                     new Vector2(bulletTexture.Width / 2)), rotation, 6, damage);
-
+                bulletAudio.Play();
                 bulletList.Add(bullet);
                 bulletTimer = 0;
             }
