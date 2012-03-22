@@ -145,21 +145,6 @@ namespace TowerDefenseXNA
             }
 
             oldState = mouseState; // Set the oldState so it becomes the state of the previous frame.
-
-            if (selectedTower != null)
-            {
-                Vector2 radiusPosition = selectedTower.Center - new Vector2(selectedTower.Radius);
-                Console.WriteLine(selectedTower.Radius);
-                Rectangle radiusRect = new Rectangle(
-                    (int)radiusPosition.X,
-                    (int)radiusPosition.Y,
-                    (int)selectedTower.Radius * 2,
-                    (int)selectedTower.Radius * 2);
-
-                //Draw(rangeTexture, radiusRect, Color.White);
-            }
-
-            
         }
 
 
@@ -241,16 +226,19 @@ namespace TowerDefenseXNA
                 case "Spike Tower":
                     {
                         towerToAdd = new SpikeTower(towerTextures[1], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
+                        selectedTower = towerToAdd;
                         break;
                     }
                 case "Slow Tower":
                     {
                         towerToAdd = new SlowTower(towerTextures[2], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
+                        selectedTower = towerToAdd;
                         break;
                     }
                 case "Fire Tower":
                     {
                         towerToAdd = new FireTower(towerTextures[3], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
+                        selectedTower = towerToAdd;
                         break;
                     }
             }
