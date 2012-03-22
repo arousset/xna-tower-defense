@@ -53,7 +53,7 @@ namespace GameStateManagement
             this.graphics.PreferredBackBufferWidth = 960; // 960
             this.graphics.PreferredBackBufferHeight = 720; // 720
             graphics.PreferredBackBufferWidth = 30 * 32;
-            graphics.PreferredBackBufferHeight = 15 * 32;
+            graphics.PreferredBackBufferHeight = 15 * 32; // virer le +32
 
             this.graphics.ApplyChanges();
             this.Window.Title = "Tower Defense";

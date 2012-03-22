@@ -72,6 +72,10 @@ namespace TowerDefenseXNA
                         temporarySpeed *= speedModifier;
                         // Update the modifier timer.
                         modiferCurrentTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+                        // mettre le if each sec
+                         //truc .life -5.
+
                     }
 
                     velocity = Vector2.Multiply(direction, temporarySpeed);
