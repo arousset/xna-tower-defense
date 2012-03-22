@@ -28,7 +28,7 @@ namespace GameStateManagement
 
         List<MenuEntry> menuEntries = new List<MenuEntry>();
         int selectedEntry = 0;
-        string menuTitle;
+        public string menuTitle;
 
         #endregion
 
@@ -49,7 +49,6 @@ namespace GameStateManagement
             get { return selectedEntry; }
             set { selectedEntry = value; }
         }
-
 
         #endregion
 

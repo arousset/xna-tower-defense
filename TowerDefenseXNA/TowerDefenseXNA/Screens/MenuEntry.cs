@@ -47,6 +47,8 @@ namespace GameStateManagement
         Texture2D unlockTexture;
         bool selectable = true;
         bool lvlUnlock = false;
+        bool level = false;
+        bool completed = false;
 
         #endregion
 
@@ -72,6 +74,18 @@ namespace GameStateManagement
         {
             get { return lvlUnlock; }
             set { lvlUnlock = value; }
+        }
+
+        public bool Completed
+        {
+            get { return completed; }
+            set { completed = value; }
+        }
+
+        public bool Level
+        {
+            get { return level; }
+            set { level = value; }
         }
 
 
@@ -187,13 +201,19 @@ namespace GameStateManagement
 
             Vector2 origin = new Vector2(0, font.LineSpacing / 2);
 
-            spriteBatch.DrawString(font, text, position, color, 0,
-                                   origin, scale, SpriteEffects.None, 0);
-            if (lvlUnlock)
+            if (!lvlUnlock && level)
             {
-                //spriteBatch.Draw(unlockTexture, new Rectangle(position.X, position.Y, 32, 32), Color.White);
-                spriteBatch.Draw(unlockTexture, new Rectangle((int)position.X-45,(int)position.Y-17,32,32), Color.White);
-
+                spriteBatch.DrawString(font, text, position,  Color.Black, 0,
+                                   origin, scale, SpriteEffects.None, 0);
+            }
+            else
+            {
+                spriteBatch.DrawString(font, text, position, color, 0,
+                                   origin, scale, SpriteEffects.None, 0);
+            }
+            if (completed)
+            {
+                spriteBatch.Draw(unlockTexture, new Rectangle((int)position.X - 45, (int)position.Y - 17, 32, 32), Color.White);
             }
         }
 

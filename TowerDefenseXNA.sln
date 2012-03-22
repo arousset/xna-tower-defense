@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowerDefenseXNA", "TowerDefenseXNA\TowerDefenseXNA\TowerDefenseXNA.csproj", "{5A332A22-2F1A-4F22-9DBF-237DBD839360}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "TowerDefenseXNAContent", "TowerDefenseXNA\TowerDefenseXNAContent\TowerDefenseXNAContent.contentproj", "{80F9C8FA-4D65-4F18-84C4-52C38E595CA9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowerDefenseXNAContent", "TowerDefenseXNA\TowerDefenseXNAContent\TowerDefenseXNAContent.contentproj", "{80F9C8FA-4D65-4F18-84C4-52C38E595CA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContentPipelineExtension", "ContentPipelineExtension\ContentPipelineExtension.csproj", "{C0E6598B-5A6C-4EDD-A6AA-A2569C0B80B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedData", "SharedData\SharedData.csproj", "{5875C889-1032-43A2-9D5B-F50ED05F0DEB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +21,14 @@ Global
 		{5A332A22-2F1A-4F22-9DBF-237DBD839360}.Release|x86.Build.0 = Release|x86
 		{80F9C8FA-4D65-4F18-84C4-52C38E595CA9}.Debug|x86.ActiveCfg = Debug|x86
 		{80F9C8FA-4D65-4F18-84C4-52C38E595CA9}.Release|x86.ActiveCfg = Release|x86
+		{C0E6598B-5A6C-4EDD-A6AA-A2569C0B80B1}.Debug|x86.ActiveCfg = Debug|x86
+		{C0E6598B-5A6C-4EDD-A6AA-A2569C0B80B1}.Debug|x86.Build.0 = Debug|x86
+		{C0E6598B-5A6C-4EDD-A6AA-A2569C0B80B1}.Release|x86.ActiveCfg = Debug|x86
+		{C0E6598B-5A6C-4EDD-A6AA-A2569C0B80B1}.Release|x86.Build.0 = Debug|x86
+		{5875C889-1032-43A2-9D5B-F50ED05F0DEB}.Debug|x86.ActiveCfg = Debug|x86
+		{5875C889-1032-43A2-9D5B-F50ED05F0DEB}.Debug|x86.Build.0 = Debug|x86
+		{5875C889-1032-43A2-9D5B-F50ED05F0DEB}.Release|x86.ActiveCfg = Release|x86
+		{5875C889-1032-43A2-9D5B-F50ED05F0DEB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

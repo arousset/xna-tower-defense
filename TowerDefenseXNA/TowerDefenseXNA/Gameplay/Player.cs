@@ -23,7 +23,6 @@ namespace TowerDefenseXNA
         private MouseState mouseState; // state for current frame
         private MouseState oldState; // state for previous frame
         private Level level;
-        private Texture2D towerTexture;
         private Texture2D bulletTexture;
         private Texture2D[] towerTextures;
         private Texture2D rangeTexture;
@@ -66,10 +65,11 @@ namespace TowerDefenseXNA
         }
 
         // Constructor 
-        public Player(Level level, Texture2D[] towerTextures, Texture2D bulletTexture, Texture2D rangeTexture)
+        public Player(Level level, Texture2D[] towerTextures, Texture2D bulletTexture, Texture2D rangeTexture, int life, int money)
         {
             this.level = level;
-
+            this.lives = life;
+            this.money = money;
             this.towerTextures = towerTextures;
             this.bulletTexture = bulletTexture;
             this.rangeTexture = rangeTexture;
