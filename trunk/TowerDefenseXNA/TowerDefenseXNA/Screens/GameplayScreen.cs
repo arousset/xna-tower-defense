@@ -115,7 +115,10 @@ namespace GameStateManagement
             // Tower 
 
 
-            Texture2D startWave = content.Load<Texture2D>("GUI/StartWave");
+            Texture2D startWaveNormal = content.Load<Texture2D>("GUI/StartWave");
+            Texture2D startWaveOver = content.Load<Texture2D>("GUI/StartWave_over");
+            Texture2D startWavePressed = content.Load<Texture2D>("GUI/StartWave_pressed");
+
 
             // The "Normal" texture for the arrow button.
             Texture2D arrowNormal = content.Load<Texture2D>("GUI/Tower/Normal");
@@ -157,8 +160,8 @@ namespace GameStateManagement
             fireButton = new TowerDefenseXNA.Button(fireNormal, fireHover, firePressed, new Vector2(355+96, lvl.Height * 32 - 32));
             
             sellButton = new TowerDefenseXNA.Button(sellNormal, sellHover, sellPressed, new Vector2(32 * 15, lvl.Height * 32));
-           
-            startWaveButton = new TowerDefenseXNA.Button(startWave, startWave, startWave, new Vector2(lvl.Width+553, lvl.Height+438));
+
+            startWaveButton = new TowerDefenseXNA.Button(startWaveNormal, startWaveOver, startWavePressed, new Vector2(lvl.Width + 553, lvl.Height + 438));
             startWaveButton.OnPress += new EventHandler(startButton_OnPress);
             
             arrowButton.OnPress += new EventHandler(arrowButton_OnPress);
