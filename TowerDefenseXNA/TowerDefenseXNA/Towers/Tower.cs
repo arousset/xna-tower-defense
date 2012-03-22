@@ -107,6 +107,10 @@ namespace TowerDefenseXNA
                 {
                     target = null;
                     bulletTimer = 0;
+                    for (int i = 0; i < bulletList.Count; i++)
+                    {
+                        bulletList[i].Kill();
+                    }
                 }
             }
         }
@@ -131,8 +135,6 @@ namespace TowerDefenseXNA
 
             base.Draw(spriteBatch);
         }
-
-
 
     }
 }
