@@ -141,11 +141,25 @@ namespace TowerDefenseXNA
                 {
                     tower.GetClosestEnemy(enemies);
                 }
-           
                 tower.Update(gameTime);
             }
 
             oldState = mouseState; // Set the oldState so it becomes the state of the previous frame.
+
+            if (selectedTower != null)
+            {
+                Vector2 radiusPosition = selectedTower.Center - new Vector2(selectedTower.Radius);
+                Console.WriteLine(selectedTower.Radius);
+                Rectangle radiusRect = new Rectangle(
+                    (int)radiusPosition.X,
+                    (int)radiusPosition.Y,
+                    (int)selectedTower.Radius * 2,
+                    (int)selectedTower.Radius * 2);
+
+                //Draw(rangeTexture, radiusRect, Color.White);
+            }
+
+            
         }
 
 
@@ -171,7 +185,18 @@ namespace TowerDefenseXNA
                 Texture2D previewTexture = towerTextures[newTowerIndex];
                 spriteBatch.Draw(previewTexture, new Rectangle(tileX, tileY, previewTexture.Width, previewTexture.Height), Color.White);
 
+                if (selectedTower != null)
+                {
+                    Vector2 radiusPosition = selectedTower.Center - new Vector2(selectedTower.Radius);
+                    Console.WriteLine(selectedTower.Radius);
+                    Rectangle radiusRect = new Rectangle(
+                        (int)tileX - (int)selectedTower.Radius + (previewTexture.Width/2),
+                        (int)tileY - (int)selectedTower.Radius + (previewTexture.Height / 2),
+                        (int)selectedTower.Radius * 2,
+                        (int)selectedTower.Radius * 2);
 
+                    spriteBatch.Draw(rangeTexture, radiusRect, Color.White);
+                }
             }
         }
 
@@ -210,6 +235,7 @@ namespace TowerDefenseXNA
                 case "Arrow Tower":
                     {
                         towerToAdd = new ArrowTower(towerTextures[0], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
+                        selectedTower = towerToAdd;
                         break;
                     }
                 case "Spike Tower":
