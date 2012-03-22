@@ -40,6 +40,7 @@ namespace GameStateManagement
         Texture2D tiledMap;
         TowerDefenseXNA.Toolbar toolBar;
         TowerDefenseXNA.Healthbar healthbar;
+        TowerDefenseXNA.Goldbar goldbar;
         TowerDefenseXNA.Player player;
         TowerDefenseXNA.Button arrowButton;
         TowerDefenseXNA.Button spikeButton;
@@ -99,9 +100,11 @@ namespace GameStateManagement
             Texture2D topBar = content.Load<Texture2D>("GUI/Toolbar");
             SpriteFont font = content.Load<SpriteFont>("Arial");
             Texture2D healthinformations = content.Load<Texture2D>("GUI/Coeur");
+            Texture2D goldinfos = content.Load<Texture2D>("GUI/gold_large");
 
             toolBar = new TowerDefenseXNA.Toolbar(topBar, font, new Vector2(0, lvl.Height * 32));
             healthbar = new TowerDefenseXNA.Healthbar(healthinformations, font, new Vector2(lvl.Width+860, lvl.Height-10));
+            goldbar = new TowerDefenseXNA.Goldbar(goldinfos, font, new Vector2(lvl.Width + 790, lvl.Height - 17));
             ///////
 
             map = content.Load<Map>("Map");
@@ -274,7 +277,7 @@ namespace GameStateManagement
             player.DrawPreview(spriteBatch);
             toolBar.Draw(spriteBatch, player, waveManager);
             healthbar.Draw(spriteBatch, player);
-
+            goldbar.Draw(spriteBatch, player);
             arrowButton.Draw(spriteBatch);
             spikeButton.Draw(spriteBatch);
             slowButton.Draw(spriteBatch);
