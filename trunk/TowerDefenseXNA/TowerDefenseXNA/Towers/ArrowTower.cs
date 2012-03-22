@@ -46,7 +46,9 @@ namespace TowerDefenseXNA
                 bullet.Update(gameTime);
 
                 if (!IsInRange(bullet.Center))
+                {
                     bullet.Kill();
+                }
 
                 if (target != null && Vector2.Distance(bullet.Center, target.Center) < 12)
                 {
