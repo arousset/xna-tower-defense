@@ -222,6 +222,11 @@ namespace TowerDefenseXNA
                         towerToAdd = new SlowTower(towerTextures[2], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
                         break;
                     }
+                case "Fire Tower":
+                    {
+                        towerToAdd = new FireTower(towerTextures[3], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
+                        break;
+                    }
             }
 
 

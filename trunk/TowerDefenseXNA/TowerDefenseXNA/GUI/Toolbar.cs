@@ -27,7 +27,7 @@ namespace TowerDefenseXNA
 
             this.position = position;
             // Offset the text to the bottom right corner
-            textPosition = new Vector2(520, position.Y + 10);
+            textPosition = new Vector2(502, position.Y + 10);
         }
 
         public void Draw(SpriteBatch spriteBatch, Player player, WaveManager wavemanager)
