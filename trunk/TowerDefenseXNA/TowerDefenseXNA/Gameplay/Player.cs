@@ -27,6 +27,7 @@ namespace TowerDefenseXNA
         private Texture2D[] towerTextures;
         private Texture2D rangeTexture;
         private Tower selectedTower;
+        private Tower selectedTower_radius;
         SoundEffect[] bulletsAudio;
 
         // Tower placement
@@ -130,12 +131,18 @@ namespace TowerDefenseXNA
                     }
                 }
             }
-
+            
             if (mouseState.RightButton == ButtonState.Released && oldState.RightButton == ButtonState.Pressed)
             {
-                selectedTower = null;
-                newTowerType = string.Empty;
+                if (selectedTower != null)
+                {
+                    selectedTower.Selected = false;
+                }
+                    selectedTower = null;
+                    newTowerType = string.Empty;
+                    selectedTower_radius = null;
             }
+           
 
             foreach (Tower tower in towers)
             {
@@ -172,15 +179,15 @@ namespace TowerDefenseXNA
                 Texture2D previewTexture = towerTextures[newTowerIndex];
                 spriteBatch.Draw(previewTexture, new Rectangle(tileX, tileY, previewTexture.Width, previewTexture.Height), Color.White);
 
-                if (selectedTower != null)
+                if (selectedTower_radius != null)
                 {
-                    Vector2 radiusPosition = selectedTower.Center - new Vector2(selectedTower.Radius);
-                    Console.WriteLine(selectedTower.Radius);
+                    Vector2 radiusPosition = selectedTower_radius.Center - new Vector2(selectedTower_radius.Radius);
+                    Console.WriteLine(selectedTower_radius.Radius);
                     Rectangle radiusRect = new Rectangle(
-                        (int)tileX - (int)selectedTower.Radius + (previewTexture.Width/2),
-                        (int)tileY - (int)selectedTower.Radius + (previewTexture.Height / 2),
-                        (int)selectedTower.Radius * 2,
-                        (int)selectedTower.Radius * 2);
+                        (int)tileX - (int)selectedTower_radius.Radius + (previewTexture.Width / 2),
+                        (int)tileY - (int)selectedTower_radius.Radius + (previewTexture.Height / 2),
+                        (int)selectedTower_radius.Radius * 2,
+                        (int)selectedTower_radius.Radius * 2);
 
                     spriteBatch.Draw(rangeTexture, radiusRect, Color.White);
                 }
@@ -222,25 +229,25 @@ namespace TowerDefenseXNA
                 case "Arrow Tower":
                     {
                         towerToAdd = new ArrowTower(towerTextures[0], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
-                        selectedTower = towerToAdd;
+                        selectedTower_radius = towerToAdd;
                         break;
                     }
                 case "Spike Tower":
                     {
                         towerToAdd = new SpikeTower(towerTextures[1], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[1]);
-                        selectedTower = towerToAdd;
+                        selectedTower_radius = towerToAdd;
                         break;
                     }
                 case "Slow Tower":
                     {
                         towerToAdd = new SlowTower(towerTextures[2], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
-                        selectedTower = towerToAdd;
+                        selectedTower_radius = towerToAdd;
                         break;
                     }
                 case "Fire Tower":
                     {
                         towerToAdd = new FireTower(towerTextures[3], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
-                        selectedTower = towerToAdd;
+                        selectedTower_radius = towerToAdd;
                         break;
                     }
             }

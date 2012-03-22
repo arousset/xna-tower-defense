@@ -331,8 +331,6 @@ namespace GameStateManagement
 
             spriteBatch.Begin();
 
-
-
             lvl.Draw(spriteBatch, tiledMap);
             waveManager.Draw(spriteBatch);
             player.Draw(spriteBatch);
@@ -345,18 +343,18 @@ namespace GameStateManagement
             spikeButton.Draw(spriteBatch);
             fireButton.Draw(spriteBatch);
             slowButton.Draw(spriteBatch);
-
+///////////////////////
             if (debug)
             {
                 string text = string.Format("Level {0}", levelNb);
                 spriteBatch.DrawString(font, text, new Vector2(10, 10), Color.White);
             }
-
+////////////////
             if (player.TowerSelected)
             {
                 sellButton.Draw(spriteBatch);
             }
-
+///////////////////////
             if (waveManager.WaveReady)
                 startWaveButton.Draw(spriteBatch);
             spriteBatch.End();
@@ -394,6 +392,28 @@ namespace GameStateManagement
             player.NewTowerType = "Fire Tower";
             player.NewTowerIndex = 3;
         }
+
+        private void arrowButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Arrow Tower";
+            player.NewTowerIndex = 0;
+        }
+        private void spikeButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Spike Tower";
+            player.NewTowerIndex = 1;
+        }
+        private void slowButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Slow Tower";
+            player.NewTowerIndex = 2;
+        }
+        private void fireButton_Clicked(object sender, EventArgs e)
+        {
+            player.NewTowerType = "Fire Tower";
+            player.NewTowerIndex = 3;
+        }
+
 
         private void startButton_OnPress(object sender, EventArgs e)
         {
