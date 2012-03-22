@@ -22,7 +22,9 @@ namespace GameStateManagement
     {
         ContentManager Content;
         #region Initialization
-
+        MenuEntry audioGameMenuEntry;
+        static string[] audio = { "On", "Off"};
+        public static int currentAudio = 0;
 
         /// <summary>
         /// Constructor.
@@ -34,22 +36,36 @@ namespace GameStateManagement
 
             // Create our menu entries.
             MenuEntry resumeGameMenuEntry = new MenuEntry("Resume Game");
+            audioGameMenuEntry = new MenuEntry(string.Empty);
             MenuEntry quitGameMenuEntry = new MenuEntry("Quit Game");
-            
+            SetMenuEntryText();
             // Hook up menu event handlers.
             resumeGameMenuEntry.Selected += OnCancel;
             quitGameMenuEntry.Selected += QuitGameMenuEntrySelected;
+            audioGameMenuEntry.Selected += AudioGameMenuEntry;
 
             // Add entries to the menu.
             MenuEntries.Add(resumeGameMenuEntry);
+            MenuEntries.Add(audioGameMenuEntry);
             MenuEntries.Add(quitGameMenuEntry);
         }
 
 
         #endregion
 
+        void SetMenuEntryText()
+        {
+            audioGameMenuEntry.Text = "Audio : " + audio[currentAudio];
+        }
+
         #region Handle Input
 
+        void AudioGameMenuEntry(object sender, PlayerIndexEventArgs e)
+        {
+            currentAudio = (currentAudio + 1) % audio.Length;
+
+            SetMenuEntryText();
+        }
 
         /// <summary>
         /// Event handler for when the Quit Game menu entry is selected.

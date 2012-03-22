@@ -17,6 +17,7 @@ namespace TowerDefenseXNA
         // A list of directions that the tower can shoot in.
         private Vector2[] directions = new Vector2[8];
         private List<Enemy> targets = new List<Enemy>();
+        SoundEffect bulletAudio;
 
         public override bool HasTarget
         {
@@ -25,11 +26,13 @@ namespace TowerDefenseXNA
 
 
         // Constructors
-        public SpikeTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position) : base(texture, bulletTexture, rangeTexture, position) 
+        public SpikeTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, SoundEffect bulletAudio)
+            : base(texture, bulletTexture, rangeTexture, position) 
         {
             this.damage = 20; 
             this.cost = 40;   
-            this.radius = 48; 
+            this.radius = 48;
+            this.bulletAudio = bulletAudio;
 
             // Store a list of all the directions the tower can shoot.
             directions = new Vector2[]
@@ -70,6 +73,7 @@ namespace TowerDefenseXNA
             // Decide if it is time to shoot.
             if (bulletTimer >= 1.0f && targets.Count != 0)
             {
+                bulletAudio.Play();
                 // For every direction the tower can shoot,
                 for (int i = 0; i < directions.Length; i++)
                 {

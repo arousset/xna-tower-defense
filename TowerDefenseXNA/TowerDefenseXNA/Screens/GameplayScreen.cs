@@ -51,6 +51,8 @@ namespace GameStateManagement
         Texture2D enemyTextureNormal;
         Texture2D enemyTextureFast;
         Texture2D healthTexture;
+        List<SoundEffectInstance> SoundEffectList;
+        SoundEffect bulletSound;
 
         bool debug = false;
         float pauseAlpha;
@@ -78,7 +80,6 @@ namespace GameStateManagement
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
             TransitionOnTime = TimeSpan.FromSeconds(1.5);
             tiledMap = content.Load<Texture2D>("Tilesmap");
-            
 
             switch(levelNb)
             {
@@ -103,6 +104,21 @@ namespace GameStateManagement
             }
             lvl.init();
 
+            bulletSound = content.Load<SoundEffect>("Audio/bullet");
+            SoundEffect bullet2Sound = content.Load<SoundEffect>("Audio/bullet2");
+
+            SoundEffect[] bulletsAudio = new SoundEffect[]
+            {
+                bulletSound,
+                bullet2Sound
+            };
+
+            SoundEffectList = new List<SoundEffectInstance>()
+            {
+                bulletSound.CreateInstance(),
+                bullet2Sound.CreateInstance()
+            };
+
             Texture2D[] towerTextures = new Texture2D[]
   	        {
   	                content.Load<Texture2D>("Towers/Arrow"),
@@ -113,7 +129,7 @@ namespace GameStateManagement
 
             Texture2D bulletTexture = content.Load<Texture2D>("Towers/bullet4");
             Texture2D rangeTexture = content.Load<Texture2D>("GUI/Range");
-            player = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture, lvl.playerLife, lvl.playerMoney);
+            player = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture, lvl.playerLife, lvl.playerMoney, bulletsAudio);
 
             enemyTextureFast = content.Load<Texture2D>("Enemies/Fast");
             enemyTextureNormal = content.Load<Texture2D>("Enemies/Normal");
@@ -129,6 +145,7 @@ namespace GameStateManagement
             healthbar = new TowerDefenseXNA.Healthbar(healthinformations, font, new Vector2(lvl.Width+860, lvl.Height-10));
             goldbar = new TowerDefenseXNA.Goldbar(goldinfos, font, new Vector2(lvl.Width+790, lvl.Height-17));
             ///////
+           
 
             map = content.Load<Map>("Map");
 
@@ -221,6 +238,14 @@ namespace GameStateManagement
         /// </summary>
         public override void Update(GameTime gameTime, bool otherScreenHasFocus, bool coveredByOtherScreen)
         {
+            foreach (SoundEffectInstance SEI in SoundEffectList)
+            {
+                /*if (PauseMenuScreen.currentAudio == 0)
+                    SEI.Volume = 1.0f;
+                else
+                    SEI.Volume = 0.0f;*/
+            }
+
             base.Update(gameTime, otherScreenHasFocus, false);
             // Gradually fade in or out depending on whether we are covered by the pause screen.
             if (coveredByOtherScreen)
