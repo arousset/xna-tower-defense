@@ -27,14 +27,14 @@ namespace TowerDefenseXNA
 
             this.position = position;
             // Offset the text to the bottom right corner
-            textPosition = new Vector2(130, position.Y + 10);
+            textPosition = new Vector2(520, position.Y + 10);
         }
 
         public void Draw(SpriteBatch spriteBatch, Player player, WaveManager wavemanager)
         {
             spriteBatch.Draw(texture, position, Color.White);
 
-            string text = string.Format("Gold : {0} Lives : {1} Wave {2}/{3}", player.Money, player.Lives, wavemanager.Round, wavemanager.NbRounds);
+            string text = string.Format("Wave {0}/{1}", wavemanager.Round, wavemanager.NbRounds);
             spriteBatch.DrawString(font, text, textPosition, Color.White);
         }
     }

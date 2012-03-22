@@ -170,6 +170,8 @@ namespace TowerDefenseXNA
 
                 Texture2D previewTexture = towerTextures[newTowerIndex];
                 spriteBatch.Draw(previewTexture, new Rectangle(tileX, tileY, previewTexture.Width, previewTexture.Height), Color.White);
+
+
             }
         }
 
