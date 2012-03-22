@@ -196,6 +196,10 @@ namespace TowerDefenseXNA
 
         private bool IsCellClear()
         {
+            // test menu barre
+            if(cellX > 10 && cellX < 19 && cellY == 14)
+                return false;
+
             bool inBounds = cellX >= 0 && cellY >= 0 && // Make sure tower is within limits
                 cellX < level.Width && cellY < level.Height;
 
