@@ -102,9 +102,9 @@ namespace GameStateManagement
             Texture2D healthinformations = content.Load<Texture2D>("GUI/Coeur");
             Texture2D goldinfos = content.Load<Texture2D>("GUI/gold_large");
 
-            toolBar = new TowerDefenseXNA.Toolbar(topBar, font, new Vector2(0, lvl.Height * 32));
+            toolBar = new TowerDefenseXNA.Toolbar(topBar, font, new Vector2(lvl.Width+324, lvl.Height+433));
             healthbar = new TowerDefenseXNA.Healthbar(healthinformations, font, new Vector2(lvl.Width+860, lvl.Height-10));
-            goldbar = new TowerDefenseXNA.Goldbar(goldinfos, font, new Vector2(lvl.Width + 790, lvl.Height - 17));
+            goldbar = new TowerDefenseXNA.Goldbar(goldinfos, font, new Vector2(lvl.Width+790, lvl.Height-17));
             ///////
 
             map = content.Load<Map>("Map");
@@ -142,13 +142,13 @@ namespace GameStateManagement
             Texture2D sellPressed = content.Load<Texture2D>("GUI/Sell Button/Pressed");
 
             // Initialize the buttons.
-            arrowButton = new TowerDefenseXNA.Button(arrowNormal, arrowHover, arrowPressed, new Vector2(0, lvl.Height * 32));
-            spikeButton = new TowerDefenseXNA.Button(spikeNormal, spikeHover, spikePressed, new Vector2(32, lvl.Height * 32));
-            slowButton = new TowerDefenseXNA.Button(slowNormal, slowHover, slowPressed, new Vector2(32*2, lvl.Height * 32));
+            arrowButton = new TowerDefenseXNA.Button(arrowNormal, arrowHover, arrowPressed, new Vector2(355, lvl.Height * 32 - 32));
+            spikeButton = new TowerDefenseXNA.Button(spikeNormal, spikeHover, spikePressed, new Vector2(355+32, lvl.Height * 32 - 32));
+            slowButton = new TowerDefenseXNA.Button(slowNormal, slowHover, slowPressed, new Vector2(355+64, lvl.Height * 32 - 32));
             
             sellButton = new TowerDefenseXNA.Button(sellNormal, sellHover, sellPressed, new Vector2(32 * 15, lvl.Height * 32));
            
-            startWaveButton = new TowerDefenseXNA.Button(startWave, startWave, startWave, new Vector2(lvl.Width * 32 - 32, lvl.Height * 32 + 5));
+            startWaveButton = new TowerDefenseXNA.Button(startWave, startWave, startWave, new Vector2(lvl.Width+553, lvl.Height+438));
             startWaveButton.OnPress += new EventHandler(startButton_OnPress);
             
             arrowButton.OnPress += new EventHandler(arrowButton_OnPress);

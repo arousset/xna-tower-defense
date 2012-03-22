@@ -50,10 +50,10 @@ namespace GameStateManagement
 
             graphics = new GraphicsDeviceManager(this);
             this.graphics.IsFullScreen = false;
-            this.graphics.PreferredBackBufferWidth = 1280; // 960
+            this.graphics.PreferredBackBufferWidth = 960; // 960
             this.graphics.PreferredBackBufferHeight = 720; // 720
             graphics.PreferredBackBufferWidth = 30 * 32;
-            graphics.PreferredBackBufferHeight = 32 + 15 * 32;
+            graphics.PreferredBackBufferHeight = 15 * 32;
 
             this.graphics.ApplyChanges();
             this.Window.Title = "Tower Defense";
