@@ -14,14 +14,15 @@ namespace TowerDefenseXNA
 {
     public class ArrowTower : Tower
     {
-        
+        SoundEffect bulletAudio;
         // Constructor
-        public ArrowTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position)
+        public ArrowTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, SoundEffect bulletAudio)
             : base(texture, bulletTexture, rangeTexture, position)
         {
             this.damage = 15; // Set the damage
             this.cost = 15;   // Set the initial cost
             this.radius = 80; // Set the radius
+            this.bulletAudio = bulletAudio;
         }
 
 
@@ -33,7 +34,7 @@ namespace TowerDefenseXNA
             if (bulletTimer >= 1.00f && target != null)
             {
                 Bullet bullet = new Bullet(bulletTexture, Vector2.Subtract(center, new Vector2(bulletTexture.Width / 2)), rotation, 3, damage);
-
+                bulletAudio.Play();
                 bulletList.Add(bullet);
                 bulletTimer = 0;
             }

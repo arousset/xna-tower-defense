@@ -27,6 +27,7 @@ namespace TowerDefenseXNA
         private Texture2D[] towerTextures;
         private Texture2D rangeTexture;
         private Tower selectedTower;
+        SoundEffect[] bulletsAudio;
 
         // Tower placement
         private int cellX;
@@ -65,8 +66,9 @@ namespace TowerDefenseXNA
         }
 
         // Constructor 
-        public Player(Level level, Texture2D[] towerTextures, Texture2D bulletTexture, Texture2D rangeTexture, int life, int money)
+        public Player(Level level, Texture2D[] towerTextures, Texture2D bulletTexture, Texture2D rangeTexture, int life, int money, SoundEffect[] bulletsAudio)
         {
+            this.bulletsAudio = bulletsAudio;   
             this.level = level;
             this.lives = life;
             this.money = money;
@@ -219,25 +221,25 @@ namespace TowerDefenseXNA
             {
                 case "Arrow Tower":
                     {
-                        towerToAdd = new ArrowTower(towerTextures[0], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
+                        towerToAdd = new ArrowTower(towerTextures[0], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
                         selectedTower = towerToAdd;
                         break;
                     }
                 case "Spike Tower":
                     {
-                        towerToAdd = new SpikeTower(towerTextures[1], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
+                        towerToAdd = new SpikeTower(towerTextures[1], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[1]);
                         selectedTower = towerToAdd;
                         break;
                     }
                 case "Slow Tower":
                     {
-                        towerToAdd = new SlowTower(towerTextures[2], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
+                        towerToAdd = new SlowTower(towerTextures[2], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
                         selectedTower = towerToAdd;
                         break;
                     }
                 case "Fire Tower":
                     {
-                        towerToAdd = new FireTower(towerTextures[3], bulletTexture, rangeTexture, new Vector2(tileX, tileY));
+                        towerToAdd = new FireTower(towerTextures[3], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
                         selectedTower = towerToAdd;
                         break;
                     }
