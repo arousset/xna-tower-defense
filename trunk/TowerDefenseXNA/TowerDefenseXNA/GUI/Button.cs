@@ -29,6 +29,7 @@ namespace TowerDefenseXNA
         // The the different state textures.
         private Texture2D hoverTexture;
         private Texture2D pressedTexture;
+        private Texture2D impossibleTexture;
 
         // A rectangle that covers the button.
         private Rectangle bounds;
@@ -47,7 +48,6 @@ namespace TowerDefenseXNA
             this.pressedTexture = pressedTexture;
             this.bounds = new Rectangle((int)position.X, (int)position.Y, texture.Width, texture.Height);
         }
-
 
         public override void Update(GameTime gameTime)
         {

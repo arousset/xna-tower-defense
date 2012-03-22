@@ -11,7 +11,7 @@ namespace TowerDefenseXNA
     public class FireTower : Tower
     {
         // Defines how fast an enemy will move when hit.
-        private float speedModifier;
+        private float dammage_infliged;
         // Defines how long this effect will last.
         private float modifierDuration;
         SoundEffect bulletAudio;
@@ -23,8 +23,8 @@ namespace TowerDefenseXNA
             this.radius = 80; // Set the radius
             this.bulletAudio = bulletAudio;
 
-            this.speedModifier = 0.6f;
-            this.modifierDuration = 2.0f;
+            this.dammage_infliged = 1.0f;
+            this.modifierDuration = 3.0f;
         }
 
         public override void Update(GameTime gameTime)
@@ -60,9 +60,9 @@ namespace TowerDefenseXNA
 
                     // Apply our speed modifier if it is better than
                     // the one currently affecting the target :
-                    if (target.SpeedModifier <= speedModifier)
+                    if (target.SpeedModifier <= dammage_infliged)
                     {
-                        target.SpeedModifier = speedModifier;
+                        target.SpeedModifier = dammage_infliged;
                         target.ModifierDuration = modifierDuration;
                     }
                 }

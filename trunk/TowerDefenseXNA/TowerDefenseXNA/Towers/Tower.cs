@@ -117,6 +117,7 @@ namespace TowerDefenseXNA
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            
             if (selected == true)
             {
                 Vector2 radiusPosition = center - new Vector2(radius);
