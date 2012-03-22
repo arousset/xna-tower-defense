@@ -115,6 +115,7 @@
     <Compile Include="Gameplay\Enemy.cs" />
     <Compile Include="Gameplay\Player.cs" />
     <Compile Include="GUI\Button.cs" />
+    <Compile Include="GUI\Goldbar.cs" />
     <Compile Include="GUI\Healthbar.cs" />
     <Compile Include="GUI\Toolbar.cs" />
     <Compile Include="Level.cs" />
