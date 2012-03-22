@@ -84,6 +84,8 @@ namespace TowerDefenseXNA
                     bulletList.Add(bullet);
                 }
 
+             
+
                 bulletTimer = 0;
             }
 

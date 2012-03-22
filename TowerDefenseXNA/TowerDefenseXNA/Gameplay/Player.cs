@@ -39,6 +39,7 @@ namespace TowerDefenseXNA
         private string newTowerType;
         private int newTowerIndex;
 
+       
         public bool TowerSelected
         {
             get { return selectedTower != null; }
@@ -133,14 +134,14 @@ namespace TowerDefenseXNA
             }
             
             if (mouseState.RightButton == ButtonState.Released && oldState.RightButton == ButtonState.Pressed)
-            {
+            {   // La feintasse ! du siou del Dios ! 
                 if (selectedTower != null)
                 {
                     selectedTower.Selected = false;
                 }
-                    selectedTower = null;
-                    newTowerType = string.Empty;
-                    selectedTower_radius = null;
+                selectedTower = null;
+                newTowerType = string.Empty;
+                selectedTower_radius = null;
             }
            
 

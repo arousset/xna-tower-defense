@@ -42,9 +42,13 @@ namespace GameStateManagement
         TowerDefenseXNA.Goldbar goldbar;
         TowerDefenseXNA.Player player;
         TowerDefenseXNA.Button arrowButton;
+        TowerDefenseXNA.Button narrowButton;
         TowerDefenseXNA.Button spikeButton;
+        TowerDefenseXNA.Button nspikeButton;
         TowerDefenseXNA.Button slowButton;
+        TowerDefenseXNA.Button nslowButton;
         TowerDefenseXNA.Button fireButton;
+        TowerDefenseXNA.Button nfireButton;
         TowerDefenseXNA.Button sellButton;
         TowerDefenseXNA.Button startWaveButton;
         TowerDefenseXNA.WaveManager waveManager;
@@ -164,18 +168,24 @@ namespace GameStateManagement
             Texture2D arrowHover = content.Load<Texture2D>("GUI/Tower/Over");
             // The "Pressed" texture for the arrow button.
             Texture2D arrowPressed = content.Load<Texture2D>("GUI/Tower/Pressed");
+            // Not available 
+            Texture2D arrow_not_available = content.Load < Texture2D>("GUI/Tower/blocked");
 
             Texture2D spikeNormal = content.Load<Texture2D>("GUI/Spike_Tower/SpikeNormal");
   	        // The "MouseOver" texture for the spike button.
  	        Texture2D spikeHover = content.Load<Texture2D>("GUI/Spike_Tower/SpikeOver");
   	        // The "Pressed" texture for the spike button.
   	        Texture2D spikePressed = content.Load<Texture2D>("GUI/Spike_Tower/SpikePressed");
+            // Not available 
+            Texture2D spike_not_available = content.Load<Texture2D>("GUI/Spike_Tower/blocked");
 
             Texture2D slowNormal = content.Load<Texture2D>("GUI/Slow Tower/Normal");
             // The "MouseOver" texture for the spike button.
             Texture2D slowHover = content.Load<Texture2D>("GUI/Slow Tower/Mouse Over");
             // The "Pressed" texture for the spike button.
             Texture2D slowPressed = content.Load<Texture2D>("GUI/Slow Tower/Pressed");
+            // Not available 
+            Texture2D slow_not_available = content.Load<Texture2D>("GUI/Slow Tower/blocked");
 
             // The "Normal" texture for the arrow button.
             Texture2D fireNormal = content.Load<Texture2D>("GUI/Fire Tower/Normal");
@@ -183,6 +193,8 @@ namespace GameStateManagement
             Texture2D fireHover = content.Load<Texture2D>("GUI/Fire Tower/Mouse Over");
             // The "Pressed" texture for the arrow button.
             Texture2D firePressed = content.Load<Texture2D>("GUI/Fire Tower/Pressed");
+            // Not available 
+            Texture2D fire_not_available = content.Load<Texture2D>("GUI/Fire Tower/blocked");
 
             // The "Normal" texture for the sell button.
             Texture2D sellNormal = content.Load<Texture2D>("GUI/Sell Button/Normal");
@@ -192,10 +204,18 @@ namespace GameStateManagement
             Texture2D sellPressed = content.Load<Texture2D>("GUI/Sell Button/Pressed");
 
             // Initialize the buttons.
+
             arrowButton = new TowerDefenseXNA.Button(arrowNormal, arrowHover, arrowPressed, new Vector2(355, lvl.Height * 32 - 32));
+            narrowButton = new TowerDefenseXNA.Button(arrow_not_available, arrow_not_available, arrow_not_available, new Vector2(355, lvl.Height * 32 - 32));
+
             spikeButton = new TowerDefenseXNA.Button(spikeNormal, spikeHover, spikePressed, new Vector2(355+32, lvl.Height * 32 - 32));
+            nspikeButton = new TowerDefenseXNA.Button(spike_not_available, spike_not_available, spike_not_available, new Vector2(355 + 32, lvl.Height * 32 - 32));
+            
             slowButton = new TowerDefenseXNA.Button(slowNormal, slowHover, slowPressed, new Vector2(355+64, lvl.Height * 32 - 32));
+            nslowButton = new TowerDefenseXNA.Button(slow_not_available, slow_not_available, slow_not_available, new Vector2(355 + 64, lvl.Height * 32 - 32));
+            
             fireButton = new TowerDefenseXNA.Button(fireNormal, fireHover, firePressed, new Vector2(355+96, lvl.Height * 32 - 32));
+            nfireButton = new TowerDefenseXNA.Button(fire_not_available, fire_not_available, fire_not_available, new Vector2(355 + 96, lvl.Height * 32 - 32));
             
             sellButton = new TowerDefenseXNA.Button(sellNormal, sellHover, sellPressed, new Vector2(32 * 15, lvl.Height * 32));
 
@@ -266,11 +286,26 @@ namespace GameStateManagement
                 }
 
                 waveManager.Update(gameTime);
+                if (player.Money < 15) // See if it can be increase...
+                    narrowButton.Update(gameTime);
+                else
+                    arrowButton.Update(gameTime);
 
-                arrowButton.Update(gameTime);
-                spikeButton.Update(gameTime);
-                slowButton.Update(gameTime);
-                fireButton.Update(gameTime);
+                if (player.Money < 40)
+                    nspikeButton.Update(gameTime);
+                else
+                    spikeButton.Update(gameTime);
+
+                if (player.Money < 25)
+                    nslowButton.Update(gameTime);
+                else
+                    slowButton.Update(gameTime);
+
+                if (player.Money < 25)
+                    nfireButton.Update(gameTime);
+                else
+                    fireButton.Update(gameTime);
+
                 startWaveButton.Update(gameTime);
 
                 if (player.TowerSelected)
@@ -342,10 +377,26 @@ namespace GameStateManagement
             toolBar.Draw(spriteBatch, player, waveManager);
             healthbar.Draw(spriteBatch, player);
             goldbar.Draw(spriteBatch, player);
-            arrowButton.Draw(spriteBatch);
-            spikeButton.Draw(spriteBatch);
-            fireButton.Draw(spriteBatch);
-            slowButton.Draw(spriteBatch);
+
+            if (player.Money < 15)
+                narrowButton.Draw(spriteBatch);
+            else
+                arrowButton.Draw(spriteBatch);
+
+            if (player.Money < 40)
+                nspikeButton.Draw(spriteBatch);
+            else
+                spikeButton.Draw(spriteBatch);
+
+            if (player.Money < 25)
+                nslowButton.Draw(spriteBatch);
+            else
+                slowButton.Draw(spriteBatch);
+
+            if (player.Money < 25)
+                nfireButton.Draw(spriteBatch);
+            else
+                fireButton.Draw(spriteBatch);
 ///////////////////////
             if (debug)
             {
@@ -416,27 +467,7 @@ namespace GameStateManagement
             player.NewTowerIndex = 3;
         }
 
-        private void arrowButton_Clicked(object sender, EventArgs e)
-        {
-            player.NewTowerType = "Arrow Tower";
-            player.NewTowerIndex = 0;
-        }
-        private void spikeButton_Clicked(object sender, EventArgs e)
-        {
-            player.NewTowerType = "Spike Tower";
-            player.NewTowerIndex = 1;
-        }
-        private void slowButton_Clicked(object sender, EventArgs e)
-        {
-            player.NewTowerType = "Slow Tower";
-            player.NewTowerIndex = 2;
-        }
-        private void fireButton_Clicked(object sender, EventArgs e)
-        {
-            player.NewTowerType = "Fire Tower";
-            player.NewTowerIndex = 3;
-        }
-
+       
 
         private void startButton_OnPress(object sender, EventArgs e)
         {
