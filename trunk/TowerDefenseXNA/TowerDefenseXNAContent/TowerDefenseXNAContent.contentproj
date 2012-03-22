@@ -257,6 +257,42 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ContentPipelineExtension\ContentPipelineExtension.csproj">
+      <Project>{C0E6598B-5A6C-4EDD-A6AA-A2569C0B80B1}</Project>
+      <Name>ContentPipelineExtension</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Levels\Level01.xml">
+      <Name>Level01</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <SubType>Designer</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Levels\Level02.xml">
+      <Name>Level02</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Level03.xml">
+      <Name>Level03</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Level04.xml">
+      <Name>Level04</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
+    <Compile Include="Levels\Level05.xml">
+      <Name>Level05</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="GUI\Coeur.png">
       <Name>Coeur</Name>
       <Importer>TextureImporter</Importer>

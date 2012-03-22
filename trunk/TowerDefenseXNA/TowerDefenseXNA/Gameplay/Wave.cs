@@ -41,7 +41,7 @@ namespace TowerDefenseXNA
         {
 
             Enemy enemy = new Enemy(enemyTextureNormal,
-            level.Waypoints.Peek(), 125, 5, 1.5f, player);
+            level.Waypoints.Peek(), 125, 5, 1f, player);
             enemy.SetWaypoints(level.Waypoints);
             enemies.Add(enemy);
             spawnTimer = 0;
@@ -52,7 +52,7 @@ namespace TowerDefenseXNA
         {
 
             Enemy enemy = new Enemy(enemyTextureFast,
-            level.Waypoints.Peek(), 80, 5, 2f, player);
+            level.Waypoints.Peek(), 80, 5, 1.5f, player);
             enemy.SetWaypoints(level.Waypoints);
             enemies.Add(enemy);
             spawnTimer = 0;

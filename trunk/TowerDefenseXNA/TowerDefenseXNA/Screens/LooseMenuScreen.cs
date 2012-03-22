@@ -21,17 +21,18 @@ namespace GameStateManagement
     class LooseMenuScreen : MenuScreen
     {
         ContentManager Content;
-
+        int levelNb;
         #region Initialization
 
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        public LooseMenuScreen(ContentManager Content)
+        public LooseMenuScreen(ContentManager Content, int levelNb)
             : base("You loose !")
         {
             this.Content = Content;
+            this.levelNb = levelNb;
             // Create our menu entries.
             MenuEntry restarteGameMenuEntry = new MenuEntry("Restart level");
             MenuEntry quitGameMenuEntry = new MenuEntry("Quit Game");
@@ -64,7 +65,7 @@ namespace GameStateManagement
         void ConfirmRestartMessageBoxAccepted(object sender, PlayerIndexEventArgs e)
         {
             LoadingScreen.Load(ScreenManager, true, e.PlayerIndex,
-                               new GameplayScreen());
+                               new GameplayScreen(levelNb));
         }
 
         /// <summary>

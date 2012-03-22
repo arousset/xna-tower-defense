@@ -16,11 +16,18 @@ namespace GameStateManagement
             alban.Selectable = false;
             MenuEntry clement = new MenuEntry("Clement Kawczak");
             clement.Selectable = false;
+            MenuEntry vide = new MenuEntry("");
+            vide.Selectable = false;
+            MenuEntry thx = new MenuEntry("Thank to XNA 4.0");
+            thx.Selectable = false;
+
 
             MenuEntries.Add(alban);
             MenuEntries.Add(clement);
+            MenuEntries.Add(vide);
+            MenuEntries.Add(thx);      
             MenuEntries.Add(back);
-            SelectedEntry = 2;
+            SelectedEntry = 4;
         }
     }
 }

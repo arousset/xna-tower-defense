@@ -12,7 +12,6 @@ namespace TowerDefenseXNA
         private int numberOfWaves; // How many waves the game will have
         private float timeSinceLastWave; // How long since the last wave ended
         private Queue<Wave> waves = new Queue<Wave>(); // A queue of all our waves
-        //private Texture2D enemyTexture; // The texture used to draw the enemies
         private bool waveFinished = true; // Is the current wave over?
         private Level level; // A reference to our level class
         private bool firstWave = true;
@@ -28,16 +27,27 @@ namespace TowerDefenseXNA
         {
             int[][] waveList = { wave1, wave2, wave3, wave4, wave5 };
             this.numberOfWaves = numberOfWaves;
-            //this.enemyTexture = enemyTexture;
             this.level = level;
 
             for (int i = 0; i < numberOfWaves; i++)
             {
-                /*int initialNumerOfEnemies = 6;
-                int numberModifier = (i / 6) + 1;*/
 
-                Wave wave; 
-                wave = new Wave(i, 6+i, level, enemyTextureNormal, enemyTextureFast, healthTexture, waveList[i], player);
+                Wave wave;
+                wave = new Wave(i, waveList[i].Length, level, enemyTextureNormal, enemyTextureFast, healthTexture, waveList[i], player);
+                waves.Enqueue(wave);
+            }
+        }
+
+        public WaveManager(Level level, int numberOfWaves, Texture2D enemyTextureNormal, Texture2D enemyTextureFast, Texture2D healthTexture, Player player, int[][] waveList)
+        {
+            this.numberOfWaves = numberOfWaves;
+            this.level = level;
+
+            for (int i = 0; i < numberOfWaves; i++)
+            {
+
+                Wave wave;
+                wave = new Wave(i, waveList[i].Length, level, enemyTextureNormal, enemyTextureFast, healthTexture, waveList[i], player);
                 waves.Enqueue(wave);
             }
         }

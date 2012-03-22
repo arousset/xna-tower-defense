@@ -20,15 +20,14 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using TiledLib;
+#if WINDOWS
+using System.Xml;
+using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Intermediate;
+#endif   
 #endregion
 
 namespace GameStateManagement
 {
-    /// <summary>
-    /// This screen implements the actual game logic. It is just a
-    /// placeholder to get the idea across: you'll probably want to
-    /// put some more interesting gameplay in here!
-    /// </summary>
     class GameplayScreen : GameScreen
     {
         #region Fields
@@ -55,6 +54,8 @@ namespace GameStateManagement
 
         bool debug = false;
         float pauseAlpha;
+        SpriteFont font;
+        int levelNb;
 
         #endregion
 
@@ -64,23 +65,43 @@ namespace GameStateManagement
         /// <summary>
         /// Constructor.
         /// </summary>
-        public GameplayScreen()
+        public GameplayScreen(int levelNb)
         {
+            this.levelNb = levelNb;
             TransitionOnTime = TimeSpan.FromSeconds(1.5);
             TransitionOffTime = TimeSpan.FromSeconds(0.5);
         }
 
-        /// <summary>
-        /// Load graphics content for the game.
-        /// </summary>
         public override void LoadContent()
         {
             if (content == null)
                 content = new ContentManager(ScreenManager.Game.Services, "Content");
             TransitionOnTime = TimeSpan.FromSeconds(1.5);
             tiledMap = content.Load<Texture2D>("Tilesmap");
-            lvl = new TowerDefenseXNA.Level(tiledMap, 32);
             
+
+            switch(levelNb)
+            {
+                case 1:
+                    lvl = content.Load<TowerDefenseXNA.Level>("Levels/Level01");
+                    break;
+                case 2:
+                    lvl = content.Load<TowerDefenseXNA.Level>("Levels/Level02");
+                    break;
+                case 3:
+                    lvl = content.Load<TowerDefenseXNA.Level>("Levels/Level03");
+                    break;
+                case 4:
+                    lvl = content.Load<TowerDefenseXNA.Level>("Levels/Level04");
+                    break;
+                case 5:
+                    lvl = content.Load<TowerDefenseXNA.Level>("Levels/Level05");
+                    break;
+                default:
+                    lvl = content.Load<TowerDefenseXNA.Level>("Levels/Level01");
+                    break;
+            }
+            lvl.init();
 
             Texture2D[] towerTextures = new Texture2D[]
   	        {
@@ -92,15 +113,15 @@ namespace GameStateManagement
 
             Texture2D bulletTexture = content.Load<Texture2D>("Towers/bullet4");
             Texture2D rangeTexture = content.Load<Texture2D>("GUI/Range");
-            player = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture);
+            player = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture, lvl.playerLife, lvl.playerMoney);
 
             enemyTextureFast = content.Load<Texture2D>("Enemies/Fast");
             enemyTextureNormal = content.Load<Texture2D>("Enemies/Normal");
             healthTexture = content.Load<Texture2D>("Enemies/Health bar");
-            waveManager = new TowerDefenseXNA.WaveManager(lvl, 5, enemyTextureNormal, enemyTextureFast, healthTexture, player);
+            waveManager = new TowerDefenseXNA.WaveManager(lvl, lvl.wavelist.Length, enemyTextureNormal, enemyTextureFast, healthTexture, player, lvl.wavelist);
 
             Texture2D topBar = content.Load<Texture2D>("GUI/Toolbar");
-            SpriteFont font = content.Load<SpriteFont>("Arial");
+            font = content.Load<SpriteFont>("Arial");
             Texture2D healthinformations = content.Load<Texture2D>("GUI/Coeur");
             Texture2D goldinfos = content.Load<Texture2D>("GUI/gold_large");
 
@@ -212,6 +233,12 @@ namespace GameStateManagement
                 if (Keyboard.GetState().IsKeyDown(Keys.P))
                 {
                     debug = !debug;
+                    /*XmlWriterSettings xmlSettings = new XmlWriterSettings();
+                    xmlSettings.Indent = true;
+                    using (XmlWriter xmlWriter = XmlWriter.Create("Level01.xml", xmlSettings))
+                    {
+                        IntermediateSerializer.Serialize(xmlWriter, lvl, null);
+                    }  */
                 }
 
                 waveManager.Update(gameTime);
@@ -229,7 +256,9 @@ namespace GameStateManagement
 
                 player.Update(gameTime, waveManager.Enemies);
                 if (player.Lives <= 0)
-                    ScreenManager.AddScreen(new LooseMenuScreen(content), ControllingPlayer);
+                    ScreenManager.AddScreen(new LooseMenuScreen(content, levelNb), ControllingPlayer);
+                if (waveManager.Round == waveManager.NbRounds && waveManager.WaveReady)
+                    ScreenManager.AddScreen(new WinMenuScreen(content, levelNb), ControllingPlayer);
             }
         }
 
@@ -281,9 +310,9 @@ namespace GameStateManagement
 
             spriteBatch.Begin();
 
-           
 
-            lvl.Draw(spriteBatch);
+
+            lvl.Draw(spriteBatch, tiledMap);
             waveManager.Draw(spriteBatch);
             player.Draw(spriteBatch);
             
@@ -295,6 +324,12 @@ namespace GameStateManagement
             spikeButton.Draw(spriteBatch);
             fireButton.Draw(spriteBatch);
             slowButton.Draw(spriteBatch);
+
+            if (debug)
+            {
+                string text = string.Format("Level {0}", levelNb);
+                spriteBatch.DrawString(font, text, new Vector2(10, 10), Color.White);
+            }
 
             if (player.TowerSelected)
             {

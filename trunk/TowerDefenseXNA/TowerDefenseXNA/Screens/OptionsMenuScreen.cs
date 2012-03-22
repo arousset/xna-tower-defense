@@ -8,7 +8,9 @@
 #endregion
 
 #region Using Statements
+using System;
 using Microsoft.Xna.Framework;
+using System.IO;
 #endregion
 
 namespace GameStateManagement
@@ -22,26 +24,8 @@ namespace GameStateManagement
     {
         #region Fields
 
-        MenuEntry ungulateMenuEntry;
-        MenuEntry languageMenuEntry;
-        MenuEntry frobnicateMenuEntry;
-        MenuEntry elfMenuEntry;
+        MenuEntry resetSave;
 
-        enum Ungulate
-        {
-            BactrianCamel,
-            Dromedary,
-            Llama,
-        }
-
-        static Ungulate currentUngulate = Ungulate.Dromedary;
-
-        static string[] languages = { "C#", "French", "Deoxyribonucleic acid" };
-        static int currentLanguage = 0;
-
-        static bool frobnicate = true;
-
-        static int elf = 23;
 
         #endregion
 
@@ -54,41 +38,12 @@ namespace GameStateManagement
         public OptionsMenuScreen()
             : base("Options")
         {
-            // Create our menu entries.
-            ungulateMenuEntry = new MenuEntry(string.Empty);
-            languageMenuEntry = new MenuEntry(string.Empty);
-            frobnicateMenuEntry = new MenuEntry(string.Empty);
-            elfMenuEntry = new MenuEntry(string.Empty);
-
-            SetMenuEntryText();
-
+            resetSave = new MenuEntry("Reset save");
+            resetSave.Selected += ResetSave;
+            MenuEntries.Add(resetSave);
             MenuEntry back = new MenuEntry("Back");
-
-            // Hook up menu event handlers.
-            ungulateMenuEntry.Selected += UngulateMenuEntrySelected;
-            languageMenuEntry.Selected += LanguageMenuEntrySelected;
-            frobnicateMenuEntry.Selected += FrobnicateMenuEntrySelected;
-            elfMenuEntry.Selected += ElfMenuEntrySelected;
             back.Selected += OnCancel;
-            
-            // Add entries to the menu.
-            MenuEntries.Add(ungulateMenuEntry);
-            MenuEntries.Add(languageMenuEntry);
-            MenuEntries.Add(frobnicateMenuEntry);
-            MenuEntries.Add(elfMenuEntry);
             MenuEntries.Add(back);
-        }
-
-
-        /// <summary>
-        /// Fills in the latest values for the options screen menu text.
-        /// </summary>
-        void SetMenuEntryText()
-        {
-            ungulateMenuEntry.Text = "Preferred ungulate: " + currentUngulate;
-            languageMenuEntry.Text = "Language: " + languages[currentLanguage];
-            frobnicateMenuEntry.Text = "Frobnicate: " + (frobnicate ? "on" : "off");
-            elfMenuEntry.Text = "elf: " + elf;
         }
 
 
@@ -96,53 +51,39 @@ namespace GameStateManagement
 
         #region Handle Input
 
-
-        /// <summary>
-        /// Event handler for when the Ungulate menu entry is selected.
-        /// </summary>
-        void UngulateMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        void ResetSave(object sender, PlayerIndexEventArgs e)
         {
-            currentUngulate++;
+            const string message = "Are you sure you want to reset the save?";
 
-            if (currentUngulate > Ungulate.Llama)
-                currentUngulate = 0;
+            MessageBoxScreen confirmQuitMessageBox = new MessageBoxScreen(message);
 
-            SetMenuEntryText();
+            confirmQuitMessageBox.Accepted += ConfirmQuitMessageBoxAccepted;
+
+            ScreenManager.AddScreen(confirmQuitMessageBox, ControllingPlayer);
         }
 
-
-        /// <summary>
-        /// Event handler for when the Language menu entry is selected.
-        /// </summary>
-        void LanguageMenuEntrySelected(object sender, PlayerIndexEventArgs e)
+        void ConfirmQuitMessageBoxAccepted(object sender, PlayerIndexEventArgs e)
         {
-            currentLanguage = (currentLanguage + 1) % languages.Length;
-
-            SetMenuEntryText();
+            try
+            {
+                // Instanciation du StreamWriter avec passage du nom du fichier 
+                StreamWriter monStreamWriter = new StreamWriter("Content/save.txt");
+                int i = 0;
+                while(i < 5)
+                {
+                    if (i == 0)
+                        monStreamWriter.WriteLine("yn");
+                    else
+                        monStreamWriter.WriteLine("nn");
+                    i++;
+                }
+                // Fermeture du StreamWriter (Très important) 
+                monStreamWriter.Close();
+            }
+            catch (Exception)
+            {
+            }
         }
-
-
-        /// <summary>
-        /// Event handler for when the Frobnicate menu entry is selected.
-        /// </summary>
-        void FrobnicateMenuEntrySelected(object sender, PlayerIndexEventArgs e)
-        {
-            frobnicate = !frobnicate;
-
-            SetMenuEntryText();
-        }
-
-
-        /// <summary>
-        /// Event handler for when the Elf menu entry is selected.
-        /// </summary>
-        void ElfMenuEntrySelected(object sender, PlayerIndexEventArgs e)
-        {
-            elf++;
-
-            SetMenuEntryText();
-        }
-
 
         #endregion
     }
