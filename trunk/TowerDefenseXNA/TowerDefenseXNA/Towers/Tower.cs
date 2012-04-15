@@ -26,6 +26,10 @@ namespace TowerDefenseXNA
         protected bool selected;
         protected Texture2D rangeTexture;
 
+        protected Texture2D btsell;
+        protected Texture2D btupgrade;
+        protected Texture2D btreplace;
+
         public Enemy Target
         {
             get { return target; }
@@ -57,10 +61,14 @@ namespace TowerDefenseXNA
             get { return target != null; }
         }
 
-        public Tower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position) : base(texture, position)
+        public Tower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, Texture2D btsell, Texture2D btupgrade, Texture2D btreplace)
+            : base(texture, position)
         {
             this.bulletTexture = bulletTexture;
             this.rangeTexture = rangeTexture;
+            this.btsell = btsell;
+            this.btupgrade = btupgrade;
+            this.btreplace = btreplace;
         }
 
         // Methods
@@ -129,6 +137,11 @@ namespace TowerDefenseXNA
                     (int)radius * 2);
 
                 spriteBatch.Draw(rangeTexture, radiusRect, Color.White);
+                
+                // In order to draw the tower menu
+                spriteBatch.Draw(btsell, radiusRect, Color.White);
+                spriteBatch.Draw(btupgrade, radiusRect, Color.White);
+                spriteBatch.Draw(btreplace, radiusRect, Color.White);
             }
             
             foreach (Bullet bullet in bulletList)

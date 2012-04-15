@@ -133,7 +133,16 @@ namespace GameStateManagement
 
             Texture2D bulletTexture = content.Load<Texture2D>("Towers/bullet4");
             Texture2D rangeTexture = content.Load<Texture2D>("GUI/Range");
-            player = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture, lvl.playerLife, lvl.playerMoney, bulletsAudio);
+
+    /*************************************************************************************/
+            /* test pour le menu */
+            // - Modifications du constructeur de player => Tower
+    /*************************************************************************************/
+            Texture2D sellbt = content.Load<Texture2D>("GUI/bt_sell");
+            Texture2D upgradebt = content.Load<Texture2D>("GUI/bt_upgrade");
+            Texture2D replacebt = content.Load<Texture2D>("GUI/bt_replace");
+
+            player = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture, lvl.playerLife, lvl.playerMoney, bulletsAudio, sellbt, upgradebt, replacebt);
 
             enemyTextureFast = content.Load<Texture2D>("Enemies/Fast");
             enemyTextureNormal = content.Load<Texture2D>("Enemies/Normal");
@@ -217,7 +226,8 @@ namespace GameStateManagement
             fireButton = new TowerDefenseXNA.Button(fireNormal, fireHover, firePressed, new Vector2(355+96, lvl.Height * 32 - 32));
             nfireButton = new TowerDefenseXNA.Button(fire_not_available, fire_not_available, fire_not_available, new Vector2(355 + 96, lvl.Height * 32 - 32));
             
-            sellButton = new TowerDefenseXNA.Button(sellNormal, sellHover, sellPressed, new Vector2(32 * 15, lvl.Height * 32));
+   // tetre faire en dynamique ou remettre dans une autre class ! :) 
+            sellButton = new TowerDefenseXNA.Button(sellNormal, sellHover, sellPressed, new Vector2(15, 20));
 
             startWaveButton = new TowerDefenseXNA.Button(startWaveNormal, startWaveOver, startWavePressed, new Vector2(lvl.Width + 553, lvl.Height + 438));
             startWaveButton.OnPress += new EventHandler(startButton_OnPress);
@@ -372,7 +382,7 @@ namespace GameStateManagement
             lvl.Draw(spriteBatch, tiledMap);
             waveManager.Draw(spriteBatch);
             player.Draw(spriteBatch);
-            
+               
             player.DrawPreview(spriteBatch);
             toolBar.Draw(spriteBatch, player, waveManager);
             healthbar.Draw(spriteBatch, player);
@@ -406,6 +416,8 @@ namespace GameStateManagement
 ////////////////
             if (player.TowerSelected)
             {
+                string text = string.Format("Level {0}", levelNb);
+                spriteBatch.DrawString(font, text, new Vector2(10, 10), Color.White);
                 sellButton.Draw(spriteBatch);
             }
 ///////////////////////

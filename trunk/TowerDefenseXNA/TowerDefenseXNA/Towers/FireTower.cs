@@ -16,7 +16,8 @@ namespace TowerDefenseXNA
         private float modifierDuration;
         SoundEffect bulletAudio;
 
-        public FireTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, SoundEffect bulletAudio) : base(texture, bulletTexture, rangeTexture, position)
+        public FireTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, SoundEffect bulletAudio, Texture2D btsell, Texture2D btupgrade, Texture2D btreplace)
+            : base(texture, bulletTexture, rangeTexture, position, btsell, btupgrade, btreplace)
         {
             this.damage = 5; // Set the damage
             this.cost = 25;   // Set the initial cost

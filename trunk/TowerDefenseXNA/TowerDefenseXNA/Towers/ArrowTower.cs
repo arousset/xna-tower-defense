@@ -16,8 +16,8 @@ namespace TowerDefenseXNA
     {
         SoundEffect bulletAudio;
         // Constructor
-        public ArrowTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, SoundEffect bulletAudio)
-            : base(texture, bulletTexture, rangeTexture, position)
+        public ArrowTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, SoundEffect bulletAudio, Texture2D btsell, Texture2D btupgrade, Texture2D btreplace)
+            : base(texture, bulletTexture, rangeTexture, position, btsell, btupgrade, btreplace)
         {
             this.damage = 15; // Set the damage
             this.cost = 15;   // Set the initial cost
