@@ -22,12 +22,14 @@ namespace TowerDefenseXNA
         public Vector2 Position
         {
             get { return position; }
+            set { position = value; }
         }
 
         // Use for kwnowing the center of the sprite
         public Vector2 Center
         {
             get { return center; }
+            set { center = value; }
         }
 
         // Use for kwnowing the boundaries of the sprite

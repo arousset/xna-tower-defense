@@ -134,13 +134,9 @@ namespace GameStateManagement
             Texture2D bulletTexture = content.Load<Texture2D>("Towers/bullet4");
             Texture2D rangeTexture = content.Load<Texture2D>("GUI/Range");
 
-    /*************************************************************************************/
-            /* test pour le menu */
-            // - Modifications du constructeur de player => Tower
-    /*************************************************************************************/
-            Texture2D sellbt = content.Load<Texture2D>("GUI/bt_sell");
-            Texture2D upgradebt = content.Load<Texture2D>("GUI/bt_upgrade");
-            Texture2D replacebt = content.Load<Texture2D>("GUI/bt_replace");
+            Texture2D sellbt = content.Load<Texture2D>("GUI/sell_button");
+            Texture2D upgradebt = content.Load<Texture2D>("GUI/upgrade_button");
+            Texture2D replacebt = content.Load<Texture2D>("GUI/replace_button");
 
             player = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture, lvl.playerLife, lvl.playerMoney, bulletsAudio, sellbt, upgradebt, replacebt);
 
@@ -164,8 +160,6 @@ namespace GameStateManagement
 
 
             // Tower 
-
-
             Texture2D startWaveNormal = content.Load<Texture2D>("GUI/StartWave");
             Texture2D startWaveOver = content.Load<Texture2D>("GUI/StartWave_over");
             Texture2D startWavePressed = content.Load<Texture2D>("GUI/StartWave_pressed");
@@ -225,9 +219,6 @@ namespace GameStateManagement
             
             fireButton = new TowerDefenseXNA.Button(fireNormal, fireHover, firePressed, new Vector2(355+96, lvl.Height * 32 - 32));
             nfireButton = new TowerDefenseXNA.Button(fire_not_available, fire_not_available, fire_not_available, new Vector2(355 + 96, lvl.Height * 32 - 32));
-            
-   // tetre faire en dynamique ou remettre dans une autre class ! :) 
-            sellButton = new TowerDefenseXNA.Button(sellNormal, sellHover, sellPressed, new Vector2(15, 20));
 
             startWaveButton = new TowerDefenseXNA.Button(startWaveNormal, startWaveOver, startWavePressed, new Vector2(lvl.Width + 553, lvl.Height + 438));
             startWaveButton.OnPress += new EventHandler(startButton_OnPress);
@@ -320,7 +311,7 @@ namespace GameStateManagement
 
                 if (player.TowerSelected)
                 {
-                    sellButton.Update(gameTime);
+                    // on verra par la suite s'il faut mettre qqch
                 }
 
                 player.Update(gameTime, waveManager.Enemies);
@@ -416,9 +407,8 @@ namespace GameStateManagement
 ////////////////
             if (player.TowerSelected)
             {
-                string text = string.Format("Level {0}", levelNb);
-                spriteBatch.DrawString(font, text, new Vector2(10, 10), Color.White);
-                sellButton.Draw(spriteBatch);
+                //string text = string.Format("Level {0}", levelNb);
+                //spriteBatch.DrawString(font, text, new Vector2(10, 10), Color.White);
             }
 ///////////////////////
             if (waveManager.WaveReady)

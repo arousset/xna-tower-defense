@@ -20,15 +20,20 @@ namespace TowerDefenseXNA
         protected int damage; 
         protected float radius; // How far the tower can shoot
         protected Enemy target;
+        protected int level_tower;
 
         protected float bulletTimer; // How long ago was a bullet fired
         protected List<Bullet> bulletList = new List<Bullet>();
         protected bool selected;
         protected Texture2D rangeTexture;
 
-        protected Texture2D btsell;
-        protected Texture2D btupgrade;
-        protected Texture2D btreplace;
+        protected string name;
+
+
+        public string Name
+        {
+            get { return name; }
+        }
 
         public Enemy Target
         {
@@ -44,16 +49,26 @@ namespace TowerDefenseXNA
         public int Cost
         {
             get { return cost; }
+            set { cost = value; }
         }
         public int Damage
         {
             get { return damage; }
+            set { damage = value; }
         }
 
         public float Radius
         {
             get { return radius; }
+            set { radius = value; }
         }
+
+        public int Level_tower
+        {
+            get { return level_tower; }
+            set { level_tower = value; }
+        }
+
 
         public virtual bool HasTarget
         {
@@ -61,14 +76,12 @@ namespace TowerDefenseXNA
             get { return target != null; }
         }
 
-        public Tower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, Texture2D btsell, Texture2D btupgrade, Texture2D btreplace)
+        public Tower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position)
             : base(texture, position)
         {
             this.bulletTexture = bulletTexture;
             this.rangeTexture = rangeTexture;
-            this.btsell = btsell;
-            this.btupgrade = btupgrade;
-            this.btreplace = btreplace;
+            this.level_tower = 1;
         }
 
         // Methods
@@ -123,6 +136,7 @@ namespace TowerDefenseXNA
             }
         }
 
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             
@@ -137,11 +151,6 @@ namespace TowerDefenseXNA
                     (int)radius * 2);
 
                 spriteBatch.Draw(rangeTexture, radiusRect, Color.White);
-                
-                // In order to draw the tower menu
-                spriteBatch.Draw(btsell, radiusRect, Color.White);
-                spriteBatch.Draw(btupgrade, radiusRect, Color.White);
-                spriteBatch.Draw(btreplace, radiusRect, Color.White);
             }
             
             foreach (Bullet bullet in bulletList)

@@ -392,18 +392,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GUI\bt_replace.png">
-      <Name>bt_replace</Name>
+    <Compile Include="GUI\replace_button.PNG">
+      <Name>replace_button</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="GUI\bt_sell.png">
-      <Name>bt_sell</Name>
+    <Compile Include="GUI\sell_button.PNG">
+      <Name>sell_button</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="GUI\bt_upgrade.png">
-      <Name>bt_upgrade</Name>
+    <Compile Include="GUI\upgrade_button.PNG">
+      <Name>upgrade_button</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
