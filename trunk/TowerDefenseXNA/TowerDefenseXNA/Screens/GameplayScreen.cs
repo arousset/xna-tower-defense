@@ -49,7 +49,6 @@ namespace GameStateManagement
         TowerDefenseXNA.Button nslowButton;
         TowerDefenseXNA.Button fireButton;
         TowerDefenseXNA.Button nfireButton;
-        TowerDefenseXNA.Button sellButton;
         TowerDefenseXNA.Button startWaveButton;
         TowerDefenseXNA.WaveManager waveManager;
         Texture2D enemyTextureNormal;
@@ -138,7 +137,10 @@ namespace GameStateManagement
             Texture2D upgradebt = content.Load<Texture2D>("GUI/upgrade_button");
             Texture2D replacebt = content.Load<Texture2D>("GUI/replace_button");
 
-            player = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture, lvl.playerLife, lvl.playerMoney, bulletsAudio, sellbt, upgradebt, replacebt);
+            Texture2D ranksilver = content.Load<Texture2D>("GUI/ranksilver");
+            Texture2D rankgold = content.Load<Texture2D>("GUI/rankgold");
+
+            player = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture, lvl.playerLife, lvl.playerMoney, bulletsAudio, sellbt, upgradebt, replacebt, font, ranksilver, rankgold);
 
             enemyTextureFast = content.Load<Texture2D>("Enemies/Fast");
             enemyTextureNormal = content.Load<Texture2D>("Enemies/Normal");
