@@ -16,8 +16,20 @@ namespace TowerDefenseXNA
         private float modifierDuration;
         SoundEffect bulletAudio;
 
-        public SlowTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, SoundEffect bulletAudio, Texture2D btsell, Texture2D btupgrade, Texture2D btreplace)
-            : base(texture, bulletTexture, rangeTexture, position, btsell, btupgrade, btreplace)
+        public float ModifierDuration
+        {
+            get { return modifierDuration; }
+            set { modifierDuration = value; }
+        }
+
+        public float SpeedModifier
+        {
+            get { return speedModifier; }
+            set { speedModifier = value; }
+        }
+
+        public SlowTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, SoundEffect bulletAudio)
+            : base(texture, bulletTexture, rangeTexture, position)
         {
             this.damage = 5; // Set the damage
             this.cost = 25;   // Set the initial cost
@@ -26,7 +38,10 @@ namespace TowerDefenseXNA
 
             this.speedModifier = 0.6f;
             this.modifierDuration = 2.0f;
+            this.name = "SlowTower";
         }
+
+        
 
         public override void Update(GameTime gameTime)
         {

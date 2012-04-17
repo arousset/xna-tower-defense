@@ -34,6 +34,17 @@ namespace TowerDefenseXNA
         private Texture2D btreplace;
         private Texture2D btupgrade;
 
+        private Button bt_sell;
+        private Button bt_upgrade;
+        private Button bt_replace;
+        
+        private Rectangle btsell_position;
+        private Rectangle btreplace_position;
+        private Rectangle btupgrade_position;
+
+        private bool first;
+        private int rotate;
+
         // Tower placement
         private int cellX;
         private int cellY;
@@ -84,21 +95,260 @@ namespace TowerDefenseXNA
             this.btsell = btsell;
             this.btupgrade = btupgrade;
             this.btreplace = btreplace;
+
+            bt_sell = new TowerDefenseXNA.Button(btsell, btsell, btsell, new Vector2(10, 100));
+            bt_upgrade = new TowerDefenseXNA.Button(btupgrade, btupgrade, btupgrade, new Vector2(10, 100));
+            bt_replace = new TowerDefenseXNA.Button(btreplace, btreplace, btreplace, new Vector2(100, 10));
+          
+            bt_sell.OnPress += new EventHandler(SellButtonOnPress);
+            bt_upgrade.OnPress += new EventHandler(upgradeButtonOnPress);
+            bt_replace.OnPress += new EventHandler(replaceButtonOnPress);
+            first = true;
+            rotate = 32;
         }
 
-        // Method Sell or UPDATE PAR LA SUITE !
+        // Methods menu !
         public void SellButtonOnPress(object sender, EventArgs e)
         {
-            money += (int)((float)selectedTower.Cost * 0.75f);
-            // Mettre code pour fiare upgrade
-            selectedTower = null;
+            if (selectedTower_radius != null)
+            {
+                money += (int)((float)selectedTower_radius.Cost * 0.75f);
+                towers.Remove(selectedTower_radius);
+                selectedTower = null;
+                selectedTower_radius = null;
+            }
+        }
 
+        public void upgradeButtonOnPress(object sender, EventArgs e)
+        {
+            if (selectedTower_radius != null)
+            {
+                Console.WriteLine("upgrade");
+                switch (selectedTower_radius.Name)
+                {
+                    case "ArrowTower":
+                        switch (selectedTower_radius.Level_tower)
+                        {
+                            case 1:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                            case 2:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                            case 3:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                        }
+                        break;
+
+                    case "SpikeTower":
+                        switch (selectedTower_radius.Level_tower)
+                        {
+                            case 1:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                            case 2:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                            case 3:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                        }
+                        break;
+
+                    case "SlowTower":
+                        switch (selectedTower_radius.Level_tower)
+                        {
+                            case 1:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                            case 2:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                            case 3:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                        }
+                        break;
+
+                    case "FireTower":
+                        switch (selectedTower_radius.Level_tower)
+                        {
+                            case 1:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                            case 2:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                            case 3:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                break;
+                        }
+                        break;
+                }
+                
+                selectedTower = null;
+                selectedTower_radius = null;
+            }
+        }
+
+        // A faire Ya de la couille !!!!
+        public void replaceButtonOnPress(object sender, EventArgs e)
+        {
+            if (selectedTower_radius != null)
+            {
+                Console.WriteLine("replace");
+                //selectedTower_radius.Position;
+ 
+              //  if (Keyboard.GetState().IsKeyDown(Keys.Space))
+             //   {
+                int index = 0; ;
+
+               /* for(int i=0; i<towers.Capacity; i++) {
+                      if(towers.ElementAt(i) == selectedTower_radius) {
+                          index = i;
+                      }
+                }*/
+                    int cellX = (int)(mouseState.X / 32); // Convert the position of the mouse
+                    int cellY = (int)(mouseState.Y / 32); // from array space to level space
+                    tileX = cellX * 32; // Convert from array space to level space
+                    tileY = cellY * 32; // Convert from array space to level space
+                    //towers.Remove(selectedTower_radius);
+                    Console.WriteLine(selectedTower_radius.Position);
+                    towers.ElementAt(0).Position = new Vector2(tileX, tileY);
+                    
+
+               // }
+            }
+            selectedTower = null;
+            selectedTower_radius = null;
         }
 
 
 
         public void Update(GameTime gameTime, List<Enemy> enemies)
         {
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                if (first)
+                {
+                    if (selectedTower != null)
+                    {
+                        Rectangle radiusRectDown = new Rectangle(
+                            (int)selectedTower.Center.X - rotate / 2,
+                            (int)selectedTower.Center.Y + rotate / 2,
+                            (int)32,
+                            (int)32);
+
+                        Rectangle radiusRectLeft = new Rectangle(
+                            (int)selectedTower.Center.X + rotate / 2,
+                            (int)selectedTower.Center.Y - rotate / 2,
+                            (int)32,
+                            (int)32);
+
+                        Rectangle radiusRectRight = new Rectangle(
+                            (int)selectedTower.Center.X - (rotate + rotate / 2),
+                            (int)selectedTower.Center.Y - rotate / 2,
+                            (int)32,
+                            (int)32);
+
+                        Rectangle radiusRectUp = new Rectangle(
+                            (int)selectedTower.Center.X - rotate / 2,
+                            (int)selectedTower.Center.Y - (rotate + rotate / 2),
+                            (int)32,
+                            (int)32);
+
+                            btsell_position = radiusRectDown;
+                            btreplace_position = radiusRectLeft;
+                            btupgrade_position = radiusRectRight;
+                        
+                        if (bt_sell.Bounds == radiusRectDown)
+                        {
+                            btsell_position = radiusRectLeft;
+                            btreplace_position = radiusRectUp;
+                            btupgrade_position = radiusRectDown;
+                            bt_sell.Bounds = btsell_position;
+                            bt_replace.Bounds = btreplace_position;
+                            bt_upgrade.Bounds = btupgrade_position;
+                            Console.WriteLine("on affecte down");
+                        } else if(bt_sell.Bounds == radiusRectLeft)
+                            {
+                                btsell_position = radiusRectUp;
+                                btreplace_position = radiusRectRight;
+                                btupgrade_position = radiusRectLeft;
+                                bt_sell.Bounds = btsell_position;
+                                bt_replace.Bounds = btreplace_position;
+                                bt_upgrade.Bounds = btupgrade_position;
+                                Console.WriteLine("on affecte left");
+                            } else if (bt_sell.Bounds == radiusRectUp)
+                                {
+                                    btsell_position = radiusRectRight;
+                                    btreplace_position = radiusRectDown;
+                                    btupgrade_position = radiusRectUp;
+                                    bt_sell.Bounds = btsell_position;
+                                    bt_replace.Bounds = btreplace_position;
+                                    bt_upgrade.Bounds = btupgrade_position;
+                                    Console.WriteLine("on affecte up");
+                                } else if (bt_sell.Bounds == radiusRectRight)
+                                    {
+                                        btsell_position = radiusRectDown;
+                                        btreplace_position = radiusRectLeft;
+                                        btupgrade_position = radiusRectRight;
+                                        bt_sell.Bounds = btsell_position;
+                                        bt_replace.Bounds = btreplace_position;
+                                        bt_upgrade.Bounds = btupgrade_position;
+                                        Console.WriteLine("on affecte right");
+                                    }
+                        first = false;
+                    }
+                }
+            }
+
+            if (Keyboard.GetState().IsKeyUp(Keys.Space))
+            {
+                if (!first)
+                {
+                    Console.WriteLine("on appuieeee PAS");
+                    first = true;
+                }
+            }
+                       
             mouseState = Mouse.GetState();
 
             cellX = (int)(mouseState.X / 32); // Convert the position of the mouse
@@ -117,10 +367,12 @@ namespace TowerDefenseXNA
                 {
                     if (selectedTower != null)
                     {
+                        
                         if (!selectedTower.Bounds.Contains(mouseState.X, mouseState.Y))
                         {
                             selectedTower.Selected = false;
                             selectedTower = null;
+                            //selectedTower_radius = null;
                         }
                     }
 
@@ -134,7 +386,36 @@ namespace TowerDefenseXNA
                         if (tower.Bounds.Contains(mouseState.X, mouseState.Y))
                         {
                             selectedTower = tower;
+                            Console.WriteLine(selectedTower);
+                            selectedTower_radius = tower;
                             tower.Selected = true;
+                            Rectangle radiusRectDown1 = new Rectangle(
+                                (int)selectedTower.Center.X - rotate / 2,
+                                (int)selectedTower.Center.Y + rotate / 2,
+                                (int)32,
+                                (int)32);
+
+                            Rectangle radiusRectLeft1 = new Rectangle(
+                                (int)selectedTower.Center.X + rotate / 2,
+                                (int)selectedTower.Center.Y - rotate / 2,
+                                (int)32,
+                                (int)32);
+
+                            Rectangle radiusRectRight1 = new Rectangle(
+                                (int)selectedTower.Center.X - (rotate + rotate / 2),
+                                (int)selectedTower.Center.Y - rotate / 2,
+                                (int)32,
+                                (int)32);
+
+                            Rectangle radiusRectUp1 = new Rectangle(
+                                (int)selectedTower.Center.X - rotate / 2,
+                                (int)selectedTower.Center.Y - (rotate + rotate / 2),
+                                (int)32,
+                                (int)32);
+
+                            btsell_position = radiusRectDown1;
+                            btreplace_position = radiusRectLeft1;
+                            btupgrade_position = radiusRectRight1;
                         }
                     }
                 }
@@ -148,7 +429,7 @@ namespace TowerDefenseXNA
                 }
                 selectedTower = null;
                 newTowerType = string.Empty;
-                selectedTower_radius = null;
+                //selectedTower_radius = null;
             }
            
 
@@ -162,6 +443,9 @@ namespace TowerDefenseXNA
             }
 
             oldState = mouseState; // Set the oldState so it becomes the state of the previous frame.
+            bt_sell.Update(gameTime);
+            bt_replace.Update(gameTime);
+            bt_upgrade.Update(gameTime);
         }
 
 
@@ -171,7 +455,20 @@ namespace TowerDefenseXNA
             {
                 tower.Draw(spriteBatch);
             }
+
+            if (selectedTower != null)
+            {
+                bt_sell.Bounds = btsell_position;
+                bt_sell.Draw(spriteBatch);
+
+                bt_replace.Bounds = btreplace_position;
+                bt_replace.Draw(spriteBatch);
+
+                bt_upgrade.Bounds = btupgrade_position;
+                bt_upgrade.Draw(spriteBatch);
+            }   
         }
+
 
         public void DrawPreview(SpriteBatch spriteBatch)
         {
@@ -196,7 +493,7 @@ namespace TowerDefenseXNA
                         (int)tileY - (int)selectedTower_radius.Radius + (previewTexture.Height / 2),
                         (int)selectedTower_radius.Radius * 2,
                         (int)selectedTower_radius.Radius * 2);
-
+                    
                     spriteBatch.Draw(rangeTexture, radiusRect, Color.White);
                 }
             }
@@ -240,25 +537,25 @@ namespace TowerDefenseXNA
             {
                 case "Arrow Tower":
                     {
-                        towerToAdd = new ArrowTower(towerTextures[0], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0], btsell, btupgrade, btreplace);
+                        towerToAdd = new ArrowTower(towerTextures[0], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
                         selectedTower_radius = towerToAdd;
                         break;
                     }
                 case "Spike Tower":
                     {
-                        towerToAdd = new SpikeTower(towerTextures[1], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[1], btsell, btupgrade, btreplace);
+                        towerToAdd = new SpikeTower(towerTextures[1], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[1]);
                         selectedTower_radius = towerToAdd;
                         break;
                     }
                 case "Slow Tower":
                     {
-                        towerToAdd = new SlowTower(towerTextures[2], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0], btsell, btupgrade, btreplace);
+                        towerToAdd = new SlowTower(towerTextures[2], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
                         selectedTower_radius = towerToAdd;
                         break;
                     }
                 case "Fire Tower":
                     {
-                        towerToAdd = new FireTower(towerTextures[3], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0], btsell, btupgrade, btreplace);
+                        towerToAdd = new FireTower(towerTextures[3], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
                         selectedTower_radius = towerToAdd;
                         break;
                     }
@@ -275,10 +572,6 @@ namespace TowerDefenseXNA
                 newTowerType = string.Empty;
             }
         }
-
-
-
-
     }
 }
 

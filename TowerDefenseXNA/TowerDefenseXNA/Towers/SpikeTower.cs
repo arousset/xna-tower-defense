@@ -26,13 +26,14 @@ namespace TowerDefenseXNA
 
 
         // Constructors
-        public SpikeTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, SoundEffect bulletAudio, Texture2D btsell, Texture2D btupgrade, Texture2D btreplace)
-            : base(texture, bulletTexture, rangeTexture, position, btsell, btupgrade, btreplace) 
+        public SpikeTower(Texture2D texture, Texture2D bulletTexture, Texture2D rangeTexture, Vector2 position, SoundEffect bulletAudio)
+            : base(texture, bulletTexture, rangeTexture, position) 
         {
             this.damage = 20; 
             this.cost = 40;   
             this.radius = 48;
             this.bulletAudio = bulletAudio;
+            this.name = "SpikeTower";
 
             // Store a list of all the directions the tower can shoot.
             directions = new Vector2[]
@@ -46,6 +47,11 @@ namespace TowerDefenseXNA
                new Vector2( 0,  1), // South
                new Vector2( 1,  1), // South East
             };
+        }
+
+        public string ToString()
+        {
+            return "SpikeTower";
         }
 
         public override void GetClosestEnemy(List<Enemy> enemies)

@@ -41,6 +41,13 @@ namespace TowerDefenseXNA
         public event EventHandler Clicked;
         public event EventHandler OnPress;
 
+        // Use for kwnowing the boundaries of the sprite
+        public Rectangle Bounds
+        {
+            get { return bounds; }
+            set { bounds = value; }
+        }
+
         // Constructor
         public Button(Texture2D texture, Texture2D hoverTexture, Texture2D pressedTexture, Vector2 position) : base(texture, position)
         {
