@@ -36,6 +36,7 @@ namespace TowerDefenseXNA
         public Rectangle Bounds
         {
             get { return bounds; }
+            set { bounds = value; }
         }
 
 

@@ -34,6 +34,9 @@ namespace TowerDefenseXNA
         private Texture2D btreplace;
         private Texture2D btupgrade;
 
+        private Texture2D ranksilver;
+        private Texture2D rankgold;
+
         private Button bt_sell;
         private Button bt_upgrade;
         private Button bt_replace;
@@ -43,7 +46,10 @@ namespace TowerDefenseXNA
         private Rectangle btupgrade_position;
 
         private bool first;
+        private bool notdraw;
         private int rotate;
+        private SpriteFont font;
+
 
         // Tower placement
         private int cellX;
@@ -83,7 +89,7 @@ namespace TowerDefenseXNA
         }
 
         // Constructor 
-        public Player(Level level, Texture2D[] towerTextures, Texture2D bulletTexture, Texture2D rangeTexture, int life, int money, SoundEffect[] bulletsAudio, Texture2D btsell, Texture2D btreplace, Texture2D btupgrade)
+        public Player(Level level, Texture2D[] towerTextures, Texture2D bulletTexture, Texture2D rangeTexture, int life, int money, SoundEffect[] bulletsAudio, Texture2D btsell, Texture2D btreplace, Texture2D btupgrade, SpriteFont font, Texture2D ranksilver, Texture2D rankgold)
         {
             this.bulletsAudio = bulletsAudio;   
             this.level = level;
@@ -95,16 +101,21 @@ namespace TowerDefenseXNA
             this.btsell = btsell;
             this.btupgrade = btupgrade;
             this.btreplace = btreplace;
+            this.ranksilver = ranksilver;
+            this.rankgold = rankgold;
 
             bt_sell = new TowerDefenseXNA.Button(btsell, btsell, btsell, new Vector2(10, 100));
             bt_upgrade = new TowerDefenseXNA.Button(btupgrade, btupgrade, btupgrade, new Vector2(10, 100));
             bt_replace = new TowerDefenseXNA.Button(btreplace, btreplace, btreplace, new Vector2(100, 10));
-          
+
             bt_sell.OnPress += new EventHandler(SellButtonOnPress);
             bt_upgrade.OnPress += new EventHandler(upgradeButtonOnPress);
             bt_replace.OnPress += new EventHandler(replaceButtonOnPress);
             first = true;
             rotate = 32;
+            notdraw = true;
+
+            this.font =font;
         }
 
         // Methods menu !
@@ -130,22 +141,29 @@ namespace TowerDefenseXNA
                         switch (selectedTower_radius.Level_tower)
                         {
                             case 1:
+                                notdraw = true;
                                 selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
                                 break;
                             case 2:
                                 selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
                                 break;
                             case 3:
                                 selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                if (selectedTower_radius.Level_tower == 3)
+                                {
+                                    this.money = money - 15;
+                                }
                                 break;
                         }
                         break;
@@ -158,18 +176,24 @@ namespace TowerDefenseXNA
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
                                 break;
                             case 2:
                                 selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
                                 break;
                             case 3:
                                 selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                if (selectedTower_radius.Level_tower == 3)
+                                {
+                                    this.money = money - 15;
+                                }
                                 break;
                         }
                         break;
@@ -182,18 +206,24 @@ namespace TowerDefenseXNA
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
                                 break;
                             case 2:
                                 selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
                                 break;
                             case 3:
                                 selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                if (selectedTower_radius.Level_tower == 3)
+                                {
+                                    this.money = money - 15;
+                                }
                                 break;
                         }
                         break;
@@ -206,18 +236,24 @@ namespace TowerDefenseXNA
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
                                 break;
                             case 2:
                                 selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
                                 break;
                             case 3:
                                 selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
                                 selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
                                 selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
                                 selectedTower_radius.Level_tower += 1;
+                                if (selectedTower_radius.Level_tower == 3)
+                                {
+                                    this.money = money - 15;
+                                }
                                 break;
                         }
                         break;
@@ -238,23 +274,29 @@ namespace TowerDefenseXNA
  
               //  if (Keyboard.GetState().IsKeyDown(Keys.Space))
              //   {
-                int index = 0; ;
-
-               /* for(int i=0; i<towers.Capacity; i++) {
-                      if(towers.ElementAt(i) == selectedTower_radius) {
+                int index = 0;
+                Console.WriteLine(towers.Capacity);
+                for(int i=0; i<towers.Capacity; i++) 
+                {
+                    /*  if(towers.ElementAt(i) == selectedTower_radius) 
+                      {
                           index = i;
-                      }
-                }*/
+                      }*/
+                }
+
                     int cellX = (int)(mouseState.X / 32); // Convert the position of the mouse
                     int cellY = (int)(mouseState.Y / 32); // from array space to level space
                     tileX = cellX * 32; // Convert from array space to level space
                     tileY = cellY * 32; // Convert from array space to level space
-                    //towers.Remove(selectedTower_radius);
-                    Console.WriteLine(selectedTower_radius.Position);
-                    towers.ElementAt(0).Position = new Vector2(tileX, tileY);
-                    
 
-               // }
+                    Rectangle carr = new Rectangle(tileX, tileY, 32, 32);
+                    Console.WriteLine(selectedTower_radius.Position);
+                    towers.ElementAt(index).Position = new Vector2(tileX, tileY);
+                    towers.ElementAt(index).Bounds = carr;
+                    //towers.ElementAt(0).Center = new Vector2(tileX, tileY);
+
+                    selectedTower_radius = null;
+                    selectedTower = null;
             }
             selectedTower = null;
             selectedTower_radius = null;
@@ -377,7 +419,7 @@ namespace TowerDefenseXNA
                     }
 
                     foreach (Tower tower in towers)
-                    {
+                    {   
                         if (tower == selectedTower)
                         {
                             continue;
@@ -454,6 +496,15 @@ namespace TowerDefenseXNA
             foreach (Tower tower in towers)
             {
                 tower.Draw(spriteBatch);
+                if (tower.Level_tower == 2)
+                {
+                    spriteBatch.Draw(ranksilver, tower.Bounds, Color.White);
+                }
+
+                if (tower.Level_tower >= 3)
+                {
+                    spriteBatch.Draw(rankgold, tower.Bounds, Color.White);
+                }
             }
 
             if (selectedTower != null)
