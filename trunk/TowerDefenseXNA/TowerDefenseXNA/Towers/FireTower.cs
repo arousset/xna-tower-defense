@@ -65,10 +65,10 @@ namespace TowerDefenseXNA
                     // destroy the bullet and hurt the target.
                     target.CurrentHealth -= bullet.Damage;
                     bullet.Kill();
-
+                    target.Burne = 5.0f;
                     // Apply our speed modifier if it is better than
                     // the one currently affecting the target :
-                    if (target.SpeedModifier <= dammage_infliged)
+                    if (target.Burne <= dammage_infliged)
                     {
                         target.SpeedModifier = dammage_infliged;
                         target.ModifierDuration = modifierDuration;

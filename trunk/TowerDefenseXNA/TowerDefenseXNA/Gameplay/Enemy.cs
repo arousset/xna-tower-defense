@@ -17,6 +17,11 @@ namespace TowerDefenseXNA
         private float speedModifier;
         private float modifierDuration;
         private float modiferCurrentTime;
+
+        private float burn_Modifier;
+        private float burn_Duration;
+        private float burn_CurrentTime;
+
         Player player;
         private Queue<Vector2> waypoints = new Queue<Vector2>();
 
@@ -28,6 +33,13 @@ namespace TowerDefenseXNA
             this.speed = speed;
             this.bountyGiven = bountyGiven;
             this.player = player;
+            this.burn_Modifier = 5.0f;
+        }
+
+        public float Burne
+        {
+            get { return burn_Modifier; }
+            set { burn_Modifier = value; }
         }
 
         public void SetWaypoints(Queue<Vector2> waypoints)
@@ -72,9 +84,14 @@ namespace TowerDefenseXNA
                         temporarySpeed *= speedModifier;
                         // Update the modifier timer.
                         modiferCurrentTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    }
 
-                        // mettre le if each sec
-                         //truc .life -5.
+                    if (burn_Modifier != 0 && burn_CurrentTime <= burn_Duration)
+                    {
+                        // Modify the speed of the enemy.
+                        currentHealth -= burn_Modifier;
+                        // Update the modifier timer.
+                        burn_CurrentTime += (float)gameTime.ElapsedGameTime.TotalSeconds;
 
                     }
 
