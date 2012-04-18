@@ -31,6 +31,7 @@ namespace TowerDefenseXNA
         private Tower selectedTower_replace;
         SoundEffect[] bulletsAudio;
         private bool replace;
+        private bool replace2;
         
         private Texture2D btsell;
         private Texture2D btreplace;
@@ -272,29 +273,37 @@ namespace TowerDefenseXNA
             tileX = 0;
             tileY = 0;
             int index = 0;
-            
 
             if (selectedTower_radius != null)
             {
+                switch (selectedTower_radius.Name)
+                {
+                    case "SpikeTower":
+                        newTowerIndex = 1;
+                        break;
+                    case "ArrowTower":
+                        newTowerIndex = 0;
+                        break;
+                    case "SlowTower":
+                        newTowerIndex = 2;
+                        break;
+                    case "FireTower":
+                        newTowerIndex = 3;
+                        break;
+                }
                 selectedTower_replace = selectedTower_radius;
                 replace = true;
-                for (int i = 0; i < towers.Count - 1; i++)
-                {
-                    if (towers.ElementAt(i) == selectedTower_replace)
-                    {
-                        index = i;
-                    }
-                }
-                Console.WriteLine(towers.Count);
+                Console.WriteLine(selectedTower_replace);
             }
-            //selectedTower = null;
-            //selectedTower_radius = null;
+            selectedTower = null;
+            selectedTower_radius = null;
         }
 
 
 
         public void Update(GameTime gameTime, List<Enemy> enemies)
         {
+            replace2 = false;
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
                 if (first)
@@ -393,6 +402,7 @@ namespace TowerDefenseXNA
                 // Replace a tower
                 if (replace)
                 {
+                    replace2 = true;
                     cellX = (int)(mouseState.X / 32); // Convert the position of the mouse
                     cellY = (int)(mouseState.Y / 32); // from array space to level space
                     tileX = cellX * 32; // Convert from array space to level space
@@ -402,15 +412,34 @@ namespace TowerDefenseXNA
                     replace = false;
                     if (cellX != 0 && cellY != 0 && tileX != 0 && tileY != 0)
                     {
+                        Console.WriteLine(index);
                         Rectangle carr = new Rectangle(tileX, tileY, 32, 32);
                         Console.WriteLine(selectedTower_replace.Position);
-                        towers.ElementAt(index).Position = new Vector2(tileX, tileY);
-                        towers.ElementAt(index).Bounds = carr;
-                        towers.ElementAt(index).Center = new Vector2(tileX, tileY);
-                        selectedTower_replace.Selected = false;
-                        selectedTower_replace = null;
+                        if (IsCellClear())
+                        {
+                            if (selectedTower_replace.Name == "SpikeTower")
+                            {
+                                selectedTower_replace.Position = new Vector2(tileX + (32 / 2), tileY + (32 / 2));
+                                selectedTower_replace.Bounds = carr;
+                                selectedTower_replace.Center = new Vector2(tileX + (32 / 2), tileY + (32 / 2));
+
+                                selectedTower_replace.Selected = false;
+                                selectedTower_replace = null;
+                                selectedTower = null;
+                            }
+                            else
+                            {
+                                selectedTower_replace.Position = new Vector2(tileX, tileY);
+                                selectedTower_replace.Bounds = carr;
+                                selectedTower_replace.Center = new Vector2(tileX, tileY);
+
+                                selectedTower_replace.Selected = false;
+                                selectedTower_replace = null;
+                                selectedTower = null;
+                            }
+                            money -= 10;
+                        }
                     }
-                    
                 }
                 
                 if (string.IsNullOrEmpty(newTowerType) == false)
@@ -439,40 +468,43 @@ namespace TowerDefenseXNA
 
                         if (tower.Bounds.Contains(mouseState.X, mouseState.Y))
                         {
-                            selectedTower = tower;
-                            Console.WriteLine(selectedTower);
-                            selectedTower_radius = tower;
-                            selectedTower_replace = tower;
-                            Console.WriteLine(selectedTower_replace);
-                            tower.Selected = true;
-                            selectedTower_radius.Selected = true;
-                            Rectangle radiusRectDown1 = new Rectangle(
-                                (int)selectedTower.Center.X - rotate / 2,
-                                (int)selectedTower.Center.Y + rotate / 2,
-                                (int)32,
-                                (int)32);
+                            if (replace2 == false)
+                            {
+                                selectedTower = tower;
+                                Console.WriteLine(selectedTower);
+                                selectedTower_radius = tower;
+                                selectedTower_replace = tower;
+                                Console.WriteLine(selectedTower_replace);
+                                tower.Selected = true;
+                                selectedTower_radius.Selected = true;
+                                Rectangle radiusRectDown1 = new Rectangle(
+                                    (int)selectedTower.Center.X - rotate / 2,
+                                    (int)selectedTower.Center.Y + rotate / 2,
+                                    (int)32,
+                                    (int)32);
 
-                            Rectangle radiusRectLeft1 = new Rectangle(
-                                (int)selectedTower.Center.X + rotate / 2,
-                                (int)selectedTower.Center.Y - rotate / 2,
-                                (int)32,
-                                (int)32);
+                                Rectangle radiusRectLeft1 = new Rectangle(
+                                    (int)selectedTower.Center.X + rotate / 2,
+                                    (int)selectedTower.Center.Y - rotate / 2,
+                                    (int)32,
+                                    (int)32);
 
-                            Rectangle radiusRectRight1 = new Rectangle(
-                                (int)selectedTower.Center.X - (rotate + rotate / 2),
-                                (int)selectedTower.Center.Y - rotate / 2,
-                                (int)32,
-                                (int)32);
+                                Rectangle radiusRectRight1 = new Rectangle(
+                                    (int)selectedTower.Center.X - (rotate + rotate / 2),
+                                    (int)selectedTower.Center.Y - rotate / 2,
+                                    (int)32,
+                                    (int)32);
 
-                            Rectangle radiusRectUp1 = new Rectangle(
-                                (int)selectedTower.Center.X - rotate / 2,
-                                (int)selectedTower.Center.Y - (rotate + rotate / 2),
-                                (int)32,
-                                (int)32);
+                                Rectangle radiusRectUp1 = new Rectangle(
+                                    (int)selectedTower.Center.X - rotate / 2,
+                                    (int)selectedTower.Center.Y - (rotate + rotate / 2),
+                                    (int)32,
+                                    (int)32);
 
-                            btsell_position = radiusRectDown1;
-                            btreplace_position = radiusRectLeft1;
-                            btupgrade_position = radiusRectRight1;
+                                btsell_position = radiusRectDown1;
+                                btreplace_position = radiusRectLeft1;
+                                btupgrade_position = radiusRectRight1;
+                            }
                         }
                     }
                 }
@@ -488,6 +520,8 @@ namespace TowerDefenseXNA
                 selectedTower = null;
                 newTowerType = string.Empty;
                 selectedTower_radius = null;
+                replace = false;
+                selectedTower_replace = null;
             }
            
 
@@ -531,8 +565,11 @@ namespace TowerDefenseXNA
                 bt_replace.Bounds = btreplace_position;
                 bt_replace.Draw(spriteBatch);
 
-                bt_upgrade.Bounds = btupgrade_position;
-                bt_upgrade.Draw(spriteBatch);
+                if (selectedTower.Level_tower < 3)
+                {
+                    bt_upgrade.Bounds = btupgrade_position;
+                    bt_upgrade.Draw(spriteBatch);
+                }
             }
 
             if (replace)
