@@ -32,6 +32,7 @@ namespace TowerDefenseXNA
         SoundEffect[] bulletsAudio;
         private bool replace;
         private bool replace2;
+        private int deplacement_costaCondcordia;
         
         private Texture2D btsell;
         private Texture2D btreplace;
@@ -118,6 +119,7 @@ namespace TowerDefenseXNA
             index = 0;
             replace = false;
             this.font =font;
+            deplacement_costaCondcordia = 10;
         }
 
         // Methods menu !
@@ -562,8 +564,11 @@ namespace TowerDefenseXNA
                 bt_sell.Bounds = btsell_position;
                 bt_sell.Draw(spriteBatch);
 
-                bt_replace.Bounds = btreplace_position;
-                bt_replace.Draw(spriteBatch);
+                if (money > deplacement_costaCondcordia)
+                {
+                    bt_replace.Bounds = btreplace_position;
+                    bt_replace.Draw(spriteBatch);
+                }
 
                 if (selectedTower.Level_tower < 3)
                 {
