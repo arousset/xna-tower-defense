@@ -72,6 +72,7 @@ namespace TowerDefenseXNA
                     {
                         target.SpeedModifier = dammage_infliged;
                         target.ModifierDuration = modifierDuration;
+                        target.CurrentHealth -= bullet.Damage;
                     }
                 }
 
