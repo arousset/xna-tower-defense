@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Input.Touch;
 using System.IO;
 #endregion
 
-namespace GameStateManagement
+namespace GameStateManagement 
 {
     /// <summary>
     /// Enum describes the screen transition state.
@@ -35,7 +35,7 @@ namespace GameStateManagement
     /// want to quit" message box, and the main game itself are all implemented
     /// as screens.
     /// </summary>
-    public abstract class GameScreen
+    public class GameScreen 
     {
         #region Properties
 

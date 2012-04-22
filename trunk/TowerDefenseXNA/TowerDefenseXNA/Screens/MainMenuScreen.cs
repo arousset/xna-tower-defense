@@ -22,19 +22,24 @@ namespace GameStateManagement
     {
         #region Initialization
         ContentManager Content;
+        GameComponentCollection Components;
+        Game game;
         /// <summary>
         /// Constructor fills in the menu contents.
         /// </summary>
-        public MainMenuScreen(ContentManager Content)
+        public MainMenuScreen(ContentManager Content, GameComponentCollection Components, Game game)
             : base("Tower Defense")
         {
             this.Content = Content;
+            this.Components = Components;
+            this.game = game;
             // Create our menu entries.
             MenuEntry playGameMenuEntry = new MenuEntry("Play Game solo");
             MenuEntry multiMenuEntry = new MenuEntry("Multiplayer");
             MenuEntry optionsMenuEntry = new MenuEntry("Options");
             MenuEntry creditMenuEntry = new MenuEntry("Credit");
             MenuEntry exitMenuEntry = new MenuEntry("Exit");
+            
 
             // Hook up menu event handlers.
             playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
@@ -51,6 +56,32 @@ namespace GameStateManagement
             MenuEntries.Add(exitMenuEntry);
         }
 
+        public MainMenuScreen(ContentManager Content)
+            : base("Tower Defense")
+        {
+            this.Content = Content;
+            // Create our menu entries.
+            MenuEntry playGameMenuEntry = new MenuEntry("Play Game solo");
+            MenuEntry multiMenuEntry = new MenuEntry("Multiplayer");
+            MenuEntry optionsMenuEntry = new MenuEntry("Options");
+            MenuEntry creditMenuEntry = new MenuEntry("Credit");
+            MenuEntry exitMenuEntry = new MenuEntry("Exit");
+
+
+            // Hook up menu event handlers.
+            playGameMenuEntry.Selected += PlayGameMenuEntrySelected;
+            multiMenuEntry.Selected += MultiMenuEntrySelected;
+            optionsMenuEntry.Selected += OptionsMenuEntrySelected;
+            creditMenuEntry.Selected += CreditMenuEntrySelected;
+            exitMenuEntry.Selected += OnCancel;
+
+            // Add entries to the menu.
+            MenuEntries.Add(playGameMenuEntry);
+            MenuEntries.Add(multiMenuEntry);
+            MenuEntries.Add(optionsMenuEntry);
+            MenuEntries.Add(creditMenuEntry);
+            MenuEntries.Add(exitMenuEntry);
+        }
 
         #endregion
 
@@ -69,7 +100,7 @@ namespace GameStateManagement
 
         void MultiMenuEntrySelected(object sender, PlayerIndexEventArgs e)
         {
-            ScreenManager.AddScreen(new OptionsMenuScreen(), e.PlayerIndex);
+            ScreenManager.AddScreen(new MultiPlayerMenuScreen(Content, Components, game), e.PlayerIndex);
         }
 
         void CreditMenuEntrySelected(object sender, PlayerIndexEventArgs e)
