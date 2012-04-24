@@ -89,7 +89,6 @@ namespace GameStateManagement
         /// </summary>
         public GameplayScreenMulti(int levelNb, GameComponentCollection Components, Game game)
         {
-            
             this.levelNb = levelNb;
             this.Components = Components;
             this.game = game;
@@ -297,7 +296,7 @@ namespace GameStateManagement
                 {
                     // If there are no profiles signed in, we cannot proceed.
                     // Show the Guide so the user can sign in.
-                   //Guide.ShowSignIn(maxLocalGamers, false);
+                  // Guide.ShowSignIn(maxLocalGamers, false);
                 }
                 else if (IsPressed(Keys.A, Buttons.A))
                 {
@@ -598,20 +597,55 @@ namespace GameStateManagement
                     int[] coup_lu = new int[7];
                     for (int i = 0; i < 7; i++)
                         coup_lu[i] = packetReader.ReadInt32();
-
-                    if (player.compteur_read < coup_lu[0])
+                    NetworkAction(coup_lu);
+                  /*  if (player.compteur_read < coup_lu[0])
                     {
                         player.compteur_read = coup_lu[0];
                         Console.WriteLine("Nouveau coup");
-                        if (coup_lu[1] == 0)
+                        switch (coup_lu[1])
                         {
-                            Console.WriteLine("ajout d'une tour");
-                            player.AddTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                            case 0:
+                                Console.WriteLine("Ajout d'une tour");
+                                player.AddTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                                break;
+                            case 1:
+                                Console.WriteLine("Suppression d'une tour");
+                                player.RemoveTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                                break;
                         }
 
                         for (int j = 0; j < 7; j++)
                             Console.WriteLine(j + " " + coup_lu[j]);
-                    }
+                    }*/
+                }
+            }
+        }
+
+        void NetworkAction(int[] coup_lu)
+        {
+            if (player.compteur_read < coup_lu[0])
+            {
+                player.compteur_read = coup_lu[0];
+                Console.WriteLine("Reception d'une nouvelle donnée");
+                        
+                switch(coup_lu[1])
+                {
+                    case 0 :
+                        Console.WriteLine("Ajout d'une tour depuis le reseau");
+                        player.AddTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                        break;
+                    case 1:
+                        Console.WriteLine("Suppression d'une tour depuis le reseau");
+                        player.RemoveTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                        break;
+                    case 2:
+                        Console.WriteLine("Upgrade d'une tour depuis le reseau");
+                        player.UpgradeMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                        break;
+                    case 4:
+                        Console.WriteLine("Lancement de la vague depuis le reseau");
+                        waveManager.StartNextWave();
+                        break;
                 }
             }
         }
@@ -636,19 +670,35 @@ namespace GameStateManagement
                     for (int i = 0; i < 7; i++)
                         coup_lu[i] = packetReader.ReadInt32();
 
-                    if (player.compteur_read < coup_lu[0])
+                    NetworkAction(coup_lu);
+
+                  /*  if (player.compteur_read < coup_lu[0])
                     {
                         player.compteur_read = coup_lu[0];
                         Console.WriteLine("Nouveau coup");
-                        if (coup_lu[1] == 0)
+                        
+                        switch(coup_lu[1])
                         {
-                            Console.WriteLine("Ajout d'une tour");
-                            player.AddTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                            case 0 :
+                                Console.WriteLine("Ajout d'une tour");
+                                player.AddTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                                break;
+                            case 1:
+                                Console.WriteLine("Suppression d'une tour");
+                                player.RemoveTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                                break;
+                            case 2:
+                                Console.WriteLine("Suppression d'une tour");
+                                player.UpgradeMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                                break;
+                            case 4:
+                                waveManager.StartNextWave();
+                                break;
                         }
 
                         for (int j = 0; j < 7; j++)
                             Console.WriteLine(j + " " + coup_lu[j]);
-                    }
+                    }*/
 
 
 
@@ -703,7 +753,7 @@ namespace GameStateManagement
                        "B = join session";
 
             spriteBatch.Begin();
-            ScreenManager.GraphicsDevice.Clear(ClearOptions.Target, Color.CornflowerBlue, 0, 0);
+           // ScreenManager.GraphicsDevice.Clear(ClearOptions.Target, Color.CornflowerBlue, 0, 0);
             spriteBatch.DrawString(font, message, new Vector2(161, 161), Color.Black);
             spriteBatch.DrawString(font, message, new Vector2(160, 160), Color.White);
             spriteBatch.End();
@@ -715,7 +765,6 @@ namespace GameStateManagement
             // For each person in the session...
             foreach (NetworkGamer gamer in networkSession.AllGamers)
             {
-                // Look up the tank object belonging to this network gamer.
                 TowerDefenseXNA.Player player_serv = gamer.Tag as TowerDefenseXNA.Player;
 
                 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -749,7 +798,7 @@ namespace GameStateManagement
                 else
                     fireButton.Draw(spriteBatch);
 
-                if (waveManager.WaveReady)
+                if (waveManager.WaveReady && gamer.IsHost)
                     startWaveButton.Draw(spriteBatch);
 
                 
@@ -760,13 +809,21 @@ namespace GameStateManagement
                 Vector2 labelOffset = new Vector2(100, 150);
 
                 if (gamer.IsHost)
+                {
                     label += " (server)";
+                    spriteBatch.DrawString(font, "Server", new Vector2(10, 10), Color.Blue);
+                    
+                }
+                else
+                {
+                    spriteBatch.DrawString(font, "Client", new Vector2(10, 10), Color.Blue);
+                }
 
                 // Flash the gamertag to yellow when the player is talking.
                 if (gamer.IsTalking)
                     labelColor = Color.Yellow;
 
-                spriteBatch.DrawString(font, label, new Vector2(10, 10), labelColor, 0, labelOffset, 0.6f, SpriteEffects.None, 0);
+                //spriteBatch.DrawString(font, label, new Vector2(10, 10), labelColor, 0, labelOffset, 0.6f, SpriteEffects.None, 0);
                 spriteBatch.End();
 
                 // If the game is transitioning on or off, fade it out to black.
@@ -852,6 +909,7 @@ namespace GameStateManagement
          private void startButton_OnPress(object sender, EventArgs e)
         {
             waveManager.StartNextWave();
+            player.RunWaveMulti();
         }
 
          void ReadPlayerInputs(TowerDefenseXNA.Player player, PlayerIndex playerIndex)
