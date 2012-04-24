@@ -275,7 +275,7 @@ namespace GameStateManagement
                 // If we are not in a network session, update the
                 // menu screen that will let us create or join one.
                 UpdateMenuScreen();
-                Console.WriteLine(player.Money);
+               // Console.WriteLine(player.Money);
             }
             else
             {
@@ -289,7 +289,7 @@ namespace GameStateManagement
 
         void UpdateMenuScreen()
         {
-            Console.WriteLine(IsActive);
+           // Console.WriteLine(IsActive);
             
             if (IsActive)
             {
@@ -470,8 +470,6 @@ namespace GameStateManagement
             // later use these values to control the tank movement.
             TowerDefenseXNA.Player localplayer = gamer.Tag as TowerDefenseXNA.Player;
             ReadPlayerInputs(localplayer, gamer.SignedInGamer.PlayerIndex);
-            if (!gamer.IsHost)
-            {
                 localplayer.Money = player.Money;
                 localplayer.Lives = player.Lives;
 
@@ -480,10 +478,9 @@ namespace GameStateManagement
                 if (!networkSession.IsHost)
                 {
                     // Write our latest input state into a network packet.
-                    packetWriter.Write(localplayer.Money);
-                    packetWriter.Write(localplayer.Lives);
-                    localplayer.Modify_value = false;
-                    player.Modify_value = false;
+                    for (int i = 0; i < 7; i++)
+                        packetWriter.Write(player.last_coup[i]);
+                    
                     // Send our input data to the server.
                     gamer.SendData(packetWriter, SendDataOptions.InOrder, networkSession.Host);
 
@@ -520,7 +517,6 @@ namespace GameStateManagement
                             ScreenManager.AddScreen(new WinMenuScreen(content, levelNb), ControllingPlayer);
                     }
                     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                }
             }
         }
 
@@ -535,7 +531,7 @@ namespace GameStateManagement
                 Console.WriteLine(player.towers.Count);
                     player_serv.Money = player.Money;
                     player_serv.towers = player.towers;
-                    Console.WriteLine("money serveur : "+player.Money);
+                   // Console.WriteLine("money serveur : "+player.Money);
                 // Update the tank.
                 player.Update(legametime, waveManager.Enemies);
                 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -573,10 +569,8 @@ namespace GameStateManagement
 
                 // Write the tank state into the output network packet.
                 packetWriter.Write(gamer.Id);
-                packetWriter.Write(player.Money);
-                packetWriter.Write(player.Lives);
-                player.Modify_value = false;
-                
+                for(int i=0; i<7; i++) 
+                    packetWriter.Write(player.last_coup[i]);
             }
 
             // Send the combined data for all tanks to everyone in the session.
@@ -601,13 +595,21 @@ namespace GameStateManagement
                     TowerDefenseXNA.Player remoteplayer = sender.Tag as TowerDefenseXNA.Player;
                     
                     // Read the latest inputs controlling this tank.;
-                    int money = packetReader.ReadInt32();
-                    int lives = packetReader.ReadInt32();
-                    Console.WriteLine(player.Modify_value);
-                    if (player.Modify_value == false)
+                    int[] coup_lu = new int[7];
+                    for (int i = 0; i < 7; i++)
+                        coup_lu[i] = packetReader.ReadInt32();
+
+                    if (player.compteur_read < coup_lu[0])
                     {
-                        player.Money = money;
-                        player.Lives = lives;
+                        player.compteur_read = coup_lu[0];
+                        Console.WriteLine("Nouveau coup");
+                        if (coup_lu[1] == 0)
+                        {
+                            player.AddTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                        }
+
+                        for (int j = 0; j < 7; j++)
+                            Console.WriteLine(j + " " + coup_lu[j]);
                     }
                 }
             }
@@ -629,8 +631,24 @@ namespace GameStateManagement
                 {
                     // Read the state of one tank from the network packet.
                     byte gamerId = packetReader.ReadByte();
-                    int money = packetReader.ReadInt32();
-                    int lives = packetReader.ReadInt32();
+                    int[] coup_lu = new int[7];
+                    for (int i = 0; i < 7; i++)
+                        coup_lu[i] = packetReader.ReadInt32();
+
+                    if (player.compteur_read < coup_lu[0])
+                    {
+                        player.compteur_read = coup_lu[0];
+                        Console.WriteLine("Nouveau coup");
+                        if (coup_lu[1] == 0)
+                        {
+                            player.AddTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
+                        }
+
+                        for (int j = 0; j < 7; j++)
+                            Console.WriteLine(j + " " + coup_lu[j]);
+                    }
+
+
 
                     // Look up which gamer this state refers to.
                     NetworkGamer remoteGamer = networkSession.FindGamerById(gamerId);
@@ -642,13 +660,13 @@ namespace GameStateManagement
                     {
                         // Update our local state with data from the network packet.
                         TowerDefenseXNA.Player player_cli = remoteGamer.Tag as TowerDefenseXNA.Player;
-                        player_cli.Money = money;
+                        /*player_cli.Money = money;
                         player_cli.Lives = lives;
                         if (player.Modify_value == false)
                         {
                             player.Money = player_cli.Money;
                             player.Lives = player_cli.Lives;
-                        }
+                        }*/
                     }
                 }
             }
@@ -848,7 +866,7 @@ namespace GameStateManagement
 
              if (keyboard.IsKeyDown(Keys.Left))
                  player.Lives -= 1;
-             Console.WriteLine("zerzeprzer :" + player.Lives);
+             //Console.WriteLine("zerzeprzer :" + player.Lives);
              // Store these input values into the  player object.
              //player.TankInput = tankInput;
              //player.TurretInput = turretInput;
