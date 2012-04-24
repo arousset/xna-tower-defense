@@ -300,7 +300,7 @@ namespace GameStateManagement
         public void FadeBackBufferToBlack(float alpha)
         {
             Viewport viewport = GraphicsDevice.Viewport;
-
+            
             spriteBatch.Begin();
 
             spriteBatch.Draw(blankTexture,

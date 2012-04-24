@@ -18,7 +18,7 @@ namespace TowerDefenseXNA
         private int lives = 30;
 
         // Players towers
-        private List<Tower> towers = new List<Tower>();
+        public List<Tower> towers = new List<Tower>();
 
         private MouseState mouseState; // state for current frame
         private MouseState oldState; // state for previous frame
@@ -53,6 +53,7 @@ namespace TowerDefenseXNA
         private int rotate;
         private SpriteFont font;
         private int index;
+        private bool modify_value;
 
         // Tower placement
         private int cellX;
@@ -63,6 +64,11 @@ namespace TowerDefenseXNA
         private string newTowerType;
         private int newTowerIndex;
 
+        public bool Modify_value
+        {
+            get { return modify_value; }
+            set { modify_value = value; }
+        }
        
         public bool TowerSelected
         {
@@ -120,6 +126,7 @@ namespace TowerDefenseXNA
             replace = false;
             this.font =font;
             deplacement_costaCondcordia = 10;
+            modify_value = false;
         }
 
         // Methods menu !
@@ -695,6 +702,7 @@ namespace TowerDefenseXNA
             {
                 towers.Add(towerToAdd);
                 money -= towerToAdd.Cost;
+                modify_value = true;
 
                 // Reset the newTowerType field.
                 newTowerType = string.Empty;
