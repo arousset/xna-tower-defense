@@ -139,7 +139,7 @@ namespace TowerDefenseXNA
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            
+            //spriteBatch.Begin();
             if (selected == true)
             {
                 Vector2 radiusPosition = center - new Vector2(radius);
@@ -149,13 +149,14 @@ namespace TowerDefenseXNA
                     (int)radiusPosition.Y,
                     (int)radius * 2,
                     (int)radius * 2);
-
+                
                 spriteBatch.Draw(rangeTexture, radiusRect, Color.White);
+                
             }
             
             foreach (Bullet bullet in bulletList)
                 bullet.Draw(spriteBatch);
-
+            //spriteBatch.End();
             base.Draw(spriteBatch);
         }
 
