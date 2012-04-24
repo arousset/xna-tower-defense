@@ -20,6 +20,21 @@ namespace TowerDefenseXNA
         // Players towers
         public List<Tower> towers = new List<Tower>();
 
+        public int[] last_coup = new int[7];
+        // ---------- protocol ------------
+        /* numero de coup
+         * type coup (-1 : coup vide | 0 : ajouter une tour | 1 : vendre une tour | 2 : deplacer tour | 3 : amélioré tour)
+         * type tour ( 1 : grise | 2 spike | 3 slower | 4 fire)
+         * coordonné tourX
+         * coordonne tourY
+         * New coordonné tourX
+         * New coordonné tourY
+         */
+        // représente le numéro de coup lu
+        public int compteur_read = 0;
+        public int compteur_write = 0;
+
+
         private MouseState mouseState; // state for current frame
         private MouseState oldState; // state for previous frame
         private Level level;
@@ -127,6 +142,13 @@ namespace TowerDefenseXNA
             this.font =font;
             deplacement_costaCondcordia = 10;
             modify_value = false;
+            last_coup[0] = -1;
+            last_coup[1] = -1;
+            last_coup[2] = -1;
+            last_coup[3] = -1;
+            last_coup[4] = -1;
+            last_coup[5] = -1;
+            last_coup[6] = -1;
         }
 
         // Methods menu !
@@ -674,27 +696,32 @@ namespace TowerDefenseXNA
                     {
                         towerToAdd = new ArrowTower(towerTextures[0], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
                         selectedTower_radius = towerToAdd;
+                        last_coup[2] = 0;
                         break;
                     }
                 case "Spike Tower":
                     {
                         towerToAdd = new SpikeTower(towerTextures[1], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[1]);
                         selectedTower_radius = towerToAdd;
+                        last_coup[2] = 1;
                         break;
                     }
                 case "Slow Tower":
                     {
                         towerToAdd = new SlowTower(towerTextures[2], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
                         selectedTower_radius = towerToAdd;
+                        last_coup[2] = 2;
                         break;
                     }
                 case "Fire Tower":
                     {
                         towerToAdd = new FireTower(towerTextures[3], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
                         selectedTower_radius = towerToAdd;
+                        last_coup[2] = 3;
                         break;
                     }
             }
+
 
 
             // Only add the tower if there is a space and if the player can afford it.
@@ -702,10 +729,57 @@ namespace TowerDefenseXNA
             {
                 towers.Add(towerToAdd);
                 money -= towerToAdd.Cost;
-                modify_value = true;
-
+                //modify_value = true;
+                last_coup[0] = compteur_write+1;
+                compteur_write++;
+                last_coup[1] = 0;
+                last_coup[3] = (int)towerToAdd.Position.X/32;
+                last_coup[4] = (int)towerToAdd.Position.Y/32;
+                last_coup[5] = 0;
+                last_coup[6] = 0;
                 // Reset the newTowerType field.
                 newTowerType = string.Empty;
+            }
+        }
+
+
+        public void AddTowerMulti(int type_tour, int coordX, int coordY)
+        {
+            Tower towerToAdd = null;
+            float tileX = coordX * 32;
+            float tileY = coordY * 32;
+
+            switch (type_tour)
+            {
+                case 0:
+                    {
+                        towerToAdd = new ArrowTower(towerTextures[0], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
+                        break;
+                    }
+                case 1:
+                    {
+                        towerToAdd = new SpikeTower(towerTextures[1], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[1]);
+                        break;
+                    }
+                case 2:
+                    {
+                        towerToAdd = new SlowTower(towerTextures[2], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
+                        break;
+                    }
+                case 3:
+                    {
+                        towerToAdd = new FireTower(towerTextures[3], bulletTexture, rangeTexture, new Vector2(tileX, tileY), bulletsAudio[0]);
+                        break;
+                    }
+            }
+
+
+
+            // Only add the tower if there is a space and if the player can afford it.
+            if (IsCellClear() == true && towerToAdd.Cost <= money)
+            {
+                towers.Add(towerToAdd);
+                money -= towerToAdd.Cost;
             }
         }
     }
