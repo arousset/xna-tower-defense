@@ -528,7 +528,7 @@ namespace GameStateManagement
             {
                 // Look up what tank is associated with this player.
                 TowerDefenseXNA.Player player_serv = gamer.Tag as TowerDefenseXNA.Player;
-                Console.WriteLine(player.towers.Count);
+                //Console.WriteLine(player.towers.Count);
                     player_serv.Money = player.Money;
                     player_serv.towers = player.towers;
                    // Console.WriteLine("money serveur : "+player.Money);
@@ -605,6 +605,7 @@ namespace GameStateManagement
                         Console.WriteLine("Nouveau coup");
                         if (coup_lu[1] == 0)
                         {
+                            Console.WriteLine("ajout d'une tour");
                             player.AddTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
                         }
 
@@ -641,6 +642,7 @@ namespace GameStateManagement
                         Console.WriteLine("Nouveau coup");
                         if (coup_lu[1] == 0)
                         {
+                            Console.WriteLine("Ajout d'une tour");
                             player.AddTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
                         }
 

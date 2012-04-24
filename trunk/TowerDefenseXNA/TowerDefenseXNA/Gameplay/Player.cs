@@ -680,6 +680,8 @@ namespace TowerDefenseXNA
             return inBounds && spaceClear && onPath; // If both checks are true return true
         }
 
+       
+
         public void giveGold(int gold)
         {
             money += gold;
@@ -748,6 +750,8 @@ namespace TowerDefenseXNA
             Tower towerToAdd = null;
             float tileX = coordX * 32;
             float tileY = coordY * 32;
+            cellX = (int)tileX;
+            cellY = (int)tileY;
 
             switch (type_tour)
             {
@@ -776,7 +780,7 @@ namespace TowerDefenseXNA
 
 
             // Only add the tower if there is a space and if the player can afford it.
-            if (IsCellClear() == true && towerToAdd.Cost <= money)
+            if (towerToAdd.Cost <= money)
             {
                 towers.Add(towerToAdd);
                 money -= towerToAdd.Cost;
