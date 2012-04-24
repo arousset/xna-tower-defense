@@ -55,7 +55,8 @@ namespace GameStateManagement
 
         void OkSelected(object sender, PlayerIndexEventArgs e)
         {
-            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new GameplayScreenMulti(1, Components, game));
+            //LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new GameplayScreenMulti(1, Components, game));
+            LoadingScreen.Load(ScreenManager, true, e.PlayerIndex, new BackgroundScreen(), new GameplayScreenMulti(1, Components, game));
         }
 
     }

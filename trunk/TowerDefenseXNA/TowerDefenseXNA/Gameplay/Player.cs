@@ -23,7 +23,7 @@ namespace TowerDefenseXNA
         public int[] last_coup = new int[7];
         // ---------- protocol ------------
         /* numero de coup
-         * type coup (-1 : coup vide | 0 : ajouter une tour | 1 : vendre une tour | 2 : deplacer tour | 3 : amélioré tour)
+         * type coup (-1 : coup vide | 0 : ajouter une tour | 1 : vendre une tour | 2 : deplacer tour | 3 : amélioré tour | 4 : lancer vague)
          * type tour ( 1 : grise | 2 spike | 3 slower | 4 fire)
          * coordonné tourX
          * coordonne tourY
@@ -156,6 +156,16 @@ namespace TowerDefenseXNA
         {
             if (selectedTower_radius != null)
             {
+                last_coup[0] = compteur_write + 1;
+                compteur_write++;
+                last_coup[1] = 1;
+                int x = (int)(selectedTower_radius.Position.X / 32);
+                int y = (int)(selectedTower_radius.Position.Y / 32);
+                last_coup[3] = x;
+                last_coup[4] = y;
+                last_coup[5] = 0;
+                last_coup[6] = 0;
+
                 money += (int)((float)selectedTower_radius.Cost * 0.75f);
                 towers.Remove(selectedTower_radius);
                 selectedTower = null;
@@ -290,6 +300,14 @@ namespace TowerDefenseXNA
                         }
                         break;
                 }
+
+                last_coup[0] = compteur_write + 1;
+                compteur_write++;
+                last_coup[1] = 3;
+                last_coup[3] = (int)selectedTower_radius.Position.X / 32;
+                last_coup[4] = (int)selectedTower_radius.Position.Y / 32;
+                last_coup[5] = 0;
+                last_coup[6] = 0;
                 
                 selectedTower = null;
                 selectedTower_radius = null;
@@ -299,11 +317,8 @@ namespace TowerDefenseXNA
         // A faire Ya de la couille !!!!
         public void replaceButtonOnPress(object sender, EventArgs e)
         {
-            int cellX = 0;
-            int cellY = 0;
             tileX = 0;
             tileY = 0;
-            int index = 0;
 
             if (selectedTower_radius != null)
             {
@@ -777,14 +792,181 @@ namespace TowerDefenseXNA
                     }
             }
 
-
-
             // Only add the tower if there is a space and if the player can afford it.
             if (towerToAdd.Cost <= money)
             {
                 towers.Add(towerToAdd);
                 money -= towerToAdd.Cost;
             }
+        }
+
+        public void RemoveTowerMulti(int type_tour, int coordX, int coordY)
+        {
+            //public List<Tower> towers = new List<Tower>();
+            Tower towerToDelete = null;
+            for (int i = 0; i < towers.Count; i++)
+            {
+                if (towers.ElementAt(i).Position.X == coordX && towers.ElementAt(i).Position.Y == coordY)
+                {
+                    towerToDelete = towers.ElementAt(i);
+                }
+            }
+            if (towerToDelete != null)
+            {
+                money += (int)((float)towerToDelete.Cost * 0.75f);
+                towers.Remove(towerToDelete);
+            }
+        }
+
+        public void UpgradeMulti(int type_tour, int coordX, int coordY)
+        {
+            Tower towerToUpgrade = null;
+            for (int i = 0; i < towers.Count; i++)
+            {
+                if (towers.ElementAt(i).Position.X == coordX && towers.ElementAt(i).Position.Y == coordY)
+                {
+                    towerToUpgrade = towers.ElementAt(i);
+                }
+            }
+
+            if (towerToUpgrade != null)
+            {
+                Console.WriteLine("upgrade");
+                switch (selectedTower_radius.Name)
+                {
+                    case "ArrowTower":
+                        switch (towerToUpgrade.Level_tower)
+                        {
+                            case 1:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
+                                break;
+                            case 2:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
+                                break;
+                            case 3:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                if (selectedTower_radius.Level_tower == 3)
+                                {
+                                    this.money = money - 15;
+                                }
+                                break;
+                        }
+                        break;
+
+                    case "SpikeTower":
+                        switch (towerToUpgrade.Level_tower)
+                        {
+                            case 1:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
+                                break;
+                            case 2:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
+                                break;
+                            case 3:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                if (selectedTower_radius.Level_tower == 3)
+                                {
+                                    this.money = money - 15;
+                                }
+                                break;
+                        }
+                        break;
+
+                    case "SlowTower":
+                        switch (towerToUpgrade.Level_tower)
+                        {
+                            case 1:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
+                                break;
+                            case 2:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
+                                break;
+                            case 3:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                if (selectedTower_radius.Level_tower == 3)
+                                {
+                                    this.money = money - 15;
+                                }
+                                break;
+                        }
+                        break;
+
+                    case "FireTower":
+                        switch (towerToUpgrade.Level_tower)
+                        {
+                            case 1:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
+                                break;
+                            case 2:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                this.money = money - 15;
+                                break;
+                            case 3:
+                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
+                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
+                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
+                                selectedTower_radius.Level_tower += 1;
+                                if (selectedTower_radius.Level_tower == 3)
+                                {
+                                    this.money = money - 15;
+                                }
+                                break;
+                        }
+                        break;
+                }
+
+            }
+        }
+
+        public void RunWaveMulti()
+        {
+            last_coup[0] = compteur_write + 1;
+            compteur_write++;
+            last_coup[1] = 4;
+            last_coup[3] = 0; 
+            last_coup[4] = 0;
+            last_coup[5] = 0;
+            last_coup[6] = 0;
         }
     }
 }
