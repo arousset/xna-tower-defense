@@ -314,30 +314,37 @@ namespace TowerDefenseXNA
             }
         }
 
-        // A faire Ya de la couille !!!!
+
         public void replaceButtonOnPress(object sender, EventArgs e)
         {
             tileX = 0;
             tileY = 0;
-
+            
             if (selectedTower_radius != null)
             {
+                last_coup[1] = 2;
                 switch (selectedTower_radius.Name)
                 {
                     case "SpikeTower":
                         newTowerIndex = 1;
+                        last_coup[2] = 2;
                         break;
                     case "ArrowTower":
                         newTowerIndex = 0;
+                        last_coup[2] = 1;
                         break;
                     case "SlowTower":
                         newTowerIndex = 2;
+                        last_coup[2] = 3;
                         break;
                     case "FireTower":
                         newTowerIndex = 3;
+                        last_coup[2] = 4;
                         break;
                 }
                 selectedTower_replace = selectedTower_radius;
+                last_coup[3] = (int)selectedTower_replace.Position.X / 32;
+                last_coup[4] = (int)selectedTower_replace.Position.Y / 32;
                 replace = true;
                 Console.WriteLine(selectedTower_replace);
             }
@@ -453,8 +460,11 @@ namespace TowerDefenseXNA
                     cellY = (int)(mouseState.Y / 32); // from array space to level space
                     tileX = cellX * 32; // Convert from array space to level space
                     tileY = cellY * 32; // Convert from array space to level space
-                      
 
+                    last_coup[5] = cellX;
+                    last_coup[6] = cellY;
+                    last_coup[0] = compteur_write + 1;
+                    compteur_write++;
                     replace = false;
                     if (cellX != 0 && cellY != 0 && tileX != 0 && tileY != 0)
                     {
@@ -806,7 +816,7 @@ namespace TowerDefenseXNA
             Tower towerToDelete = null;
             for (int i = 0; i < towers.Count; i++)
             {
-                if (towers.ElementAt(i).Position.X == coordX && towers.ElementAt(i).Position.Y == coordY)
+                if (towers.ElementAt(i).Position.X/32 == coordX && towers.ElementAt(i).Position.Y/32 == coordY)
                 {
                     towerToDelete = towers.ElementAt(i);
                 }
@@ -823,7 +833,7 @@ namespace TowerDefenseXNA
             Tower towerToUpgrade = null;
             for (int i = 0; i < towers.Count; i++)
             {
-                if (towers.ElementAt(i).Position.X == coordX && towers.ElementAt(i).Position.Y == coordY)
+                if (towers.ElementAt(i).Position.X/32 == coordX && towers.ElementAt(i).Position.Y/32 == coordY)
                 {
                     towerToUpgrade = towers.ElementAt(i);
                 }
@@ -832,31 +842,31 @@ namespace TowerDefenseXNA
             if (towerToUpgrade != null)
             {
                 Console.WriteLine("upgrade");
-                switch (selectedTower_radius.Name)
+                switch (towerToUpgrade.Name)
                 {
                     case "ArrowTower":
                         switch (towerToUpgrade.Level_tower)
                         {
                             case 1:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
                                 this.money = money - 15;
                                 break;
                             case 2:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
                                 this.money = money - 15;
                                 break;
                             case 3:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
-                                if (selectedTower_radius.Level_tower == 3)
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
+                                if (towerToUpgrade.Level_tower == 3)
                                 {
                                     this.money = money - 15;
                                 }
@@ -868,25 +878,25 @@ namespace TowerDefenseXNA
                         switch (towerToUpgrade.Level_tower)
                         {
                             case 1:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
                                 this.money = money - 15;
                                 break;
                             case 2:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
                                 this.money = money - 15;
                                 break;
                             case 3:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
-                                if (selectedTower_radius.Level_tower == 3)
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
+                                if (towerToUpgrade.Level_tower == 3)
                                 {
                                     this.money = money - 15;
                                 }
@@ -898,25 +908,25 @@ namespace TowerDefenseXNA
                         switch (towerToUpgrade.Level_tower)
                         {
                             case 1:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
                                 this.money = money - 15;
                                 break;
                             case 2:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
                                 this.money = money - 15;
                                 break;
                             case 3:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
-                                if (selectedTower_radius.Level_tower == 3)
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
+                                if (towerToUpgrade.Level_tower == 3)
                                 {
                                     this.money = money - 15;
                                 }
@@ -928,25 +938,25 @@ namespace TowerDefenseXNA
                         switch (towerToUpgrade.Level_tower)
                         {
                             case 1:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
                                 this.money = money - 15;
                                 break;
                             case 2:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
                                 this.money = money - 15;
                                 break;
                             case 3:
-                                selectedTower_radius.Radius = selectedTower_radius.Radius + selectedTower_radius.Radius * 0.20f;
-                                selectedTower_radius.Cost = selectedTower_radius.Cost + (int)(selectedTower_radius.Cost * 0.12f);
-                                selectedTower_radius.Damage = selectedTower_radius.Damage + (int)(selectedTower_radius.Damage * 0.15f);
-                                selectedTower_radius.Level_tower += 1;
-                                if (selectedTower_radius.Level_tower == 3)
+                                towerToUpgrade.Radius = towerToUpgrade.Radius + towerToUpgrade.Radius * 0.20f;
+                                towerToUpgrade.Cost = towerToUpgrade.Cost + (int)(towerToUpgrade.Cost * 0.12f);
+                                towerToUpgrade.Damage = towerToUpgrade.Damage + (int)(towerToUpgrade.Damage * 0.15f);
+                                towerToUpgrade.Level_tower += 1;
+                                if (towerToUpgrade.Level_tower == 3)
                                 {
                                     this.money = money - 15;
                                 }
@@ -967,6 +977,20 @@ namespace TowerDefenseXNA
             last_coup[4] = 0;
             last_coup[5] = 0;
             last_coup[6] = 0;
+        }
+
+        public void ReplaceTowerMulti(int type_tour, int coordX, int coordY, int NcoordX, int NcoordY) 
+        {
+            Tower towerToReplace = null;
+            for (int i = 0; i < towers.Count; i++)
+            {
+                if (towers.ElementAt(i).Position.X / 32 == coordX && towers.ElementAt(i).Position.Y / 32 == coordY)
+                {
+                    towerToReplace = towers.ElementAt(i);
+                }
+            }
+
+            towerToReplace.Position = new Vector2(NcoordX*32, NcoordY*32);
         }
     }
 }

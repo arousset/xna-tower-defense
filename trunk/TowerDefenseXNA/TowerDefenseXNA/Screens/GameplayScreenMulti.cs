@@ -469,53 +469,54 @@ namespace GameStateManagement
             // later use these values to control the tank movement.
             TowerDefenseXNA.Player localplayer = gamer.Tag as TowerDefenseXNA.Player;
             ReadPlayerInputs(localplayer, gamer.SignedInGamer.PlayerIndex);
-                localplayer.Money = player.Money;
-                localplayer.Lives = player.Lives;
+            /////////////////////////    
+            //localplayer.Money = player.Money;
+                //localplayer.Lives = player.Lives;
 
                 // Only send if we are not the server. There is no point sending packets
                 // to ourselves, because we already know what they will contain!
-                if (!networkSession.IsHost)
+            if (!networkSession.IsHost)
+            {
+                // Write our latest input state into a network packet.
+                for (int i = 0; i < 7; i++)
+                    packetWriter.Write(player.last_coup[i]);
+
+                // Send our input data to the server.
+                gamer.SendData(packetWriter, SendDataOptions.InOrder, networkSession.Host);
+
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                if (IsActive)
                 {
-                    // Write our latest input state into a network packet.
-                    for (int i = 0; i < 7; i++)
-                        packetWriter.Write(player.last_coup[i]);
-                    
-                    // Send our input data to the server.
-                    gamer.SendData(packetWriter, SendDataOptions.InOrder, networkSession.Host);
+                    waveManager.Update(legametime);
+                    if (player.Money < 15) // See if it can be increase...
+                        narrowButton.Update(legametime);
+                    else
+                        arrowButton.Update(legametime);
 
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                    if (IsActive)
-                    {
-                        waveManager.Update(legametime);
-                        if (player.Money < 15) // See if it can be increase...
-                            narrowButton.Update(legametime);
-                        else
-                            arrowButton.Update(legametime);
+                    if (player.Money < 40)
+                        nspikeButton.Update(legametime);
+                    else
+                        spikeButton.Update(legametime);
 
-                        if (player.Money < 40)
-                            nspikeButton.Update(legametime);
-                        else
-                            spikeButton.Update(legametime);
+                    if (player.Money < 25)
+                        nslowButton.Update(legametime);
+                    else
+                        slowButton.Update(legametime);
 
-                        if (player.Money < 25)
-                            nslowButton.Update(legametime);
-                        else
-                            slowButton.Update(legametime);
+                    if (player.Money < 25)
+                        nfireButton.Update(legametime);
+                    else
+                        fireButton.Update(legametime);
 
-                        if (player.Money < 25)
-                            nfireButton.Update(legametime);
-                        else
-                            fireButton.Update(legametime);
+                    startWaveButton.Update(legametime);
 
-                        startWaveButton.Update(legametime);
-
-                        player.Update(legametime, waveManager.Enemies);
-                        if (player.Lives <= 0)
-                            ScreenManager.AddScreen(new LooseMenuScreen(content, levelNb), ControllingPlayer);
-                        if (waveManager.Round == waveManager.NbRounds && waveManager.WaveReady)
-                            ScreenManager.AddScreen(new WinMenuScreen(content, levelNb), ControllingPlayer);
-                    }
-                    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                    player.Update(legametime, waveManager.Enemies);
+                    if (player.Lives <= 0)
+                        ScreenManager.AddScreen(new LooseMenuScreen(content, levelNb), ControllingPlayer);
+                    if (waveManager.Round == waveManager.NbRounds && waveManager.WaveReady)
+                        ScreenManager.AddScreen(new WinMenuScreen(content, levelNb), ControllingPlayer);
+                }
+                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
         }
 
@@ -528,8 +529,9 @@ namespace GameStateManagement
                 // Look up what tank is associated with this player.
                 TowerDefenseXNA.Player player_serv = gamer.Tag as TowerDefenseXNA.Player;
                 //Console.WriteLine(player.towers.Count);
-                    player_serv.Money = player.Money;
-                    player_serv.towers = player.towers;
+                ///////////////////////////////
+                    //player_serv.Money = player.Money;
+                    //player_serv.towers = player.towers;
                    // Console.WriteLine("money serveur : "+player.Money);
                 // Update the tank.
                 player.Update(legametime, waveManager.Enemies);
@@ -638,7 +640,10 @@ namespace GameStateManagement
                         Console.WriteLine("Suppression d'une tour depuis le reseau");
                         player.RemoveTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
                         break;
-                    case 2:
+                    case 2: Console.WriteLine("Deplacement d'une tour depuis le reseau");
+                        player.ReplaceTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4], coup_lu[5], coup_lu[6]);
+                        break;
+                    case 3:
                         Console.WriteLine("Upgrade d'une tour depuis le reseau");
                         player.UpgradeMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
                         break;
