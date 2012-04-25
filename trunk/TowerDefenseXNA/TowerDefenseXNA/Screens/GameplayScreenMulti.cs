@@ -274,7 +274,6 @@ namespace GameStateManagement
                 // If we are not in a network session, update the
                 // menu screen that will let us create or join one.
                 UpdateMenuScreen();
-               // Console.WriteLine(player.Money);
             }
             else
             {
@@ -287,9 +286,7 @@ namespace GameStateManagement
 
 
         void UpdateMenuScreen()
-        {
-           // Console.WriteLine(IsActive);
-            
+        {   
             if (IsActive)
             {
                 if (Gamer.SignedInGamers.Count == 0)
@@ -318,7 +315,6 @@ namespace GameStateManagement
             try
             {
                 networkSession = NetworkSession.Create(NetworkSessionType.SystemLink, maxLocalGamers, maxGamers);
-
                 HookSessionEvents();
             }
             catch (Exception e)
@@ -350,7 +346,6 @@ namespace GameStateManagement
 
                     // Join the first session we found.
                     networkSession = NetworkSession.Join(availableSessions[0]);
-
                     HookSessionEvents();
                 }
             }
@@ -364,8 +359,7 @@ namespace GameStateManagement
         void GamerJoinedEventHandler(object sender, GamerJoinedEventArgs e)
         {
             int gamerIndex = networkSession.AllGamers.IndexOf(e.Gamer);
-
-            e.Gamer.Tag = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture, lvl.playerLife, lvl.playerMoney, bulletsAudio, sellbt, upgradebt, replacebt, font, ranksilver, rankgold);//Tank(gamerIndex, Content, 960, 720);
+            e.Gamer.Tag = new TowerDefenseXNA.Player(lvl, towerTextures, bulletTexture, rangeTexture, lvl.playerLife, lvl.playerMoney, bulletsAudio, sellbt, upgradebt, replacebt, font, ranksilver, rankgold);
         }
 
 
@@ -375,7 +369,6 @@ namespace GameStateManagement
         void SessionEndedEventHandler(object sender, NetworkSessionEndedEventArgs e)
         {
             errorMessage = e.EndReason.ToString();
-
             networkSession.Dispose();
             networkSession = null;
         }
@@ -393,12 +386,15 @@ namespace GameStateManagement
 
         void UpdateNetworkSession()
         {
-            // Read inputs for locally controlled tanks, and send them to the server.
+            // Read inputs for locally controlled player, and send them to the server.
             foreach (LocalNetworkGamer gamer in networkSession.LocalGamers)
             {
-                UpdateLocalGamer(gamer);
-                waveManager.Update(legametime);
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+                if (!networkSession.IsHost)
+                {
+                    UpdateLocalGamer(gamer);
+                } 
+                
                 if (IsActive)
                 {
                     
@@ -424,13 +420,12 @@ namespace GameStateManagement
 
                     startWaveButton.Update(legametime);
 
-                    player.Update(legametime, waveManager.Enemies);
+                    
                     if (player.Lives <= 0)
                         ScreenManager.AddScreen(new LooseMenuScreen(content, levelNb), ControllingPlayer);
                     if (waveManager.Round == waveManager.NbRounds && waveManager.WaveReady)
                         ScreenManager.AddScreen(new WinMenuScreen(content, levelNb), ControllingPlayer);
                 }
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
 
             // If we are the server, update all the tanks and transmit
@@ -439,6 +434,7 @@ namespace GameStateManagement
             {
                 UpdateServer();
             }
+
 
             // Pump the underlying session object.
             networkSession.Update();
@@ -464,17 +460,8 @@ namespace GameStateManagement
 
         void UpdateLocalGamer(LocalNetworkGamer gamer)
         {
-            // Look up what tank is associated with this local player,
-            // and read the latest user inputs for it. The server will
-            // later use these values to control the tank movement.
-            TowerDefenseXNA.Player localplayer = gamer.Tag as TowerDefenseXNA.Player;
-            ReadPlayerInputs(localplayer, gamer.SignedInGamer.PlayerIndex);
-            /////////////////////////    
-            //localplayer.Money = player.Money;
-                //localplayer.Lives = player.Lives;
-
-                // Only send if we are not the server. There is no point sending packets
-                // to ourselves, because we already know what they will contain!
+            // Only send if we are not the server. There is no point sending packets
+            // to ourselves, because we already know what they will contain!
             if (!networkSession.IsHost)
             {
                 // Write our latest input state into a network packet.
@@ -484,7 +471,6 @@ namespace GameStateManagement
                 // Send our input data to the server.
                 gamer.SendData(packetWriter, SendDataOptions.InOrder, networkSession.Host);
 
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 if (IsActive)
                 {
                     waveManager.Update(legametime);
@@ -516,7 +502,6 @@ namespace GameStateManagement
                     if (waveManager.Round == waveManager.NbRounds && waveManager.WaveReady)
                         ScreenManager.AddScreen(new WinMenuScreen(content, levelNb), ControllingPlayer);
                 }
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             }
         }
 
@@ -526,57 +511,53 @@ namespace GameStateManagement
             // Loop over all the players in the session, not just the local ones!
             foreach (NetworkGamer gamer in networkSession.AllGamers)
             {
-                // Look up what tank is associated with this player.
-                TowerDefenseXNA.Player player_serv = gamer.Tag as TowerDefenseXNA.Player;
-                //Console.WriteLine(player.towers.Count);
-                ///////////////////////////////
-                    //player_serv.Money = player.Money;
-                    //player_serv.towers = player.towers;
-                   // Console.WriteLine("money serveur : "+player.Money);
-                // Update the tank.
-                player.Update(legametime, waveManager.Enemies);
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                if (IsActive)
+                if (gamer.IsHost) 
                 {
-                    waveManager.Update(legametime);
-                    if (player.Money < 15) // See if it can be increase...
-                        narrowButton.Update(legametime);
-                    else
-                        arrowButton.Update(legametime);
+                    // Update the player
+                    player.Update(legametime, waveManager.Enemies);
 
-                    if (player.Money < 40)
-                        nspikeButton.Update(legametime);
-                    else
-                        spikeButton.Update(legametime);
+                    if (IsActive)
+                    {
+                        waveManager.Update(legametime);
+                        if (player.Money < 15)
+                            narrowButton.Update(legametime);
+                        else
+                            arrowButton.Update(legametime);
 
-                    if (player.Money < 25)
-                        nslowButton.Update(legametime);
-                    else
-                        slowButton.Update(legametime);
+                        if (player.Money < 40)
+                            nspikeButton.Update(legametime);
+                        else
+                            spikeButton.Update(legametime);
 
-                    if (player.Money < 25)
-                        nfireButton.Update(legametime);
-                    else
-                        fireButton.Update(legametime);
+                        if (player.Money < 25)
+                            nslowButton.Update(legametime);
+                        else
+                            slowButton.Update(legametime);
 
-                    startWaveButton.Update(legametime);
-                    
-                    if (player.Lives <= 0)
-                        ScreenManager.AddScreen(new LooseMenuScreen(content, levelNb), ControllingPlayer);
-                    if (waveManager.Round == waveManager.NbRounds && waveManager.WaveReady)
-                        ScreenManager.AddScreen(new WinMenuScreen(content, levelNb), ControllingPlayer);
+                        if (player.Money < 25)
+                            nfireButton.Update(legametime);
+                        else
+                            fireButton.Update(legametime);
+
+                        startWaveButton.Update(legametime);
+
+                        if (player.Lives <= 0)
+                            ScreenManager.AddScreen(new LooseMenuScreen(content, levelNb), ControllingPlayer);
+                        if (waveManager.Round == waveManager.NbRounds && waveManager.WaveReady)
+                            ScreenManager.AddScreen(new WinMenuScreen(content, levelNb), ControllingPlayer);
+                    }
+
+                    // Write the player state into the output network packet.
+                    packetWriter.Write(gamer.Id);
+                    for (int i = 0; i < 7; i++)
+                        packetWriter.Write(player.last_coup[i]);
+
+                    // Send the combined data for all players to everyone in the session.
+                    LocalNetworkGamer server = (LocalNetworkGamer)networkSession.Host;
+                    server.SendData(packetWriter, SendDataOptions.InOrder);
+                
                 }
-                /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-                // Write the tank state into the output network packet.
-                packetWriter.Write(gamer.Id);
-                for(int i=0; i<7; i++) 
-                    packetWriter.Write(player.last_coup[i]);
             }
-
-            // Send the combined data for all tanks to everyone in the session.
-            LocalNetworkGamer server = (LocalNetworkGamer)networkSession.Host;
-            server.SendData(packetWriter, SendDataOptions.InOrder);
         }
 
 
@@ -592,33 +573,11 @@ namespace GameStateManagement
 
                 if (!sender.IsLocal)
                 {
-                    // Look up the tank associated with whoever sent this packet.
-                    TowerDefenseXNA.Player remoteplayer = sender.Tag as TowerDefenseXNA.Player;
-                    
-                    // Read the latest inputs controlling this tank.;
+                    // Read the latest inputs controlling this player;
                     int[] coup_lu = new int[7];
                     for (int i = 0; i < 7; i++)
                         coup_lu[i] = packetReader.ReadInt32();
                     NetworkAction(coup_lu);
-                  /*  if (player.compteur_read < coup_lu[0])
-                    {
-                        player.compteur_read = coup_lu[0];
-                        Console.WriteLine("Nouveau coup");
-                        switch (coup_lu[1])
-                        {
-                            case 0:
-                                Console.WriteLine("Ajout d'une tour");
-                                player.AddTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
-                                break;
-                            case 1:
-                                Console.WriteLine("Suppression d'une tour");
-                                player.RemoveTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
-                                break;
-                        }
-
-                        for (int j = 0; j < 7; j++)
-                            Console.WriteLine(j + " " + coup_lu[j]);
-                    }*/
                 }
             }
         }
@@ -669,62 +628,13 @@ namespace GameStateManagement
                 // We keep reading from it until we have processed all the data.
                 while (packetReader.Position < packetReader.Length)
                 {
-                    // Read the state of one tank from the network packet.
+                    // Read the state of one player from the network packet.
                     byte gamerId = packetReader.ReadByte();
                     int[] coup_lu = new int[7];
                     for (int i = 0; i < 7; i++)
                         coup_lu[i] = packetReader.ReadInt32();
 
                     NetworkAction(coup_lu);
-
-                  /*  if (player.compteur_read < coup_lu[0])
-                    {
-                        player.compteur_read = coup_lu[0];
-                        Console.WriteLine("Nouveau coup");
-                        
-                        switch(coup_lu[1])
-                        {
-                            case 0 :
-                                Console.WriteLine("Ajout d'une tour");
-                                player.AddTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
-                                break;
-                            case 1:
-                                Console.WriteLine("Suppression d'une tour");
-                                player.RemoveTowerMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
-                                break;
-                            case 2:
-                                Console.WriteLine("Suppression d'une tour");
-                                player.UpgradeMulti(coup_lu[2], coup_lu[3], coup_lu[4]);
-                                break;
-                            case 4:
-                                waveManager.StartNextWave();
-                                break;
-                        }
-
-                        for (int j = 0; j < 7; j++)
-                            Console.WriteLine(j + " " + coup_lu[j]);
-                    }*/
-
-
-
-                    // Look up which gamer this state refers to.
-                    NetworkGamer remoteGamer = networkSession.FindGamerById(gamerId);
-
-                    // This might come back null if the gamer left the session after
-                    // the host sent the packet but before we received it. If that
-                    // happens, we just ignore the data for this gamer.
-                    if (remoteGamer != null)
-                    {
-                        // Update our local state with data from the network packet.
-                        TowerDefenseXNA.Player player_cli = remoteGamer.Tag as TowerDefenseXNA.Player;
-                        /*player_cli.Money = money;
-                        player_cli.Lives = lives;
-                        if (player.Modify_value == false)
-                        {
-                            player.Money = player_cli.Money;
-                            player.Lives = player_cli.Lives;
-                        }*/
-                    }
                 }
             }
         }
@@ -770,9 +680,6 @@ namespace GameStateManagement
             // For each person in the session...
             foreach (NetworkGamer gamer in networkSession.AllGamers)
             {
-                TowerDefenseXNA.Player player_serv = gamer.Tag as TowerDefenseXNA.Player;
-
-                ///////////////////////////////////////////////////////////////////////////////////////////////
                 spriteBatch.Begin();
                 lvl.Draw(spriteBatch, tiledMap);
                 waveManager.Draw(spriteBatch);
@@ -803,11 +710,9 @@ namespace GameStateManagement
                 else
                     fireButton.Draw(spriteBatch);
 
-                if (waveManager.WaveReady && gamer.IsHost)
+                if (waveManager.WaveReady)
                     startWaveButton.Draw(spriteBatch);
 
-                
-                ///////////////////////////////////////////////////////////////////////////////////////
                 // Draw a gamertag label.
                 string label = gamer.Gamertag;
                 Color labelColor = Color.Black;
@@ -816,19 +721,19 @@ namespace GameStateManagement
                 if (gamer.IsHost)
                 {
                     label += " (server)";
-                    spriteBatch.DrawString(font, "Server", new Vector2(10, 10), Color.Blue);
+                    //spriteBatch.DrawString(font, label, new Vector2(10, 10), Color.Blue);
                     
                 }
                 else
                 {
-                    spriteBatch.DrawString(font, "Client", new Vector2(10, 10), Color.Blue);
+                    label += " (client)";
+                    //spriteBatch.DrawString(font, label, new Vector2(10, 10), Color.Blue);
                 }
 
                 // Flash the gamertag to yellow when the player is talking.
                 if (gamer.IsTalking)
                     labelColor = Color.Yellow;
 
-                //spriteBatch.DrawString(font, label, new Vector2(10, 10), labelColor, 0, labelOffset, 0.6f, SpriteEffects.None, 0);
                 spriteBatch.End();
 
                 // If the game is transitioning on or off, fade it out to black.
@@ -838,11 +743,8 @@ namespace GameStateManagement
                     ScreenManager.FadeBackBufferToBlack(alpha);
                 }
             }
-
-          
-
-
         }
+
 
         void DrawMessage(string message)
         {
@@ -917,28 +819,6 @@ namespace GameStateManagement
             player.RunWaveMulti();
         }
 
-         void ReadPlayerInputs(TowerDefenseXNA.Player player, PlayerIndex playerIndex)
-         {
-             // Read the gamepad.
-             GamePadState gamePad = GamePad.GetState(playerIndex);
-
-             Vector2 tankInput = gamePad.ThumbSticks.Left;
-             Vector2 turretInput = gamePad.ThumbSticks.Right;
-
-             // Read the keyboard.
-             KeyboardState keyboard = Keyboard.GetState(playerIndex);
-
-
-             if (keyboard.IsKeyDown(Keys.Left))
-                 player.Lives -= 1;
-             //Console.WriteLine("zerzeprzer :" + player.Lives);
-             // Store these input values into the  player object.
-             //player.TankInput = tankInput;
-             //player.TurretInput = turretInput;
-             //player.Lives = ;
-             //player.Money = 25;
-         }
-
-
+         
     }
 }
