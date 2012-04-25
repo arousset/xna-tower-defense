@@ -990,8 +990,30 @@ namespace TowerDefenseXNA
                 }
             }
 
-            towerToReplace.Position = new Vector2(NcoordX*32, NcoordY*32);
+            Rectangle carr = new Rectangle(NcoordX * 32, NcoordX * 32, 32, 32);
+            if (towerToReplace.Name == "SpikeTower")
+            {
+                towerToReplace.Position = new Vector2(NcoordX * 32 + (32 / 2), NcoordY * 32 + (32 / 2));
+                towerToReplace.Bounds = carr;
+                towerToReplace.Center = new Vector2(NcoordX * 32 + (32 / 2), NcoordY * 32 + (32 / 2));
+
+                towerToReplace.Selected = false;
+                towerToReplace = null;
+            }
+            else
+            {
+                towerToReplace.Position = new Vector2(NcoordX * 32, NcoordY * 32);
+                towerToReplace.Bounds = carr;
+                towerToReplace.Center = new Vector2(NcoordX * 32, NcoordY * 32);
+
+                towerToReplace.Selected = false;
+                towerToReplace = null;
+            }
+            money -= 10;
         }
     }
 }
 
+
+
+                   
